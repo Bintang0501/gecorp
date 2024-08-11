@@ -14,12 +14,15 @@ class User extends Authenticatable
     
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $guarded = [''];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
-    public $incrementing = false;
-
-    protected $keyType = "string";
-
-    public $primaryKey = "id";
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
 }

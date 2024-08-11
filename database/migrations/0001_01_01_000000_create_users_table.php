@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('nama_toko');
             $table->string('nama_level');
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -18,24 +18,17 @@
                     </a>
                 </div>
                 <div class="login-form">
-                    <form>
+                    <form method="POST" action="{{ route('post_login') }}">
+                        @csrf
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" class="form-control" placeholder="Masukkan Username">
+                            <input type="text" class="form-control" name="username" placeholder="Masukkan Username">
                         </div>
                         <div class="form-group">
                             <label>Password</label>
-                            <input type="password" class="form-control" placeholder="Masukkan Password">
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Remember Me
-                            </label>
-
+                            <input type="password" class="form-control" name="password" placeholder="Masukkan Password">
                         </div>
                         <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
-                        <div class="social-login-content">
-                        </div>
                     </form>
                 </div>
             </div>
