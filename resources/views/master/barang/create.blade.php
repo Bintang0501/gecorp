@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
 
-<title>Tambah Data Toko - Gecorp</title>
+<title>Tambah Data Barang - Gecorp</title>
 
 @include('layout.source')
 
@@ -21,7 +21,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Tambah Data - Toko</strong></h1>
+                        <h1 class="card-title"><strong>Tambah Data - Barang</strong></h1>
                     </div>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
-                            <li><a href="{{ route('master.toko.index')}}">Data Toko</a></li>
-                            <li class="active">Tambah Data Toko</li>
+                            <li><a href="{{ route('master.barang.index')}}">Data Barang</a></li>
+                            <li class="active">Tambah Data Barang</li>
                         </ol>
                     </div>
                 </div>
@@ -48,21 +48,13 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('master.toko.index')}}" class="btn btn-danger"></i> Kembali</a>
+                                <a href="{{ route('master.barang.index')}}" class="btn btn-danger"></i> Kembali</a>
                             </div>
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
                                     <form action="#" method="post" class="">
 
-                                        <div class="form-group">
-                                            <label for="id_barang" class=" form-control-label">Id Barang</label>
-                                                <select name="id_barang" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
-                                                </select>
-                                        </div>
                                         <div class="form-group">
                                             <label for="id_jenis_barang" class=" form-control-label">Id Jenis Barang</label>
                                                 <select name="id_jenis_barang" id="select" class="form-control">
@@ -80,36 +72,40 @@
                                                 </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="nama_toko" class=" form-control-label">Nama Toko<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_toko" name="nama_toko" placeholder="Contoh : Toko Sejahtera" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="wilayah" class=" form-control-label">Wilayah<span style="color: red">*</span></label>
-                                            <input type="text" id="wilayah" name="wilayah" placeholder="Contoh : Cirebon Timur" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="wilayah" class=" form-control-label">Alamat<span style="color: red">*</span></label>
-                                            <textarea name="alamat" id="alamat" rows="4" placeholder="Contoh : Jl. Nyimas Gandasari No.18 Plered - Cirebon" class="form-control"></textarea>
+                                            <label for="id_pembelian_barang" class=" form-control-label">Id Pembelian Barang</label>
+                                                <select name="id_pembelian_barang" id="select" class="form-control">
+                                                    <option value="1">Option #1</option>
+                                                    <option value="2">Option #2</option>
+                                                    <option value="3">Option #3</option>
+                                                </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="nama_barang" class=" form-control-label">Nama Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_barang" name="nama_barang" placeholder="Contoh : Tws Bluetooth" class="form-control">
+                                            <input type="text" id="nama_barang" name="nama_barang" placeholder="Contoh : Narkoba" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label for="jenis_barang" class=" form-control-label">Jenis Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="jenis_barang" name="jenis_barang" placeholder="Contoh : Aksesoris" class="form-control">
+                                            <input type="text" id="jenis_barang" name="jenis_barang" placeholder="Contoh : Barang Haram" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label for="brand_barang" class=" form-control-label">Brand Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="brand_barang" name="brand_barang" placeholder="Contoh : JBL" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="harga" class=" form-control-label">Harga<span style="color: red">*</span></label>
-                                            <input type="number" id="harga" name="harga" placeholder="Contoh : 1000000" class="form-control">
+                                            <input type="text" id="brand_barang" name="brand_barang" placeholder="Contoh : Nama Brand" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label for="stock" class=" form-control-label">Stock<span style="color: red">*</span></label>
-                                            <input type="number" id="stock" name="stock" placeholder="Contoh : 40" class="form-control">
+                                            <input type="number" id="stock" name="stock" placeholder="Contoh : 12" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="harga" class=" form-control-label">Harga<span style="color: red">*</span></label>
+                                            <input type="number" id="harga" name="harga" placeholder="Contoh : 500000" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="stock_fix" class=" form-control-label">Stock Fix<span style="color: red">*</span></label>
+                                            <input type="text" id="stock_fix" name="stock_fix" placeholder="Stock Fix" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="stock_error" class=" form-control-label">Stock Error<span style="color: red">*</span></label>
+                                            <input type="text" id="stock_error" name="stock_error" placeholder="Stock Error" class="form-control">
                                         </div>
                                         <br>
                                         <div class="form-group">

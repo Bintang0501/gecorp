@@ -32,7 +32,8 @@
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-shopping-cart"></i>Transaksi</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li><i class="menu-icon fa fa-th"></i><a href="forms-basic.html">Transaksi1</a></li>
+                        <li class="nav-item"><i class="fa fa-shopping-cart"></i><a href="{{ route('transaksi.pembelianbarang.index')}}">Pembelian Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-truck"></i><a href="{{ route('transaksi.pengirimanbarang.index')}}">Pengiriman Barang</a></li>
                     </ul>
                 </li>
 

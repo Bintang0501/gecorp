@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="">
 
-<title>Tambah Data Toko - Gecorp</title>
+<title>Tambah Data Pembelian Barang - Gecorp</title>
 
 @include('layout.source')
 
@@ -21,7 +21,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Tambah Data - Toko</strong></h1>
+                        <h1 class="card-title"><strong>Tambah Data - Pembelian Barang</strong></h1>
                     </div>
                 </div>
             </div>
@@ -30,8 +30,8 @@
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
-                            <li><a href="{{ route('master.toko.index')}}">Data Toko</a></li>
-                            <li class="active">Tambah Data Toko</li>
+                            <li><a href="{{ route('transaksi.pembelianbarang.index')}}">Data Pembelian Barang</a></li>
+                            <li class="active">Tambah Data Pembelian Barang</li>
                         </ol>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('master.toko.index')}}" class="btn btn-danger"></i> Kembali</a>
+                                <a href="{{ route('transaksi.pembelianbarang.index')}}" class="btn btn-danger"></i> Kembali</a>
                             </div>
                             <div class="card-body">
                                 {{-- Content --}}
@@ -56,40 +56,36 @@
                                     <form action="#" method="post" class="">
 
                                         <div class="form-group">
-                                            <label for="id_barang" class=" form-control-label">Id Barang</label>
-                                                <select name="id_barang" id="select" class="form-control">
+                                            <label for="status" class=" form-control-label">Status</label>
+                                                <select name="status" id="select" class="form-control">
+                                                    <option value="Progress">Progress</option>
+                                                    <option value="Done">Done</option>
+                                                    <option value="Failed">Failed   </option>
+                                                </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="id_supplier" class=" form-control-label">Id Supplier</label>
+                                                <select name="id_supplier" id="select" class="form-control">
                                                     <option value="1">Option #1</option>
                                                     <option value="2">Option #2</option>
                                                     <option value="3">Option #3</option>
                                                 </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="id_jenis_barang" class=" form-control-label">Id Jenis Barang</label>
-                                                <select name="id_jenis_barang" id="select" class="form-control">
+                                            <label for="id_toko" class=" form-control-label">Id Toko</label>
+                                                <select name="id_toko" id="select" class="form-control">
                                                     <option value="1">Option #1</option>
                                                     <option value="2">Option #2</option>
                                                     <option value="3">Option #3</option>
                                                 </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="id_brand" class=" form-control-label">Id Brand</label>
-                                                <select name="id_brand" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
-                                                </select>
+                                            <label for="tgl_nota" class=" form-control-label">Tanggal Nota<span style="color: red">*</span></label>
+                                            <input type="date" id="tgl_nota" name="tgl_nota" placeholder="DD/MM/YYYY" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nama_toko" class=" form-control-label">Nama Toko<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_toko" name="nama_toko" placeholder="Contoh : Toko Sejahtera" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="wilayah" class=" form-control-label">Wilayah<span style="color: red">*</span></label>
-                                            <input type="text" id="wilayah" name="wilayah" placeholder="Contoh : Cirebon Timur" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="wilayah" class=" form-control-label">Alamat<span style="color: red">*</span></label>
-                                            <textarea name="alamat" id="alamat" rows="4" placeholder="Contoh : Jl. Nyimas Gandasari No.18 Plered - Cirebon" class="form-control"></textarea>
+                                            <label for="nama_supplier" class=" form-control-label">Nama Supplier<span style="color: red">*</span></label>
+                                            <input type="text" id="nama_supplier" name="nama_supplier" placeholder="Contoh : Supplier 1" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label for="nama_barang" class=" form-control-label">Nama Barang<span style="color: red">*</span></label>
@@ -104,12 +100,12 @@
                                             <input type="text" id="brand_barang" name="brand_barang" placeholder="Contoh : JBL" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label for="harga" class=" form-control-label">Harga<span style="color: red">*</span></label>
-                                            <input type="number" id="harga" name="harga" placeholder="Contoh : 1000000" class="form-control">
+                                            <label for="jml_item" class=" form-control-label">Jumlah Item<span style="color: red">*</span></label>
+                                            <input type="number" id="jml_item" name="jml_item" placeholder="Contoh : 16" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label for="stock" class=" form-control-label">Stock<span style="color: red">*</span></label>
-                                            <input type="number" id="stock" name="stock" placeholder="Contoh : 40" class="form-control">
+                                            <label for="nama_toko" class=" form-control-label">Nama Toko<span style="color: red">*</span></label>
+                                            <input type="text" id="nama_toko" name="nama_toko" placeholder="Contoh : Toko Jaya Abadi" class="form-control">
                                         </div>
                                         <br>
                                         <div class="form-group">
