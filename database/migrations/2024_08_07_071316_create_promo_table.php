@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('promo', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id')->primary();
             $table->string('id_barang');
             $table->string('id_toko');
             $table->string('nama_barang');
@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->datetime('tgl_mulai');
             $table->datetime('tgl_selesai');
+            $table->softDeletes();
         });
     }
 

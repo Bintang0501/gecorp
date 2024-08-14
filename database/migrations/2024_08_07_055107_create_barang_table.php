@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('barang', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id')->primary();
             $table->string('id_jenis_barang');
             $table->string('id_brand');
             $table->string('id_pembelian_barang');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('harga');
             $table->string('stock_fix')->nullable();
             $table->string('stock_error')->nullable();
+            $table->softDeletes();
         });
     }
 

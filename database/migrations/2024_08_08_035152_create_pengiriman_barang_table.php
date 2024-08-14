@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pengiriman_barang', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id')->primary();
             $table->string('nama_pengirim');
             $table->string('toko_pengirim');
             $table->string('nama_penerima');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->dateTime('tgl_kirim');
             $table->dateTime('tgl_terima');
             $table->enum('status', ['progress', 'done', 'failed']);
+            $table->softDeletes();
         });
     }
 
