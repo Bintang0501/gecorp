@@ -1,15 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Pembelian Barang - Gecorp</title>
-    @include('layout.source')
-</head>
-<body>
-    @include('layout.sidebar')
-    <div id="right-panel" class="right-panel">
-        @include('layout.header')
+@extends('layouts.main')
+
+@section('content')
+
         <div class="breadcrumbs">
             <div class="breadcrumbs-inner">
                 <div class="row m-0">
@@ -117,7 +109,7 @@
                                                 <option value="failed" {{ $pembelian->status == 'failed' ? 'selected' : '' }}>Failed</option>
                                             </select>
                                         </div>
-                                        
+
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fa fa-dot-circle-o"></i> Simpan
@@ -133,10 +125,7 @@
         </div>
 
         <div class="clearfix"></div>
-        @include('layout.copyright')
-    </div>
-
-    @include('layout.footerjs')
+        @endsection
 
     <script>
         function attachEventListeners() {
