@@ -21,14 +21,7 @@ return new class extends Migration
             $table->string('email');
             $table->text('alamat');
             $table->string('no_hp');
-<<<<<<< HEAD
             $table->softDeletes();
-=======
-            $table->string('nama_toko');
-            $table->string('nama_level');
-            $table->softDeletes();
-            $table->timestamps();
->>>>>>> 33347a46f3019963ba4df7d2f5fd38430dcb9202
         });
     }
 

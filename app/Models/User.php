@@ -28,6 +28,7 @@ class User extends Authenticatable
     protected $keyType = "string";
 
     public $primaryKey = "id";
+
     protected $hidden = [
         'password',
         'remember_token',
