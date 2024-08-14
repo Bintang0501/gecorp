@@ -17,8 +17,13 @@ return new class extends Migration
             $table->string('nama_toko');
             $table->double('harga_promo');
             $table->integer('qty');
+<<<<<<< HEAD
             $table->datetime('tgl_mulai');
             $table->datetime('tgl_selesai');
+=======
+            $table->dateTime('tgl_mulai');
+            $table->dateTime('tgl_selesai');
+>>>>>>> 33347a46f3019963ba4df7d2f5fd38430dcb9202
         });
     }
 

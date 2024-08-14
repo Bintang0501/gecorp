@@ -14,38 +14,43 @@ class UserSeeder extends Seeder
     {
         User::create([
             "id" => Uuid::uuid4()->getHex(),
+            "id_toko" => 1,
+            "id_level" => 1,
             "nama" => "Super Admin",
+            "username" => "admin",
             "email" => "super_admin@gmail.com",
-            "password" =>bcrypt("super_admin"),
-            "role" => "admin",
-            "status" => 1
+            "password" =>bcrypt("password"),
+            "alamat" => "Cirebon",
+            "no_hp" => 8527571268,
+            "nama_toko" => "Eka Cell",
+            "nama_level" => "admin"
         ]);
 
-        User::create([
-            "id" => Uuid::uuid4()->getHex(),
-            "nama" => "Petugas",
-            "email" => "petugas@gmail.com",
-            "password" => bcrypt("petugas01"),
-            "role" => "petugas",
-            "status" => 1
-        ]);
+        // User::create([
+        //     "id" => Uuid::uuid4()->getHex(),
+        //     "nama" => "Petugas",
+        //     "email" => "petugas@gmail.com",
+        //     "password" => bcrypt("petugas01"),
+        //     "role" => "petugas",
+        //     "status" => 1
+        // ]);
 
-        User::create([
-            "id" => Uuid::uuid4()->getHex(),
-            "nama" => "Kepala Kantor",
-            "email" => "kepala_kantor@gmail.com",
-            "password" => bcrypt("kepala01"),
-            "role" => "kepala",
-            "status" => 1
-        ]);
+        // User::create([
+        //     "id" => Uuid::uuid4()->getHex(),
+        //     "nama" => "Kepala Kantor",
+        //     "email" => "kepala_kantor@gmail.com",
+        //     "password" => bcrypt("kepala01"),
+        //     "role" => "kepala",
+        //     "status" => 1
+        // ]);
 
-        User::create([
-            "id" => Uuid::uuid4()->getHex(),
-            "nama" => "Warga",
-            "email" => "warga@gmail.com",
-            "password" => bcrypt("warga01"),
-            "role" => "warga",
-            "status" => 1
-        ]);
+        // User::create([
+        //     "id" => Uuid::uuid4()->getHex(),
+        //     "nama" => "Warga",
+        //     "email" => "warga@gmail.com",
+        //     "password" => bcrypt("warga01"),
+        //     "role" => "warga",
+        //     "status" => 1
+        // ]);
     }
 }

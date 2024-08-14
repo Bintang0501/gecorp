@@ -15,7 +15,11 @@ class User extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $guarded = [''];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
 
     public $incrementing = false;
 
@@ -24,6 +28,10 @@ class User extends Authenticatable
     protected $keyType = "string";
 
     public $primaryKey = "id";
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     public function leveluser(): BelongsTo
     {
