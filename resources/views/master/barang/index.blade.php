@@ -1,19 +1,8 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Data Barang - Gecorp</title>
 
-@include('layout.source')
+@extends('layouts.main')
 
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -41,6 +30,7 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,8 +43,7 @@
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>Id</th>
+                                            <th>#</th>
                                             <th>Up</th>
                                             <th>Nama Barang</th>
                                             <th>Jenis Barang</th>
@@ -65,9 +54,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $no = 1; ?>
                                         <tr>
-                                            <td>O</td>
-                                            <td>666</td>
+                                            <td>{{$no++}}</td>
                                             <td>O</td>
                                             <td>Barang Siapa, Barang Guwe</td>
                                             <td>Aksesoris</td>
@@ -95,12 +84,4 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
-</body>
-</html>
+@endsection

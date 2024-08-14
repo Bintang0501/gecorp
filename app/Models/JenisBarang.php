@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JenisBarang extends Model
 {
-    
+
     use HasFactory, SoftDeletes;
 
     protected $table = 'jenis_barang';
@@ -16,6 +16,8 @@ class JenisBarang extends Model
     protected $guarded = [''];
 
     public $incrementing = false;
+
+    public $timestamps = false;
 
     protected $keyType = 'string';
 

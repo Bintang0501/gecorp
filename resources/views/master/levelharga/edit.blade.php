@@ -1,5 +1,7 @@
-<title>Tambah Level Harga - Gecorp</title>
+<title>Edit Data Level Harga - Gecorp</title>
+
 @extends('layouts.main')
+
 @section('content')
 
 <div class="breadcrumbs">
@@ -8,7 +10,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Tambah Data - Level Harga</strong></h1>
+                    <h1 class="card-title"><strong>Edit Data - Level Harga</strong></h1>
                     </div>
                 </div>
             </div>
@@ -18,7 +20,7 @@
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
                             <li><a href="{{ route('master.levelharga.index')}}">Data Level Harga</a></li>
-                            <li class="active">Tambah Data Level Harga</li>
+                        <li class="active">Edit Data Level Harga</li>
                         </ol>
                     </div>
                 </div>
@@ -27,8 +29,8 @@
     </div>
 </div>
 
-        <!-- Content -->
-        <div class="content">
+<!-- Content -->
+<div class="content">
             <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
@@ -41,12 +43,13 @@
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="{{ route('master.levelharga.store')}}" method="post" class="">
+                                    <form action="{{ route('master.levelharga.update', $levelharga->id)}}" method="post" enctype="multipart/form-data">
                                         @csrf
+                                        @method('put')
 
                                         <div class="form-group">
                                             <label for="nama_level_harga" class=" form-control-label">Nama Level Harga<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_level_harga" name="nama_level_harga" placeholder="Contoh : Level Harga" class="form-control">
+                                        <input type="text" class="form-control @error('nama_level_harga') is-invalid @enderror" name="nama_level_harga" value="{{ old('nama_level_harga', $levelharga->nama_level_harga) }}">
                                         </div>
                                         <br>
                                         <div class="form-group">
@@ -56,6 +59,7 @@
                                         </div>
                                     </form>
                                 </div>
+
                                 {{-- end Content --}}
                             </div>
                         </div>
@@ -67,6 +71,4 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-        @endsection
-</body>
-</html>
+@endsection

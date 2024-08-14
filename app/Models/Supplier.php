@@ -14,9 +14,11 @@ class Supplier extends Model
 
     protected $guarded = [''];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     protected $keyType = 'string';
 
     public $primaryKey = 'id';
+
+    public $timestamps = false;
 }

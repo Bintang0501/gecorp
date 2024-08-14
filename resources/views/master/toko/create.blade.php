@@ -1,19 +1,7 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Tambah Data Toko - Gecorp</title>
+@extends('layouts.main')
 
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-<!-- Right Panel -->
-<div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -42,6 +30,7 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,32 +42,8 @@
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="#" method="post" class="">
-
-                                        <div class="form-group">
-                                            <label for="id_barang" class=" form-control-label">Id Barang</label>
-                                                <select name="id_barang" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
-                                                </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_jenis_barang" class=" form-control-label">Id Jenis Barang</label>
-                                                <select name="id_jenis_barang" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
-                                                </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_brand" class=" form-control-label">Id Brand</label>
-                                                <select name="id_brand" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
-                                                </select>
-                                        </div>
+                                    <form action="{{ route('master.toko.store')}}" method="post" class="">
+                                        @csrf
                                         <div class="form-group">
                                             <label for="nama_toko" class=" form-control-label">Nama Toko<span style="color: red">*</span></label>
                                             <input type="text" id="nama_toko" name="nama_toko" placeholder="Contoh : Toko Sejahtera" class="form-control">
@@ -90,26 +55,6 @@
                                         <div class="form-group">
                                             <label for="wilayah" class=" form-control-label">Alamat<span style="color: red">*</span></label>
                                             <textarea name="alamat" id="alamat" rows="4" placeholder="Contoh : Jl. Nyimas Gandasari No.18 Plered - Cirebon" class="form-control"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="nama_barang" class=" form-control-label">Nama Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_barang" name="nama_barang" placeholder="Contoh : Tws Bluetooth" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="jenis_barang" class=" form-control-label">Jenis Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="jenis_barang" name="jenis_barang" placeholder="Contoh : Aksesoris" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="brand_barang" class=" form-control-label">Brand Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="brand_barang" name="brand_barang" placeholder="Contoh : JBL" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="harga" class=" form-control-label">Harga<span style="color: red">*</span></label>
-                                            <input type="number" id="harga" name="harga" placeholder="Contoh : 1000000" class="form-control">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="stock" class=" form-control-label">Stock<span style="color: red">*</span></label>
-                                            <input type="number" id="stock" name="stock" placeholder="Contoh : 40" class="form-control">
                                         </div>
                                         <br>
                                         <div class="form-group">
@@ -131,12 +76,4 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
-</body>
-</html>
+@endsection

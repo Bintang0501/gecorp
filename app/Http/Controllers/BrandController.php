@@ -9,25 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class BrandController extends Controller
 {
-    
     public function index()
     {
         $brands = Brand::all();
         return view('master.brand.index', compact('brands'));
     }
 
-
-    public function create()
+    public function create(Request $request)
     {
-        return view('master.brand.create');
-    }
-
-
-    public function store(Request $request)
-    {
-        DB::beginTransaction();
-        try {
-            
+        try{
             $validatedData = $request->validate([
                 'nama_brand' => 'required|string|max:255',
             ]);
@@ -57,7 +47,6 @@ class BrandController extends Controller
         return view('master.brand.edit', compact('brand'));
     }
 
-    
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -71,8 +60,7 @@ class BrandController extends Controller
         return redirect()->route('master.brand.index')->with('success', 'Data berhasil diperbarui!');
     }
 
-    
-    public function delete(string $id)
+    public function destroy(string $id)
     {
         DB::beginTransaction();
         try {

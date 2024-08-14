@@ -1,5 +1,7 @@
-<title>Tambah Level Harga - Gecorp</title>
+<title>Tambah Data Promo   - Gecorp</title>
+
 @extends('layouts.main')
+
 @section('content')
 
 <div class="breadcrumbs">
@@ -8,7 +10,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Tambah Data - Level Harga</strong></h1>
+                        <h1 class="card-title"><strong>Tambah Data - Promo</strong></h1>
                     </div>
                 </div>
             </div>
@@ -17,8 +19,8 @@
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
-                            <li><a href="{{ route('master.levelharga.index')}}">Data Level Harga</a></li>
-                            <li class="active">Tambah Data Level Harga</li>
+                            <li><a href="{{ route('master.promo.index')}}">Data Promo</a></li>
+                            <li class="active">Tambah Data Promo</li>
                         </ol>
                     </div>
                 </div>
@@ -27,8 +29,8 @@
     </div>
 </div>
 
-        <!-- Content -->
-        <div class="content">
+<!-- Content -->
+<div class="content">
             <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
@@ -36,18 +38,33 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('master.levelharga.index')}}" class="btn btn-danger"></i> Kembali</a>
+                                <a href="{{ route('master.promo.index')}}" class="btn btn-danger"></i> Kembali</a>
                             </div>
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="{{ route('master.levelharga.store')}}" method="post" class="">
+                                    <form action="#" method="post" class="">
                                         @csrf
 
+                                        <input type="hidden" name="id" id="">
+
                                         <div class="form-group">
-                                            <label for="nama_level_harga" class=" form-control-label">Nama Level Harga<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_level_harga" name="nama_level_harga" placeholder="Contoh : Level Harga" class="form-control">
+                                            <label for="id_jenis_barang" class=" form-control-label">Nama Barang</label>
+                                                <select name="id_jenis_barang" id="select" class="form-control">
+                                                    <option value="1">Option #1</option>
+                                                    <option value="2">Option #2</option>
+                                                    <option value="3">Option #3</option>
+                                                </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="harga" class=" form-control-label">Harga<span style="color: red">*</span></label>
+                                            <input type="number" id="harga" name="harga" placeholder="Contoh : 700000" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="nama_toko" class=" form-control-label">Nama Toko<span style="color: red">*</span></label>
+                                            <input type="text" id="nama_toko" name="nama_toko" placeholder="Contoh : Toko Bangun Jaya" class="form-control">
+                                        </div>
+
                                         <br>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary">
@@ -56,6 +73,7 @@
                                         </div>
                                     </form>
                                 </div>
+
                                 {{-- end Content --}}
                             </div>
                         </div>
@@ -67,6 +85,4 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-        @endsection
-</body>
-</html>
+@endsection

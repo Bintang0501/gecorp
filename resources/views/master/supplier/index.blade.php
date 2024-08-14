@@ -1,19 +1,8 @@
-<!doctype html>
-<html class="no-js" lang="">
+<title>Data Supplier - Gecorp</title>
 
-<title>Data Supllier - Gecorp</title>
+@extends('layouts.main')
 
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -41,6 +30,8 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
+
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,28 +44,37 @@
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>#</th>
                                             <th>Nama</th>
                                             <th>Email</th>
+                                            <th>Alamat</th>
                                             <th>Kontak</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $no = 1; ?>
+                                        @forelse ($supplier as $spl)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Supplier 1</td>
-                                            <td>supplier1@gmail.com</td>
-                                            <td>089xxxxxxxx</td>
+                                            <td>{{$no++}}</td>
+                                            <td>{{$spl->nama_supplier}}</td>
+                                            <td>{{$spl->email}}</td>
+                                            <td>{{$spl->alamat}}</td>
+                                            <td>{{$spl->contact}}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
-                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.supplier.delete', $spl->id) }}" method="POST">
+                                                    <a href="{{ route('master.supplier.edit', $spl->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
+                                        @empty
+                                        <div class="alert alert-danger">
+                                            Data Supplier belum Tersedia.
+                                        </div>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -87,12 +87,4 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
-</body>
-</html>
+@endsection

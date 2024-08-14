@@ -1,19 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="">
-
-<title>Tambah Data Jenis Barang - Gecorp</title>
-
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-<!-- Right Panel -->
-<div id="right-panel" class="right-panel">
-
-@include('layout.header')
+<title>Jenis Barang - Gecorp</title>
+@extends('layouts.main')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -42,6 +29,7 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,11 +41,17 @@
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="#" method="post" class="">
+                                    <form action="{{ route('master.jenisbarang.store')}}" method="post" class="">
+                                        @csrf
 
                                         <div class="form-group">
                                             <label for="nama_jenis_barang" class=" form-control-label">Nama Jenis Barang<span style="color: red">*</span></label>
                                             <input type="text" id="nama_jenis_barang" name="nama_jenis_barang" placeholder="Contoh : Barang Kali" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fa fa-dot-circle-o"></i> Simpan
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -73,12 +67,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+@endsection
 </body>
 </html>

@@ -1,19 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="">
-
-<title>Data Stock Opname - Gecorp</title>
-
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+<title>Stock Opname - Gecorp</title>
+@extends('layouts.main')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -88,12 +75,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+        @endsection
 </body>
 </html>

@@ -1,19 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="">
-
-<title>Data Jenis Barang - Gecorp</title>
-
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+<title>Level Jenis Barang - Gecorp</title>
+@extends('layouts.main')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -41,6 +28,7 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,24 +41,31 @@
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>#</th>
                                             <th>Jenis Barang</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $no = 1; ?>
+                                        @forelse ($jenisbarang as $jb)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Sparepart</td>
+                                            <td>{{$no++}}</td>
+                                            <td>{{$jb->nama_jenis_barang}}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
-                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.jenisbarang.delete', $jb->id) }}" method="POST">
+                                                    <a href="{{ route('master.jenisbarang.edit', $jb->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
+                                        @empty
+                                        <div class="alert alert-danger">
+                                            Data Jenis Barang belum Tersedia.
+                                        </div>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -83,12 +78,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+@endsection
 </body>
 </html>
