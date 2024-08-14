@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LevelUser extends Model
 {
-    
+
     use HasFactory, SoftDeletes;
 
-    protected $table = 'level_user';
+    protected $table = 'level_users';
 
     protected $guarded = [''];
 
@@ -19,6 +19,13 @@ class LevelUser extends Model
 
     protected $keyType = 'string';
 
+    public $timestamps = false;
+
     public $primaryKey = 'id';
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 
 }

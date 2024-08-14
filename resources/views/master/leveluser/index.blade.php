@@ -1,19 +1,6 @@
-<!doctype html>
-<html class="no-js" lang="">
-
-<title>Data Level Karyawan - Gecorp</title>
-
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+<title>Level Karyawan - Gecorp</title>
+@extends('layouts.main')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -41,40 +28,44 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="#" class="btn btn-primary"><i class="ti-plus menu-icon"></i> Tambah</a>
+                                <a href="{{ route('master.leveluser.create')}}" class="btn btn-primary"><i class="ti-plus menu-icon"></i> Tambah</a>
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>ID</th>
+                                            <th>#</th>
                                             <th>Level User</th>
                                             <th>Informasi</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php $no = 1; ?>
+                                        @forelse ($leveluser as $lu)
                                         <tr>
-                                            <td>O</td>
-                                            <td>1</td>
-                                            <td>Manager Toko</td>
-                                            <td>Manager Toko</td>
+                                            <td>{{$no++}}</td>
+                                            <td>{{$lu->nama_level}}</td>
+                                            <td>{{$lu->informasi}}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
-                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                            <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="{{ route('master.leveluser.delete', $lu->id) }}" method="post">
+                                                    <a href="{{ route('master.leveluser.edit', $lu->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
+                                        @empty
+
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -87,12 +78,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+@endsection
 </body>
 </html>

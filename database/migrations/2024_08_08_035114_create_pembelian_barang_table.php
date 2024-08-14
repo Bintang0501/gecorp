@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('id_supplier');
             $table->string('id_toko');
             $table->string('no_nota');
-            $table->datetimes('tgl_nota');
-            $table->datetimes('tgl_beli');
+            $table->datetime('tgl_nota');
+            $table->datetime('tgl_beli');
             $table->string('nama_supplier');
             $table->string('nama_barang');
             $table->string('jenis_barang');

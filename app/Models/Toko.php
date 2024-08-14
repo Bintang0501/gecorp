@@ -16,7 +16,14 @@ class Toko extends Model
 
     public $incrementing = false;
 
+    public $timestamps = false;
+
     protected $keyType = 'string';
 
     public $primaryKey = 'id';
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 }

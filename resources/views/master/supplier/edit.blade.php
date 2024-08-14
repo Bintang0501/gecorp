@@ -1,4 +1,4 @@
-<title>Tambah Data Supplier - Gecorp</title>
+<title>Edit Data Supplier - Gecorp</title>
 
 @extends('layouts.main')
 
@@ -10,7 +10,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Tambah Data - Supplier</strong></h1>
+                    <h1 class="card-title"><strong>Edit Data - Supplier</strong></h1>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
                             <li><a href="{{ route('master.supplier.index')}}">Data Supplier</a></li>
-                            <li class="active">Tambah Data Supplier</li>
+                        <li class="active">Edit Data Supplier</li>
                         </ol>
                     </div>
                 </div>
@@ -43,26 +43,25 @@
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="{{ route('master.supplier.store')}}" method="post" class="">
+                                    <form action="{{ route('master.supplier.update', $supplier->id)}}" method="post" enctype="multipart/form-data">
                                         @csrf
-
-                                        <input type="hidden" name="id" id="">
+                                        @method('put')
 
                                         <div class="form-group">
                                             <label for="nama_supplier" class=" form-control-label">Nama Supplier<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_supplier" name="nama_supplier" placeholder="Contoh : Supplier1" class="form-control">
+                                            <input type="text" class="form-control @error('nama_supplier') is-invalid @enderror" name="nama_supplier" value="{{ old('nama_supplier', $supplier->nama_supplier) }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="email" class=" form-control-label">Email<span style="color: red">*</span></label>
-                                            <input type="email" id="email" name="email" placeholder="Contoh : supplier1@gmail.com" class="form-control">
+                                            <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $supplier->email) }}" placeholder="Masukkan email">
                                         </div>
                                         <div class="form-group">
                                             <label for="wilayah" class=" form-control-label">Alamat<span style="color: red">*</span></label>
-                                            <textarea name="alamat" id="alamat" rows="4" placeholder="Contoh : Jl. Nyimas Gandasari No.18 Plered - Cirebon" class="form-control"></textarea>
+                                            <textarea name="alamat" id="alamat" rows="4" @error('alamat') is-invalid @enderror" name="alamat" class="form-control">{{ old('alamat', $supplier->alamat) }}</textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="contact" class=" form-control-label">Contact<span style="color: red">*</span></label>
-                                            <input type="number" id="contact" name="contact" placeholder="Contoh : 081xxxxxxxxx" class="form-control">
+                                            <input type="number" id="contact" @error('contact') is-invalid @enderror" name="contact" value="{{ old('contact', $supplier->contact) }}" class="form-control">
                                         </div>
                                         <br>
                                         <div class="form-group">

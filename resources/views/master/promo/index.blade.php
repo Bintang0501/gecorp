@@ -1,19 +1,7 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Data Promo - Gecorp</title>
+@extends('layouts.main')
 
-@include('layout.source')
-
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -47,7 +35,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="#" class="btn btn-primary"><i class="ti-plus menu-icon"></i> Tambah</a>
+                                <a href="{{ route('master.promo.create')}}" class="btn btn-primary"><i class="ti-plus menu-icon"></i> Tambah</a>
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
@@ -91,12 +79,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+@endsection
 </body>
 </html>

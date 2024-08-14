@@ -11,16 +11,16 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti-server"></i>Master</a>
                     <ul class="sub-menu children dropdown-menu">
                         <li class="nav-item"><i class="fa fa-building-o"></i><a class="nav-link" href="{{ route('master.toko.index')}}" @class(["nav-link", "active"=> request()->routeIs('master.toko.index.*') ])>Data Toko</a></li>
-                        <li class="nav-item"><i class="fa fa-users"></i><a href="{{ route('master.user.index')}}">Data Karyawan</a></li>
-                        <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.barang.index')}}">Data Barang</a></li>
-                        <li class="nav-item"><i class="fa fa-tag"></i><a href="{{ route('master.brand.index')}}">Data Brand</a></li>
-                        <li class="nav-item"><i class="fa fa-download"></i><a href="{{ route('master.supplier.index')}}">Data Supplier</a></li>
-                        <li class="nav-item"><i class="fa fa-star"></i><a href="{{ route('master.promo.index')}}">Data Promo</a></li>
-                        <li class="nav-item"><i class="fa fa-shield"></i><a href="{{ route('master.leveluser.index')}}">Level Karyawan</a></li>
-                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{route('master.jenisbarang.index')}}">Jenis Barang</a></li>
-                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{ route('master.levelharga.index')}}">Level Harga</a></li>
-                        <li class="nav-item"><i class="fa fa-edit"></i><a href="{{ route('master.stockopname.index')}}">Stock Opname</a></li>
-                        <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.planorder.index')}}">Plan Order - All Toko</a></li>
+                        <li class="nav-item"><i class="fa fa-users"></i><a href="{{ route('master.user.index')}}"> Data Karyawan</a></li>
+                        <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.barang.index')}}"> Data Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-tag"></i><a href="{{ route('master.brand.index')}}"> Data Brand</a></li>
+                        <li class="nav-item"><i class="fa fa-download"></i><a href="{{ route('master.supplier.index')}}"> Data Supplier</a></li>
+                        <li class="nav-item"><i class="fa fa-star"></i><a href="{{ route('master.promo.index')}}"> Data Promo</a></li>
+                        <li class="nav-item"><i class="fa fa-shield"></i><a href="{{ route('master.leveluser.index')}}"> Level Karyawan</a></li>
+                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{route('master.jenisbarang.index')}}"> Jenis Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{ route('master.levelharga.index')}}"> Level Harga</a></li>
+                        <li class="nav-item"><i class="fa fa-edit"></i><a href="{{ route('master.stockopname.index')}}"> Stock Opname</a></li>
+                        <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.planorder.index')}}"> Plan Order - All Toko</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">

@@ -10,4 +10,8 @@ class PromoController extends Controller
     {
         return view('master.promo.index');
     }
+
+    public function create(){
+        return view('master.promo.create');
+    }
 }
