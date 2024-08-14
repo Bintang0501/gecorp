@@ -9,11 +9,11 @@ use Ramsey\Uuid\Uuid;
 
 class UserSeeder extends Seeder
 {
-    
+
     public function run(): void
     {
         User::create([
-            "id" => Uuid::uuid4()->getHex(),
+            "id" => 7,
             "id_toko" => 1,
             "id_level" => 1,
             "nama" => "Super Admin",
@@ -22,8 +22,6 @@ class UserSeeder extends Seeder
             "password" =>bcrypt("password"),
             "alamat" => "Cirebon",
             "no_hp" => 8527571268,
-            "nama_toko" => "Eka Cell",
-            "nama_level" => "admin"
         ]);
 
         // User::create([

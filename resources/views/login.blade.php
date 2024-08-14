@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
 <title>Login - Gecorp</title>
 
-@include('layout.source')
+@include('layouts.css.style_css')
 
 <body class="bg-dark">
 
@@ -35,7 +35,6 @@
         </div>
     </div>
 
-    @include('layout.footerjs')
 
 </body>
 </html>
