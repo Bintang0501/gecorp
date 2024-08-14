@@ -3,11 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisBarangController;
 use App\Http\Controllers\LevelHargaController;
 use App\Http\Controllers\LevelUserController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PembelianBarangController;
 use App\Http\Controllers\PlanOrderController;
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\StockOpnameController;
@@ -15,10 +14,6 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-
-Route::get('/', [LoginController::class, 'login'])->name('index');
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Toko Controller
 Route::get('/toko', [TokoController::class, 'index'])->name('master.toko.index');
@@ -39,18 +34,6 @@ Route::delete('/user/delete/{id}', [UserController::class, 'delete'])->name('mas
 // Barang Controller
 Route::get('/barang', [BarangController::class, 'index'])->name('master.barang.index');
 Route::get('/barang/create', [BarangController::class, 'create'])->name('master.barang.create');
-
-// Jenis Barang Controller
-Route::get('/jenisbarang', [JenisBarangController::class, 'index'])->name('master.jenisbarang.index');
-Route::get('/jenisbarang/create', [JenisBarangController::class, 'create'])->name('master.jenisbarang.create');
-Route::post('/jenisbarang/store', [JenisBarangController::class, 'store'])->name('master.jenisbarang.store');
-Route::get('/jenisbarang/edit{id}', [JenisBarangController::class, 'edit'])->name('master.jenisbarang.edit');
-Route::put('/jenisbarang/update{id}', [JenisBarangController::class, 'update'])->name('master.jenisbarang.update');
-Route::delete('/jenisbarang/delete{id}', [JenisBarangController::class, 'delete'])->name('master.jenisbarang.delete');
-
-// Brand Controller
-Route::get('/brand', [BrandController::class, 'index'])->name('master.brand.index');
-Route::get('/brand/create', [BrandController::class, 'create'])->name('master.brand.create');
 
 // Supplier Controller
 Route::get('/supplier', [SupplierController::class, 'index'])->name('master.supplier.index');
@@ -83,42 +66,39 @@ Route::delete('/leveluser/delete/{id}', [LevelUserController::class, 'delete'])-
 Route::get('/stockopname', [StockOpnameController::class, 'index'])->name('master.stockopname.index');
 Route::get('/planorder', [PlanOrderController::class, 'index'])->name('master.planorder.index');
 
-// Pembelian Barang
-Route::get('/pembelianbarang', function () {return view('transaksi.pembelianbarang.index');})->name('transaksi.pembelianbarang.index');
-Route::get('/pembelianbarang/create', function () {return view('transaksi.pembelianbarang.create');})->name('transaksi.pembelianbarang.create');
-
 // Pengiriman Barang
 Route::get('/pengirimanbarang', function () {return view('transaksi.pengirimanbarang.index');})->name('transaksi.pengirimanbarang.index');
 Route::get('/pengirimanbarang/create', function () {return view('transaksi.pengirimanbarang.create');})->name('transaksi.pengirimanbarang.create');
 
-// Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
-// Route::get('/login', [LoginController::class, 'login'])->name('login');
-
-// Route::group(['middleware' => ['guest']], function () {
-//     Route::prefix('login')->group(function () {
-//         Route::get('/', [LoginController::class, 'login']);
-//         Route::post('/', [LoginController::class, 'post_login'])->name('post_login');
-//     });
-// });
-
-// Route::group(['middleware' => ['is_autentikasi']], function () {
-//     Route::prefix('super_admin')->group(function () {
-//         Route::get('/dashboard', [SuperAdminController::class, 'dashboard_admin'])->name('ds_admin');
-
-//         // Route::prefix('buku_pelaut')->group(function(){
-//         //     Route::get('/', [SuperAdminBukuPelautController::class, 'index']);
-//         //     Route::get('/show/{id}', [SuperAdminBukuPelautController::class, 'show']);
-//         //     Route::put('/update/{id}', [SuperAdminBukuPelautController::class, 'update']);
-//         // });
-
-//     Route::get('/logout', [LoginController::class, 'logout']);
-//     });
-// });
-
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('post_login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('master.index');
+
+        // Brand Controller
+        Route::get('/brand', [BrandController::class, 'index'])->name('master.brand.index');
+        Route::get('/brand/create', [BrandController::class, 'create'])->name('master.brand.create');
+        Route::post('/brand/store', [BrandController::class, 'store'])->name('master.brand.store');
+        Route::get('/brand/{id}/edit', [BrandController::class, 'edit'])->name('master.brand.edit');
+        Route::put('/brand/{id}', [BrandController::class, 'update'])->name('master.brand.update');
+        Route::delete('/brand/{id}', [BrandController::class, 'delete'])->name('master.brand.delete');
+
+        // Jenis Barang Controller
+        Route::get('/jenis_barang', [JenisBarangController::class, 'index'])->name('master.jenisbarang.index');
+        Route::get('/jenis_barang/create', [JenisBarangController::class, 'create'])->name('master.jenisbarang.create');
+
+        // Pembelian Barang
+        Route::get('/pembelianbarang', [PembelianBarangController::class, 'index'])->name('master.pembelianbarang.index');
+        Route::get('/pembelianbarang/create', [PembelianBarangController::class, 'create'])->name('master.pembelianbarang.create');
+        Route::post('/pembelianbarang/store', [PembelianBarangController::class, 'store'])->name('master.pembelianbarang.store');
+        Route::get('/pembelianbarang/{id}/edit', [PembelianBarangController::class, 'edit'])->name('master.pembelianbarang.edit');
+        Route::put('/pembelianbarang/{id}/update', [PembelianBarangController::class, 'update'])->name('master.pembelianbarang.update');
+        Route::delete('/pembelianbarang/{id}/delete', [PembelianBarangController::class, 'delete'])->name('master.pembelianbarang.delete');
+        
+    });
+
 });

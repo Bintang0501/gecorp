@@ -29,7 +29,7 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                            <li><a href="{{ route('master.index')}}">Dashboard</a></li>
                             <li><a href="{{ route('master.brand.index')}}">Data Brand</a></li>
                             <li class="active">Tambah Data Brand</li>
                         </ol>
@@ -42,6 +42,20 @@
 
         <!-- Content -->
         <div class="content">
+            @if ($errors->any())
+            <div class="alerts">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger" role="alert" id="error-alert">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @endif
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -53,15 +67,18 @@
                             <div class="card-body">
                                 {{-- Content --}}
                                 <div class="card-body card-block">
-                                    <form action="#" method="post" class="">
-
+                                    <form action="{{ route('master.brand.store') }}" method="post">
+                                        @csrf
                                         <div class="form-group">
                                             <label for="nama_brand" class=" form-control-label">Nama Brand<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_brand" name="nama_brand" placeholder="Contoh : Bearbrand" class="form-control">
+                                            <input type="text" id="nama_brand" name="nama_brand" value="{{ old('nama_brand') }}" placeholder="Contoh : Bearbrand" class="form-control">
+                                        </div>
+
+                                        <div class="form-actions form-group">
+                                            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                         </div>
                                     </form>
                                 </div>
-
                                 {{-- end Content --}}
                             </div>
                         </div>
@@ -80,5 +97,31 @@
     <!-- /#right-panel -->
 
     @include('layout.footerjs')
+
+    {{-- <script>
+        window.setTimeout(function() {
+            const errorAlert = document.getElementById('error-alert');
+
+            if (errorAlert) {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.remove();
+                }, 500);
+            }
+        }, 10000);
+    </script>
+    <style>
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+    </style> --}}
+
+    @if (session('console_error'))
+        <script>
+            console.error('Error: {{ session('console_error') }}');
+        </script>
+    @endif
+
 </body>
 </html>

@@ -8,13 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class JenisBarangController extends Controller
 {
+<<<<<<< HEAD
+    
+=======
 
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
     public function index()
     {
         $jenisbarang = JenisBarang::all();
         return view('master.jenisbarang.index', compact('jenisbarang'));
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
     public function create()
     {
         return view('master.jenisbarang.create');
@@ -39,12 +47,21 @@ class JenisBarangController extends Controller
         return redirect()->route('master.jenisbarang.index')->with('success', 'Sukses menambahkan Jenis Barang Baru');
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
     public function show(string $id)
     {
         //
     }
 
+<<<<<<< HEAD
+
+    public function edit(string $id)
+=======
     public function edit(string $id )
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
     {
         $jenisbarang = JenisBarang::findOrFail($id);
         return view('master.jenisbarang.edit', compact('jenisbarang'));
@@ -63,7 +80,12 @@ class JenisBarangController extends Controller
     return redirect()->route('master.jenisbarang.index')->with('success', 'Sukses Mengubah Data Jenis Barang');
     }
 
+<<<<<<< HEAD
+    
+    public function destroy(string $id)
+=======
     public function delete(string $id)
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
     {
         DB::beginTransaction();
         $jenisbarang = JenisBarang::findOrFail($id);

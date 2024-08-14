@@ -15,12 +15,13 @@ class User extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [''];
 
+<<<<<<< HEAD
+    protected $keyType = "string";
+
+    public $primaryKey = "id";
+=======
     public $incrementing = false;
 
     public $timestamps = false;
@@ -33,6 +34,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+>>>>>>> c19ede8d5ddbc5db02ba6e610464257766e497b9
 
     public function leveluser(): BelongsTo
     {
