@@ -1,19 +1,8 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Data Pengiriman Barang - Gecorp</title>
 
-@include('layout.source')
+@extends('layouts.main')
 
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-<!-- Right Panel -->
-<div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -101,12 +90,6 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
-
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
+        @endsection
 </body>
 </html>
