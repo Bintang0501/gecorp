@@ -23,7 +23,8 @@ class AuthController extends Controller
                 $request->session()->regenerate();
                 $user = Auth::user();
 
-                if ($user->nama_level == 'admin') {
+                // dd($user);
+                if ($user->id_level == 4) {
                     return redirect()->route('master.index')->with('message', 'Berhasil Login');
                 } elseif ($user->nama_level == 'petugas') {
                     return redirect('/petugas/dashboard')->with('message', 'Berhasil Login');

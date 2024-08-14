@@ -9,6 +9,6 @@ class SuperAdminController extends Controller
 {
     public function dashboard_admin()
     {
-        return view('dashboard');
+        return view('master.index');
     }
 }
