@@ -29,7 +29,7 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                            <li><a href="{{ route('master.index')}}">Dashboard</a></li>
                             <li class="active">Data Brand</li>
                         </ol>
                     </div>
@@ -39,8 +39,32 @@
     </div>
 </div>
 
-        <!-- Content -->
-        <div class="content">
+
+<!-- Content -->
+<div class="content">
+    @if (session('success'))
+    <div class="alerts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert" id="success-alert">
+                    {{ session('success') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div class="alerts">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert" id="error-alert">
+                    {{ session('error') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -59,18 +83,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach($brands as $brand)
                                         <tr>
-                                            <td>1</td>
-                                            <td>Kontol Mania</td>
+                                            <td>{{ $brand->id }}</td>
+                                            <td>{{ $brand->nama_brand }}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
-                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <a href="{{ route('master.brand.edit', $brand->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <form action="{{ route('master.brand.delete', $brand->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -90,5 +116,32 @@
     <!-- /#right-panel -->
 
     @include('layout.footerjs')
+
+    <script>
+        window.setTimeout(function() {
+            const successAlert = document.getElementById('success-alert');
+            const errorAlert = document.getElementById('error-alert');
+
+            if (successAlert) {
+                successAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    successAlert.remove();
+                }, 500);
+            }
+
+            if (errorAlert) {
+                errorAlert.classList.add('fade-out');
+                setTimeout(function() {
+                    errorAlert.remove();
+                }, 500);
+            }
+        }, 10000);
+    </script>
+    <style>
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+    </style>
 </body>
 </html>

@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            "id" => Uuid::uuid4()->getHex(),
+            "id" => 1,
             "id_toko" => 1,
             "id_level" => 1,
             "nama" => "Super Admin",

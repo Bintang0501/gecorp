@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('brand_barang');
             $table->integer('stock');
             $table->double('harga');
-            $table->string('stock_fix');
-            $table->string('stock_error');
+            $table->string('stock_fix')->nullable();
+            $table->string('stock_error')->nullable();
         });
     }
 

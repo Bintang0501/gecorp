@@ -16,20 +16,27 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('username', 'password');
+        try {
+            $credentials = $request->only('username', 'password');
 
-        if (Auth::attempt($credentials)) {
-            Log::info('User authenticated successfully.', ['user_id' => Auth::id()]);
-            $request->session()->regenerate();
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                $user = Auth::user();
 
-            return redirect()->intended('/dashboard')->with('message', 'Berhasil Login');
-        } else {
-            Log::warning('Authentication failed.', ['username' => $request->username]);
+                if ($user->nama_level == 'admin') {
+                    return redirect()->route('master.index')->with('message', 'Berhasil Login');
+                } elseif ($user->nama_level == 'petugas') {
+                    return redirect('/petugas/dashboard')->with('message', 'Berhasil Login');
+                } else {
+                    return redirect('/default/dashboard')->with('message', 'Berhasil Login');
+                }
+            } else {
+                // Jika kredensial salah
+                return redirect()->back()->withErrors(['error' => 'Username atau password salah'])->withInput();
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
-
-        return back()->withErrors([
-            'username' => 'The provided credentials do not match our records.',
-        ]);
     }
 
 

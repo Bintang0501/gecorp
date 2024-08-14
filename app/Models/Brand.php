@@ -13,12 +13,12 @@ class Brand extends Model
 
     protected $table = 'brand';
 
-    protected $guarded = [''];
-
-    public $incrementing = false;
+    protected $fillable = ['nama_brand'];
 
     protected $keyType = 'string';
 
     public $primaryKey = 'id';
+
+    public $timestamps = false;
 
 }

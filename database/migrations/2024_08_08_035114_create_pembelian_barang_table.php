@@ -9,20 +9,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pembelian_barang', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id('id');
+            $table->string('id_users')->nullable();
             $table->string('id_supplier');
             $table->string('id_toko');
-            $table->string('no_nota');
-            $table->dateTime('tgl_nota');
-            $table->dateTime('tgl_beli');
-            $table->string('nama_supplier');
-            $table->string('nama_barang');
-            $table->string('jenis_barang');
-            $table->string('brand_barang');
-            $table->integer('jml_item');
-            $table->double('total_harga');
-            $table->string('nama_toko');
-            $table->enum('status', ['progress', 'done', 'failed']);
+            $table->string('no_nota')->nullable();
+            $table->dateTime('tgl_nota')->nullable();
+            $table->dateTime('tgl_beli')->nullable();
+            $table->string('nama_users')->nullable();
+            $table->string('nama_toko')->nullable();
+            $table->string('nama_supplier')->nullable();
+            $table->integer('total_item')->nullable();
+            $table->double('total_harga')->nullable();
+            $table->enum('status', ['progress', 'done', 'failed'])->default('progress');
+            $table->softDeletes();
         });
     }
 

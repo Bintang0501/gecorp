@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,11 +11,26 @@ class PembelianBarang extends Model
 
     protected $table = 'pembelian_barang';
 
-    protected $guarded = [''];
+    // Disable default timestamps
+    public $timestamps = false;
 
-    public $incrementing = false;
+    protected $fillable = [
+        'id_users',
+        'id_supplier',
+        'id_toko',
+        'no_nota',
+        'tgl_nota',
+        'tgl_beli',
+        'nama_users',
+        'nama_toko',
+        'nama_supplier',
+        'total_item',
+        'total_harga',
+        'status'
+    ];
 
-    protected $keyType = 'string';
-
-    public $primaryKey = 'id';
+    public function detail()
+    {
+        return $this->hasMany(DetailPembelianBarang::class, 'id_pembelian_barang');
+    }
 }

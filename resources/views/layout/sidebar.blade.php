@@ -5,7 +5,7 @@
             <ul class="nav navbar-nav">
 
                 <li>
-                    <a href="{{route('dashboard')}}"><i class="menu-icon fa fa-laptop" @class(["nav-link", "active"=> request()->routeIs('dashboard.*') ])></i>Dashboard </a>
+                    <a href="{{route('master.index')}}"><i class="menu-icon fa fa-laptop" @class(["nav-link", "active"=> request()->routeIs('dashboard.*') ])></i>Dashboard </a>
                 </li>
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon ti-server"></i>Master</a>
@@ -17,7 +17,7 @@
                         <li class="nav-item"><i class="fa fa-download"></i><a href="{{ route('master.supplier.index')}}">Data Supplier</a></li>
                         <li class="nav-item"><i class="fa fa-star"></i><a href="{{ route('master.promo.index')}}">Data Promo</a></li>
                         <li class="nav-item"><i class="fa fa-shield"></i><a href="{{ route('master.leveluser.index')}}">Level Karyawan</a></li>
-                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{route('master.jenisbarang.index')}}">Jenis Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-sitemap"></i><a href="">Jenis Barang</a></li>
                         <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{ route('master.levelharga.index')}}">Level Harga</a></li>
                         <li class="nav-item"><i class="fa fa-edit"></i><a href="{{ route('master.stockopname.index')}}">Stock Opname</a></li>
                         <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.planorder.index')}}">Plan Order - All Toko</a></li>
@@ -32,7 +32,7 @@
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-shopping-cart"></i>Transaksi</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li class="nav-item"><i class="fa fa-shopping-cart"></i><a href="{{ route('transaksi.pembelianbarang.index')}}">Pembelian Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-shopping-cart"></i><a href="{{ route('master.pembelianbarang.index')}}">Pembelian Barang</a></li>
                         <li class="nav-item"><i class="fa fa-truck"></i><a href="{{ route('transaksi.pengirimanbarang.index')}}">Pengiriman Barang</a></li>
                     </ul>
                 </li>

@@ -29,7 +29,7 @@
                 <div class="page-header float-right">
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
-                            <li><a href="{{ route('dashboard')}}">Dashboard</a></li>
+                            <li><a href="{{ route('master.index')}}">Dashboard</a></li>
                             <li class="active">Data Jenis Barang</li>
                         </ol>
                     </div>
