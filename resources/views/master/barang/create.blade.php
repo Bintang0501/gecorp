@@ -44,20 +44,23 @@
                                     <form action="#" method="post" class="">
 
                                         <div class="form-group">
-                                            <label for="id_pembelian_barang" class=" form-control-label">Id Barang</label>
+                                            <label for="id_pembelian_barang" class=" form-control-label">Nama Barang</label>
                                                 <select name="id_pembelian_barang" id="select" class="form-control">
-                                                    <option value="1">Option #1</option>
-                                                    <option value="2">Option #2</option>
-                                                    <option value="3">Option #3</option>
+                                                    <option value="">~Pilih Barang~</option>
+                                                    @foreach($detail as $dt)
+                                                        @foreach($pembelian as $pembelianItem)
+                                                            @if($dt->id_pembelian_barang == $pembelianItem->id && $pembelianItem->status == 'done')
+                                                                <option value="{{ $dt->id }}">{{ $dt->nama_barang }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
                                                 </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="nama_barang" class=" form-control-label">Nama Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_barang" name="nama_barang" readonly placeholder="Narkoba" class="form-control">
-                                        </div>
-                                        <div class="form-group">
+                                            @foreach($detail as $dt)
                                             <label for="jenis_barang" class=" form-control-label">Jenis Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="jenis_barang" name="jenis_barang" readonly placeholder="Barang Haram" class="form-control">
+                                            <input type="text" id="jenis_barang" name="jenis_barang" readonly value="{{ $dt->jenis_barang }}" class="form-control">
+                                            @endforeach
                                         </div>
                                         <div class="form-group">
                                             <label for="brand_barang" class=" form-control-label">Brand Barang<span style="color: red">*</span></label>

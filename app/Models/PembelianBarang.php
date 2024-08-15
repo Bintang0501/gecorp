@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Http\Controllers\BarangController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,5 +33,10 @@ class PembelianBarang extends Model
     public function detail()
     {
         return $this->hasMany(DetailPembelianBarang::class, 'id_pembelian_barang');
+    }
+
+    public function barang()
+    {
+        return $this->hasMany(BarangController::class, 'id');
     }
 }
