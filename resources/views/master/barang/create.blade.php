@@ -68,10 +68,6 @@
                                             <input type="number" id="harga" name="harga" readonly placeholder="500000" class="form-control">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nama_supplier" class=" form-control-label">Nama Supplier<span style="color: red">*</span></label>
-                                            <input type="text" id="nama_supplier" name="nama_supplier" readonly placeholder="Nama Supplier" class="form-control">
-                                        </div>
-                                        <div class="form-group">
                                             <label for="stock" class=" form-control-label">Stock<span style="color: red">*</span></label>
                                             <input type="number" id="stock" name="stock" placeholder="Contoh : 12" class="form-control">
                                         </div>

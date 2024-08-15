@@ -29,4 +29,9 @@ class DetailPembelianBarang extends Model
     {
         return $this->belongsTo(PembelianBarang::class, 'id_pembelian_barang');
     }
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'id');
+    }
 }
