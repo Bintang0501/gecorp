@@ -51,7 +51,7 @@
                                             <select name="id_toko" class="standardSelect" tabindex="1">
                                                 <option value="">~Pilih~</option>
                                                     @foreach ($toko as $tk)
-                                                    <option value="{{ $tk->id }}">{{ $tk->nama_toko }}</option>
+                                                    <option value="{{ $tk->id }}" {{ $user->id_toko == $tk->id ? 'selected' : '' }}>{{ $tk->nama_toko }}</option>
                                                     @endforeach
                                                 </select>
                                         </div>
@@ -60,7 +60,7 @@
                                             <select name="id_level" class="standardSelect" tabindex="1">
                                                 <option value="">~Pilih~</option>
                                                     @foreach ($leveluser as $lu)
-                                                    <option value="{{ $lu->id }}" {{ old('id_level', $lu->id_level) == "$lu->id" ? "selected" : "" }}>{{ $lu->nama_level }}</option>
+                                                    <option value="{{ $lu->id }}" {{ old('id_level', $user->id_level) == "$lu->id" ? "selected" : "" }}>{{ $lu->nama_level }}</option>
                                                     @endforeach
                                                 </select>
                                         </div>

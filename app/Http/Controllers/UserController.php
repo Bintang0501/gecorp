@@ -67,13 +67,12 @@ class UserController extends Controller
 
     public function edit(String $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with(['leveluser', 'toko'])->findOrFail($id);
+
+        // dd($user);
         $toko = Toko::all();
         $leveluser = LevelUser::all();
-        return view('master.user.edit', compact('user', 'toko', 'leveluser'), [
-            'leveluser' => LevelUser::all()->pluck('nama_level','id'),
-            'toko' => Toko::all()->pluck('nama_toko', 'id'),
-        ]);
+        return view('master.user.edit', compact('user', 'toko', 'leveluser'));
     }
 
     public function update(Request $request, String $id)

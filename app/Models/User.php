@@ -37,7 +37,7 @@ class User extends Authenticatable
 
     public function toko(): BelongsTo
     {
-        return $this->belongsTo(Toko::class, 'id_toko');
+        return $this->belongsTo(Toko::class, 'id_toko', 'id');
     }
 
 }

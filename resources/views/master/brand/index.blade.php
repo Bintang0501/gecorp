@@ -1,19 +1,8 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Data Brand - Gecorp</title>
 
-@include('layout.source')
+@extends('layouts.main')
 
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -77,7 +66,7 @@
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>#</th>
                                             <th>Nama Brand</th>
                                             <th>Action</th>
                                         </tr>
@@ -85,7 +74,7 @@
                                     <tbody>
                                         @foreach($brands as $brand)
                                         <tr>
-                                            <td>{{ $brand->id }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $brand->nama_brand }}</td>
                                             <td>
                                                 <a href="{{ route('master.brand.edit', $brand->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
@@ -109,39 +98,7 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
 
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
-
-    <script>
-        window.setTimeout(function() {
-            const successAlert = document.getElementById('success-alert');
-            const errorAlert = document.getElementById('error-alert');
-
-            if (successAlert) {
-                successAlert.classList.add('fade-out');
-                setTimeout(function() {
-                    successAlert.remove();
-                }, 500);
-            }
-
-            if (errorAlert) {
-                errorAlert.classList.add('fade-out');
-                setTimeout(function() {
-                    errorAlert.remove();
-                }, 500);
-            }
-        }, 10000);
-    </script>
-    <style>
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-        }
-    </style>
+        @endsection
 </body>
 </html>

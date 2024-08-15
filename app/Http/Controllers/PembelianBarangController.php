@@ -106,6 +106,7 @@ class PembelianBarangController extends Controller
             // Update the `PembelianBarang` data
             $pembelian->id_supplier = $request->id_supplier;
             $pembelian->id_toko = $request->id_toko;
+            $pembelian->status = $request->status;
             $pembelian->save();
 
             // Ensure the arrays are not null

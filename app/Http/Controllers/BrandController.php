@@ -15,7 +15,12 @@ class BrandController extends Controller
         return view('master.brand.index', compact('brands'));
     }
 
-    public function create(Request $request)
+    public function create()
+    {
+        return view('master.brand.create');
+    }
+
+    public function store(Request $request)
     {
         try{
             $validatedData = $request->validate([
@@ -25,7 +30,7 @@ class BrandController extends Controller
             // if ($validatedData->fails()) {
             //     return redirect()->back()->withErrors('validatedData')->withInput();
             // }
-            
+
             $data = Brand::create([
                 'nama_brand' => $validatedData['nama_brand'],
             ]);
@@ -40,7 +45,7 @@ class BrandController extends Controller
             return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
- 
+
     public function edit(string $id)
     {
         $brand = Brand::findOrFail($id);
@@ -52,15 +57,15 @@ class BrandController extends Controller
         $request->validate([
             'nama_brand' => 'required|string|max:255',
         ]);
-    
+
         $brand = Brand::findOrFail($id);
         $brand->nama_brand = $request->input('nama_brand');
         $brand->save();
-    
+
         return redirect()->route('master.brand.index')->with('success', 'Data berhasil diperbarui!');
     }
 
-    public function destroy(string $id)
+    public function delete(string $id)
     {
         DB::beginTransaction();
         try {

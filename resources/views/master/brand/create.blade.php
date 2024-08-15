@@ -1,19 +1,8 @@
-<!doctype html>
-<html class="no-js" lang="">
-
 <title>Tambah Data Brand - Gecorp</title>
 
-@include('layout.source')
+@extends('layouts.main')
 
-<body>
-{{-- Sidebar --}}
-@include('layout.sidebar')
-{{-- end Sidebar --}}
-
-<!-- Right Panel -->
-<div id="right-panel" class="right-panel">
-
-@include('layout.header')
+@section('content')
 
 <div class="breadcrumbs">
     <div class="breadcrumbs-inner">
@@ -90,38 +79,8 @@
         <!-- /.content -->
         <div class="clearfix"></div>
         <!-- Footer -->
-    @include('layout.copyright')
 
-        <!-- /.site-footer -->
-    </div>
-    <!-- /#right-panel -->
-
-    @include('layout.footerjs')
-
-    {{-- <script>
-        window.setTimeout(function() {
-            const errorAlert = document.getElementById('error-alert');
-
-            if (errorAlert) {
-                errorAlert.classList.add('fade-out');
-                setTimeout(function() {
-                    errorAlert.remove();
-                }, 500);
-            }
-        }, 10000);
-    </script>
-    <style>
-        .fade-out {
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-        }
-    </style> --}}
-
-    @if (session('console_error'))
-        <script>
-            console.error('Error: {{ session('console_error') }}');
-        </script>
-    @endif
+        @endsection
 
 </body>
 </html>

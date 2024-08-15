@@ -35,6 +35,10 @@ Route::middleware(['auth'])->group(function () {
         // Jenis Barang Controller
         Route::get('/jenis_barang', [JenisBarangController::class, 'index'])->name('master.jenisbarang.index');
         Route::get('/jenis_barang/create', [JenisBarangController::class, 'create'])->name('master.jenisbarang.create');
+        Route::post('/jenis_barang/store', [JenisBarangController::class, 'store'])->name('master.jenisbarang.store');
+        Route::get('/jenis_barang{id}/edit', [JenisBarangController::class, 'edit'])->name('master.jenisbarang.edit');
+        Route::put('/jenis_barang{id}/update', [JenisBarangController::class, 'update'])->name('master.jenisbarang.update');
+        Route::delete('/jenis_barang{id}/delete', [JenisBarangController::class, 'delete'])->name('master.jenisbarang.delete');
 
         // Pembelian Barang
         Route::get('/pembelianbarang', [PembelianBarangController::class, 'index'])->name('master.pembelianbarang.index');
