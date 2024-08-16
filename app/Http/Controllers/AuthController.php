@@ -24,7 +24,7 @@ class AuthController extends Controller
                 $user = Auth::user();
 
                 // dd($user);
-                if ($user->id_level == 4) {
+                if ($user->id_level == 1) {
                     return redirect()->route('master.index')->with('message', 'Berhasil Login');
                 } elseif ($user->nama_level == 'petugas') {
                     return redirect('/petugas/dashboard')->with('message', 'Berhasil Login');

@@ -23,6 +23,7 @@ class DetailPembelianBarang extends Model
         'brand_barang',
         'harga_barang',
         'qty',
+        'status',
     ];
 
     public function pembelian()

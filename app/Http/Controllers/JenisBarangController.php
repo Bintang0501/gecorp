@@ -56,10 +56,10 @@ class JenisBarangController extends Controller
            $jenisbarang->update([
             'nama_jenis_barang'=> $request->nama_jenis_barang,
            ]);
-     } catch (\Throwable $th) {
-        return redirect()->back()->with('error', $th->getMessage())->withInput();
-    }
-    return redirect()->route('master.jenisbarang.index')->with('success', 'Sukses Mengubah Data Jenis Barang');
+           return redirect()->route('master.jenisbarang.index')->with('success', 'Sukses Mengubah Data Jenis Barang');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
+        }
     }
 
     public function delete(string $id)
