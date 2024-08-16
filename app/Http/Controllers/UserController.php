@@ -31,6 +31,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'id_toko' => 'required',
+            'id_level' => 'required',
             'nama' => 'required|max:255',
             'username' => 'required|max:255',
             'password' => 'required|min:8|regex:/([0-9])/',
@@ -38,6 +40,8 @@ class UserController extends Controller
             'alamat' => 'required|max:255',
             'no_hp' => 'required|max:255',
         ],[
+            'id_toko.required' => 'Nama Toko tidak boleh kosong.',
+            'id_level.required' => 'Level tidak boleh kosong.',
             'nama.required' => 'Nama tidak boleh kosong.',
             'username.required' => 'Username tidak boleh kosong.',
             'password.required' => 'Password tidak boleh kosong.',

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPembelianBarang;
+use App\Models\PembelianBarang;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
@@ -13,9 +15,12 @@ class BarangController extends Controller
 
     public function create()
     {
-        return view('master.barang.create');
-    }
+        $detail = DetailPembelianBarang::all();
+        $pembelian = PembelianBarang::all();
 
+        // Mengirim data ke view
+        return view('master.barang.create', compact('detail', 'pembelian'));
+    }
     public function store(Request $request)
     {
         //

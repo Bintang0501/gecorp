@@ -47,7 +47,7 @@
                                         <div class="form-group">
                                             <label for="id_toko" class=" form-control-label">Nama Toko</label>
                                             <select name="id_toko" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                                <option value="">~Pilih~</option>
+                                                <option value="" required>~Pilih~</option>
                                                     @foreach ($toko as $tk)
                                                     <option value="{{ $tk->id }}">{{ $tk->nama_toko }}</option>
                                                     @endforeach
@@ -56,7 +56,7 @@
                                         <div class="form-group">
                                             <label for="id_level" class=" form-control-label">Level</label>
                                             <select name="id_level" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                                <option value="">~Pilih~</option>
+                                            <option value="" required>~Pilih~</option>
                                                     @foreach ($leveluser as $lu)
                                                     <option value="{{ $lu->id }}">{{ $lu->nama_level }}</option>
                                                     @endforeach
