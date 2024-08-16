@@ -52,6 +52,17 @@
                                             <input type="text" class="form-control @error('nama_toko') is-invalid @enderror" name="nama_toko" value="{{ old('nama_toko', $toko->nama_toko) }}">
                                         </div>
                                         <div class="form-group">
+                                            <label for="id_level_harga" class="form-control-label">Level Harga</label>
+                                            <select name="id_level_harga[]" multiple class="standardSelect">
+                                                @foreach ($levelharga as $lh)
+                                                    <option value="{{ $lh->id }}"
+                                                        @if(in_array($lh->id, json_decode($toko->id_level_harga, true))) selected @endif>
+                                                        {{ $lh->nama_level_harga }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="wilayah" class=" form-control-label">Wilayah<span style="color: red">*</span></label>
                                             <input type="text" class="form-control @error('wilayah') is-invalid @enderror" name="wilayah" value="{{ old('wilayah', $toko->wilayah) }}" placeholder="Masukkan wilayah">
                                         </div>

@@ -57,10 +57,8 @@
                                                 </select>
                                         </div>
                                         <div class="form-group">
-                                            @foreach($detail as $dt)
                                             <label for="jenis_barang" class=" form-control-label">Jenis Barang<span style="color: red">*</span></label>
-                                            <input type="text" id="jenis_barang" name="jenis_barang" readonly value="{{ $dt->jenis_barang }}" class="form-control">
-                                            @endforeach
+                                            <input type="text" id="jenis_barang" name="jenis_barang" readonly value="" class="form-control">
                                         </div>
                                         <div class="form-group">
                                             <label for="brand_barang" class=" form-control-label">Brand Barang<span style="color: red">*</span></label>

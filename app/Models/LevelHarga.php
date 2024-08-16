@@ -22,4 +22,20 @@ class LevelHarga extends Model
 
     public $primaryKey = 'id';
 
+    public function member()
+    {
+        return $this->hasMany(Member::class, 'id_level_harga');
+    }
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'id_level_harga');
+    }
+
+    public function toko()
+    {
+        return $this->belongsToMany(Toko::class, 'id_level_harga');
+    }
+
+
 }

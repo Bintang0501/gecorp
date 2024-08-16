@@ -13,7 +13,6 @@ class UserController extends Controller
 {
     public function index()
     {
-
         $user = User::with('leveluser', 'toko')->get();
         return view('master.user.index', compact('user'));
     }

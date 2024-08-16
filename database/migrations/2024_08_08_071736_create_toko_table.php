@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('toko', function (Blueprint $table) {
             $table->id('id');
             $table->string('nama_toko');
+            $table->string('id_level_harga');
             $table->string('wilayah');
             $table->text('alamat');
             $table->softDeletes();

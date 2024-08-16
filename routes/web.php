@@ -6,6 +6,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\JenisBarangController;
 use App\Http\Controllers\LevelHargaController;
 use App\Http\Controllers\LevelUserController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PembelianBarangController;
 use App\Http\Controllers\PlanOrderController;
 use App\Http\Controllers\PromoController;
@@ -75,6 +76,11 @@ Route::post('/supplier/store', [SupplierController::class, 'store'])->name('mast
 Route::get('/supplier/edit/{id}', [SupplierController::class, 'edit'])->name('master.supplier.edit');
 Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])->name('master.supplier.update');
 Route::delete('/supplier/delete/{id}', [SupplierController::class, 'delete'])->name('master.supplier.delete');
+
+// Member Controller
+Route::get('/get-wilayah', [MemberController::class, 'getWilayah']);
+Route::get('/member', [MemberController::class, 'index'])->name('master.member.index');
+Route::get('/member/create', [MemberController::class, 'create'])->name('master.member.create');
 
 // Promo Controller
 Route::get('/promo', [PromoController::class, 'index'])->name('master.promo.index');

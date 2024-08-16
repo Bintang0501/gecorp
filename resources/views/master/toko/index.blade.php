@@ -44,6 +44,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nama Toko</th>
+                                            <th>Level Harga</th>
                                             <th>Wilayah</th>
                                             <th>Alamat</th>
                                             <th>Action</th>
@@ -55,10 +56,36 @@
                                         <tr>
                                             <td>{{$no++}}</td>
                                             <td>{{$tk->nama_toko}}</td>
+
+                                            <td>
+                                                @php
+                                                    // Decode JSON, jika tidak valid atau null, jadikan array kosong
+                                                    $levelHargaArray = json_decode($tk->id_level_harga, true) ?? [];
+
+                                                    // Jika data adalah integer (tunggal), masukkan ke dalam array
+                                                    if (is_int($levelHargaArray)) {
+                                                        $levelHargaArray = [$levelHargaArray];
+                                                    }
+                                                @endphp
+
+                                                @if(!empty($levelHargaArray) && is_array($levelHargaArray))
+                                                    @foreach($levelHargaArray as $levelHargaId)
+                                                        @php
+                                                            // Cari LevelHarga berdasarkan ID
+                                                            $levelHarga = \App\Models\LevelHarga::find($levelHargaId);
+                                                        @endphp
+                                                        {{ $levelHarga ? $levelHarga->nama_level_harga : 'N/A' }}
+                                                        @if (!$loop->last), @endif
+                                                    @endforeach
+                                                @else
+                                                    Tidak Ada Level Harga
+                                                @endif
+                                            </td>
+
                                             <td>{{$tk->wilayah}}</td>
                                             <td>{{$tk->alamat}}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.toko.delete', $tk->id)}}" method="post">
+                                                <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="{{ route('master.toko.delete', $tk->id)}}" method="post">
                                                     <a href="{{ route('master.toko.edit', $tk->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
@@ -67,7 +94,9 @@
                                             </td>
                                         </tr>
                                         @empty
-
+                                            <tr>
+                                                <td colspan="6">Tidak ada data.</td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
