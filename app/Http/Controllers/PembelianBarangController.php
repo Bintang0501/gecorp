@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\DetailPembelianBarang;
+use App\Models\JenisBarang;
 use App\Models\PembelianBarang;
+use App\Models\Supplier;
+use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +24,12 @@ class PembelianBarangController extends Controller
 
     public function create()
     {
-        return view('transaksi.pembelianbarang.create');
+        $suppliers = Supplier::all(); 
+        $tokos = Toko::all();
+        $jenisBarangs = JenisBarang::all();
+        $brands = Brand::all();
+
+        return view('transaksi.pembelianbarang.create', compact('suppliers', 'tokos', 'jenisBarangs', 'brands'));
     }
 
     public function store(Request $request)
@@ -40,15 +49,21 @@ class PembelianBarangController extends Controller
                 'total_harga' => 'required|numeric',
             ]);
 
-            $idUser = Auth::user()->id;
+            $supplierName = Supplier::findOrFail($request->id_supplier)->nama_supplier;
+            $tokoName = Toko::findOrFail($request->id_toko)->nama_toko;
+
+            $idUser = Auth::user();
             $currentDate = now()->format('Ymd');
             $pembelianCount = PembelianBarang::count() + 1;
-            $noNota = $idUser . $currentDate . str_pad($pembelianCount, 5, '0', STR_PAD_LEFT);
+            $noNota = $idUser->id . $currentDate . str_pad($pembelianCount, 5, '0', STR_PAD_LEFT);
 
             $pembelian = PembelianBarang::create([
-                'id_users' => $idUser,
+                'id_users' => $idUser->id,
                 'id_supplier' => $request->id_supplier,
+                'nama_supplier' => $supplierName,
                 'id_toko' => $request->id_toko,
+                'nama_toko' => $tokoName,
+                'nama_users' => $idUser->nama,
                 'total_item' => $request->total_item,
                 'total_harga' => $request->total_harga,
                 'no_nota' => $noNota,
@@ -64,14 +79,21 @@ class PembelianBarangController extends Controller
                 $hargaBarang = $request->harga_barang[$index] ?? null;
                 $qty = $request->qty[$index] ?? null;
 
+                if ($idJenisBarang) {
+                    $jenisBarangName = JenisBarang::findOrFail($idJenisBarang)->nama_jenis_barang;
+                }
+                if ($idBrand) {
+                    $brandName = Brand::findOrFail($idBrand)->nama_brand;
+                }
+
                 if ($nama_barang && $idJenisBarang && $idBrand && $hargaBarang && $qty) {
                     DetailPembelianBarang::create([
                         'id_pembelian_barang' => $pembelianId,
                         'id_jenis_barang' => $idJenisBarang,
                         'id_brand' => $idBrand,
                         'nama_barang' => $nama_barang,
-                        'jenis_barang' => $request->jenis_barang[$index] ?? null,
-                        'brand_barang' => $request->brand[$index] ?? null,
+                        'jenis_barang' => $jenisBarangName,
+                        'brand_barang' => $brandName,
                         'harga_barang' => $hargaBarang,
                         'qty' => $qty,
                     ]);
@@ -88,115 +110,114 @@ class PembelianBarangController extends Controller
         }
     }
 
-    public function edit(string $id)
+    public function edit($id)
     {
         $pembelian = PembelianBarang::with('detail')->findOrFail($id);
+        $suppliers = Supplier::all();
+        $tokos = Toko::all();
+        $jenisBarang = JenisBarang::all();
+        $brands = Brand::all();
 
-        return view('transaksi.pembelianbarang.edit', compact('pembelian'));
+        return view('transaksi.pembelianbarang.edit', compact('pembelian', 'suppliers', 'tokos', 'jenisBarang', 'brands'));
     }
 
     public function update(Request $request, $id)
     {
-        try {
-            DB::beginTransaction();
+        // dd($request->input('status_detail'));
+        // Validate the request data
+        $request->validate([
+            'id_supplier' => 'required|exists:supplier,id',
+            'id_toko' => 'required|exists:toko,id',
+            'nama_barang.*' => 'required|string',
+            'id_jenis_barang.*' => 'nullable|exists:jenis_barang,id',
+            'id_brand.*' => 'nullable|exists:brand,id',
+            'harga_barang.*' => 'required|numeric|min:1',
+            'qty.*' => 'required|integer|min:1',
+            'status' => 'required|string|in:progress,done,failed',
+            'status_detail.*' => 'nullable|string|in:progress,done,failed,resend,refund',
+        ]);
 
-            // Find the `PembelianBarang` record
+        DB::beginTransaction();
+
+        try {
+            // Find the existing PembelianBarang record
             $pembelian = PembelianBarang::findOrFail($id);
 
-            // Update the `PembelianBarang` data
-            $pembelian->id_supplier = $request->id_supplier;
-            $pembelian->id_toko = $request->id_toko;
-            $pembelian->status = $request->status;
+            // Update main PembelianBarang fields
+            $pembelian->id_supplier = $request->input('id_supplier');
+            $pembelian->id_toko = $request->input('id_toko');
+            $pembelian->total_item = $request->input('total_item');
+            $pembelian->total_harga = $request->input('total_harga');
+            $pembelian->status = $request->input('status');
             $pembelian->save();
 
-            // Ensure the arrays are not null
-            $detailIds = $request->detail_id ?? [];
-            $namaBarang = $request->nama_barang ?? [];
-            $jenisBarang = $request->id_jenis_barang ?? [];
-            $brands = $request->id_brand ?? [];
-            $hargaBarang = $request->harga_barang ?? [];
-            $quantities = $request->qty ?? [];
+            // Get existing detail ids from the request
+            $existingDetailIds = $request->input('detail_ids', []);
 
-            // Track the IDs that are being updated
-            $updatedDetailIds = [];
+            // Delete details that were removed
+            $pembelian->detail()->whereNotIn('id', $existingDetailIds)->delete();
 
-            foreach ($namaBarang as $index => $nama_barang) {
-                if (isset($detailIds[$index])) {
-                    // Update existing detail record
-                    $detailPembelian = DetailPembelianBarang::where('id_pembelian_barang', $pembelian->id)
-                                        ->where('id', $detailIds[$index])
-                                        ->first();
-
-                    if ($detailPembelian) {
-                        $detailPembelian->update([
-                            'nama_barang' => $nama_barang,
-                            'id_jenis_barang' => $jenisBarang[$index],
-                            'id_brand' => $brands[$index],
-                            'harga_barang' => $hargaBarang[$index],
-                            'qty' => $quantities[$index],
-                        ]);
-                        $updatedDetailIds[] = $detailPembelian->id;
-                    }
+            // dd($request->all());
+            // Update or create new details
+            foreach ($request->input('nama_barang') as $index => $namaBarang) {
+                // Ambil detail ID jika ada
+                $detailId = $existingDetailIds[$index] ?? null;
+                
+                // Siapkan data detail
+                $detailData = [
+                    'nama_barang' => $namaBarang,
+                    'id_jenis_barang' => $request->input('id_jenis_barang')[$index] ?? null,
+                    'id_brand' => $request->input('id_brand')[$index] ?? null,
+                    'harga_barang' => $request->input('harga_barang')[$index],
+                    'qty' => $request->input('qty')[$index],
+                    'status' => $request->input('status_detail')[$index] ?? null, // Pastikan mengakses sesuai index
+                ];
+                
+                // Periksa apakah detail ID ada, update jika ada, atau buat baru jika tidak ada
+                if ($detailId) {
+                    $detail = DetailPembelianBarang::findOrFail($detailId);
+                    // dd($detailData);
+                    $detail->update($detailData);
                 } else {
-                    // Create new detail record if it's not an update
-                    $newDetail = DetailPembelianBarang::create([
-                        'id_pembelian_barang' => $pembelian->id,
-                        'nama_barang' => $nama_barang,
-                        'id_jenis_barang' => $jenisBarang[$index],
-                        'id_brand' => $brands[$index],
-                        'harga_barang' => $hargaBarang[$index],
-                        'qty' => $quantities[$index],
-                    ]);
-                    $updatedDetailIds[] = $newDetail->id;
+                    $pembelian->detail()->create($detailData);
                 }
-            }
-
-            // Optionally delete records that were not updated
-            DetailPembelianBarang::where('id_pembelian_barang', $pembelian->id)
-                ->whereNotIn('id', $updatedDetailIds)
-                ->delete();
-
-            // Calculate and update the total item and total price
-            $totalItem = array_sum($quantities);
-            $totalHarga = array_sum(array_map(function($harga, $qty) {
-                return $harga * $qty;
-            }, $hargaBarang, $quantities));
-
-            $pembelian->total_item = $totalItem;
-            $pembelian->total_harga = $totalHarga;
-            $pembelian->save();
+            }            
 
             DB::commit();
 
-            return redirect()->route('master.pembelianbarang.index')->with('success', 'Data pembelian berhasil diperbarui.');
+            return redirect()->route('master.pembelianbarang.index')
+                ->with('success', 'Pembelian barang updated successfully.');
+
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->route('master.pembelianbarang.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Failed to update pembelian barang. ' . $e->getMessage());
         }
     }
 
     public function delete($id)
     {
-        try {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            // Find the `PembelianBarang` record
+        try {
+            // Find the PembelianBarang record
             $pembelian = PembelianBarang::findOrFail($id);
 
-            // Delete associated `DetailPembelianBarang` records
-            DetailPembelianBarang::where('id_pembelian_barang', $pembelian->id)->delete();
+            // Delete all related detail records
+            $pembelian->detail()->delete();
 
-            // Delete the `PembelianBarang` record
+            // Delete the PembelianBarang record
             $pembelian->delete();
 
             DB::commit();
 
-            return redirect()->route('master.pembelianbarang.index')->with('success', 'Data pembelian berhasil dihapus.');
+            return redirect()->route('master.pembelianbarang.index')
+                ->with('success', 'Pembelian barang deleted successfully.');
         } catch (\Exception $e) {
             DB::rollback();
 
-            return redirect()->route('master.pembelianbarang.index')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete pembelian barang. ' . $e->getMessage());
         }
-}
+    }
 
 }

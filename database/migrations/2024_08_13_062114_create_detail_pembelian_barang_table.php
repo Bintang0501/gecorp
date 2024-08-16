@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('brand_barang')->nullable();
             $table->double('harga_barang')->nullable();
             $table->integer('qty')->nullable();
+            $table->enum('status', ['done', 'failed', 'progress', 'refund', 'resend'])->default('progress')->nullable();
             $table->softDeletes();
         });
     }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\LevelUser;
+use App\Models\Toko;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,34 +15,29 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            "id" => 7,
+            "id" => 1,
             "id_toko" => 1,
             "id_level" => 1,
             "nama" => "Super Admin",
             "username" => "admin",
             "email" => "super_admin@gmail.com",
-            "password" =>bcrypt("password"),
+            "password" =>bcrypt("admin123"),
             "alamat" => "Cirebon",
             "no_hp" => 8527571268,
         ]);
 
-        // User::create([
-        //     "id" => Uuid::uuid4()->getHex(),
-        //     "nama" => "Petugas",
-        //     "email" => "petugas@gmail.com",
-        //     "password" => bcrypt("petugas01"),
-        //     "role" => "petugas",
-        //     "status" => 1
-        // ]);
+        LevelUser::create([
+            "id" => 1,
+            "nama_level" => "Super Admin",
+        ]);
 
-        // User::create([
-        //     "id" => Uuid::uuid4()->getHex(),
-        //     "nama" => "Kepala Kantor",
-        //     "email" => "kepala_kantor@gmail.com",
-        //     "password" => bcrypt("kepala01"),
-        //     "role" => "kepala",
-        //     "status" => 1
-        // ]);
+        Toko::create([
+            "id" => 1,
+            "nama_toko" => "GSS",
+            "id_level_harga" => "",
+            "wilayah" => "Jakarta",
+            "alamat" => 'Jakpus',
+        ]);
 
         // User::create([
         //     "id" => Uuid::uuid4()->getHex(),
