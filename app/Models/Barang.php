@@ -23,13 +23,13 @@ class Barang extends Model
 
     public $primaryKey = 'id';
 
-    public function detail(): BelongsTo
+    public function brand(): BelongsTo
     {
-        return $this->belongsTo(DetailPembelianBarang::class, 'id', 'nama_barang', 'brand_barang', 'jenis_barang', 'harga_barang');
+        return $this->belongsTo(Brand::class, 'id_brand_barang');
     }
-    public function pembelian(): BelongsTo
+    public function jenis(): BelongsTo
     {
-        return $this->belongsTo(PembelianBarang::class, 'id', 'status');
+        return $this->belongsTo(JenisBarang::class, 'id_jenis_barang');
     }
 
 }

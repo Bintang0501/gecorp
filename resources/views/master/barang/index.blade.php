@@ -44,25 +44,19 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Up</th>
                                             <th>Nama Barang</th>
                                             <th>Jenis Barang</th>
-                                            <th>Jumlah</th>
-                                            <th>Jml Fix</th>
-                                            <th>Jml Error</th>
+                                            <th>Brand Barang</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $no = 1; ?>
+                                        @foreach ($barang as $brg)
                                         <tr>
-                                            <td>{{$no++}}</td>
-                                            <td>O</td>
-                                            <td>Barang Siapa, Barang Guwe</td>
-                                            <td>Aksesoris</td>
-                                            <td>40</td>
-                                            <td>61</td>
-                                            <td>12</td>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$brg->nama_barang}}</td>
+                                            <td>{{$brg->jenis->nama_jenis_barang}}</td>
+                                            <td>{{$brg->brand->nama_brand}}</td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
                                                     <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
@@ -72,6 +66,7 @@
                                                 </form>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

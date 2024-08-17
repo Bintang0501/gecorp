@@ -68,6 +68,9 @@ Route::middleware(['auth'])->group(function () {
         // Barang Controller
         Route::get('/barang', [BarangController::class, 'index'])->name('master.barang.index');
         Route::get('/barang/create', [BarangController::class, 'create'])->name('master.barang.create');
+        Route::post('/barang/store', [BarangController::class, 'store'])->name('master.barang.store');
+        Route::get('/get-brands-by-jenis', [BrandController::class, 'getBrandsByJenis'])->name('getBrandsByJenis');
+
 
         // Supplier Controller
         Route::get('/supplier', [SupplierController::class, 'index'])->name('master.supplier.index');

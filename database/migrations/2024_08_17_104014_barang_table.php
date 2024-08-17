@@ -6,15 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-        Schema::create('brand', function (Blueprint $table) {
+        Schema::create('barang', function (Blueprint $table) {
             $table->id('id');
             $table->string('id_jenis_barang');
-            $table->string('nama_brand');
+            $table->string('id_brand_barang');
+            $table->string('nama_barang');
             $table->softDeletes();
         });
     }

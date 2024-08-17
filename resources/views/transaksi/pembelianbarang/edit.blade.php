@@ -6,6 +6,7 @@
 
 <!-- Form -->
 <div class="content">
+    <x-adminlte-alerts />
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-md-12">

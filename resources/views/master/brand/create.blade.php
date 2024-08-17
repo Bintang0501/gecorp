@@ -59,10 +59,18 @@
                                     <form action="{{ route('master.brand.store') }}" method="post">
                                         @csrf
                                         <div class="form-group">
+                                            <label for="id_jenis_barang" class=" form-control-label">Jenis Barang<span style="color: red">*</span></label>
+                                            <select name="id_jenis_barang" data-placeholder="Cari Jenis Barang..." class="standardSelect" tabindex="1">
+                                                <option value="">~Cari Jenis Barang~</option>
+                                                    @foreach ($jenis as $jn)
+                                                    <option value="{{ $jn->id }}">{{ $jn->nama_jenis_barang }}</option>
+                                                    @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="nama_brand" class=" form-control-label">Nama Brand<span style="color: red">*</span></label>
                                             <input type="text" id="nama_brand" name="nama_brand" value="{{ old('nama_brand') }}" placeholder="Contoh : Bearbrand" class="form-control">
                                         </div>
-
                                         <div class="form-actions form-group">
                                             <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                                         </div>

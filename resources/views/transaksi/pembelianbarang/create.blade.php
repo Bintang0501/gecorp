@@ -7,6 +7,7 @@
     </div>
 
     <div class="content">
+        <x-adminlte-alerts />
         <div class="animated fadeIn">
             <div class="row">
                 <div class="col-md-12">
@@ -124,30 +125,30 @@
         function calculateTotals() {
             let totalItem = 0;
             let totalHarga = 0;
-    
+
             document.querySelectorAll('.item-group').forEach(function(group) {
                 const qty = group.querySelector('.jumlah-item').value || 0;
                 const harga = group.querySelector('.harga-barang').value || 0;
-    
+
                 totalItem += parseInt(qty);
                 totalHarga += parseInt(harga) * parseInt(qty);
             });
-    
+
             document.getElementById('total_item').value = totalItem;
             document.getElementById('total_harga').value = totalHarga;
         }
-    
+
         document.getElementById('add-item').addEventListener('click', function () {
             var itemContainer = document.getElementById('item-container');
             var newItemGroup = document.createElement('div');
             newItemGroup.className = 'item-group';
-    
+
             newItemGroup.innerHTML = `
                 <div class="form-group">
                     <label for="nama_barang" class="form-control-label">Nama Barang<span style="color: red">*</span></label>
                     <input type="text" id="nama_barang" name="nama_barang[]" placeholder="Contoh: Tws Bluetooth" class="form-control col-4">
                 </div>
-    
+
                 <!-- Jenis Barang -->
                 <div class="form-group">
                     <label for="id_jenis_barang" class="form-control-label">Jenis Barang</label>
@@ -158,7 +159,7 @@
                         @endforeach
                     </select>
                 </div>
-    
+
                 <!-- Brand Barang -->
                 <div class="form-group">
                     <label for="id_brand" class="form-control-label">Brand Barang</label>
@@ -169,13 +170,13 @@
                         @endforeach
                     </select>
                 </div>
-    
+
                 <!-- Harga Barang -->
                 <div class="form-group">
                     <label for="harga_barang" class="form-control-label">Harga Barang<span style="color: red">*</span></label>
                     <input type="number" id="harga_barang" min="1" name="harga_barang[]" placeholder="Contoh: 16000" class="form-control col-4 harga-barang">
                 </div>
-    
+
                 <!-- Jumlah Item -->
                 <div class="form-group">
                     <label for="jml_item" class="form-control-label">Jumlah Item<span style="color: red">*</span></label>
@@ -183,31 +184,31 @@
                 </div>
                 <button type="button" class="btn btn-danger remove-item">Hapus</button>
             `;
-    
+
             itemContainer.appendChild(newItemGroup);
-    
+
             // Attach event listener to remove button
             newItemGroup.querySelector('.remove-item').addEventListener('click', function () {
                 newItemGroup.remove();
                 calculateTotals();
             });
-    
+
             // Attach change listeners to newly added fields
             newItemGroup.querySelector('.jumlah-item').addEventListener('input', calculateTotals);
             newItemGroup.querySelector('.harga-barang').addEventListener('input', calculateTotals);
-    
+
             calculateTotals();
         });
-    
+
         // Attach change listeners to default items
         document.querySelectorAll('.jumlah-item').forEach(function(element) {
             element.addEventListener('input', calculateTotals);
         });
-    
+
         document.querySelectorAll('.harga-barang').forEach(function(element) {
             element.addEventListener('input', calculateTotals);
         });
-    
+
         calculateTotals();
     </script>
 

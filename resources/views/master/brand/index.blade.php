@@ -68,17 +68,19 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nama Brand</th>
+                                            <th>Jenis Barang</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($brands as $brand)
+                                        @foreach($brand as $br)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $brand->nama_brand }}</td>
+                                            <td>{{ $br->nama_brand }}</td>
+                                            <td>{{ $br->jenis->nama_jenis_barang }}</td>
                                             <td>
-                                                <a href="{{ route('master.brand.edit', $brand->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
-                                                <form action="{{ route('master.brand.delete', $brand->id) }}" method="POST">
+                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.brand.delete', $br->id) }}" method="POST">
+                                                    <a href="{{ route('master.brand.edit', $br->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>

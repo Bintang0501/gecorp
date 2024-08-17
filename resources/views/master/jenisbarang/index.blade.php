@@ -62,9 +62,7 @@
                                             </td>
                                         </tr>
                                         @empty
-                                        <div class="alert alert-danger">
-                                            Data Jenis Barang belum Tersedia.
-                                        </div>
+
                                         @endforelse
                                     </tbody>
                                 </table>

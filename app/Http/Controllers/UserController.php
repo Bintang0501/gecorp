@@ -13,6 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
+
         $user = User::with('leveluser', 'toko')->get();
         return view('master.user.index', compact('user'));
     }
@@ -40,7 +41,7 @@ class UserController extends Controller
             'no_hp' => 'required|max:255',
         ],[
             'id_toko.required' => 'Nama Toko tidak boleh kosong.',
-            'id_level.required' => 'Level tidak boleh kosong.',
+            'id_level.required' => 'Nama Level tidak boleh kosong.',
             'nama.required' => 'Nama tidak boleh kosong.',
             'username.required' => 'Username tidak boleh kosong.',
             'password.required' => 'Password tidak boleh kosong.',

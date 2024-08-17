@@ -23,4 +23,13 @@ class JenisBarang extends Model
 
     public $primaryKey = 'id';
 
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'id_barang', 'id');
+    }
+
+    public function brand()
+    {
+        return $this->hasMany(Brand::class, 'id_brand_barang', 'id');
+    }
 }
