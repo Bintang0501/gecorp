@@ -25,22 +25,31 @@ class BrandController extends Controller
         ]);
     }
 
+    public function getBrandsByJenis(Request $request)
+{
+    // Validasi bahwa id_jenis_barang dikirim melalui AJAX
+    $request->validate([
+        'id_jenis_barang' => 'required|exists:jenis_barang,id'
+    ]);
 
+    // Ambil semua Brand yang memiliki id_jenis_barang sesuai dengan yang dipilih
+    $brands = Brand::where('id_jenis_barang', $request->id_jenis_barang)->get();
+
+    // Kembalikan data dalam bentuk JSON
+    return response()->json($brands);
+}
     public function store(Request $request)
     {
         // dd($request->all());
         DB::beginTransaction();
         try{
             $validatedData = $request->validate([
-                'id_jenis_barang' => 'required|string|max:255',
                 'nama_brand' => 'required|string|max:255',
             ],[
-                'id_jenis_barang.required' => 'Jenis Barang tidak boleh kosong.',
                 'nama_brand.required' => 'Nama Brand tidak boleh kosong.',
             ]);
 
             Brand::create([
-                'id_jenis_barang' => $request->id_jenis_barang,
                 'nama_brand' => $request->nama_brand,
             ]);
 
@@ -68,17 +77,14 @@ class BrandController extends Controller
     {
         DB::beginTransaction();
         $validatedData = $request->validate([
-            'id_jenis_barang' => 'required|string|max:255',
             'nama_brand' => 'required|string|max:255',
         ],[
-            'id_jenis_barang.required' => 'Jenis Barang tidak boleh kosong.',
             'nama_brand.required' => 'Nama Brand tidak boleh kosong.',
         ]);
 
         $brand = Brand::findOrFail($id);
 
         $brand->update([
-            'id_jenis_barang' => $request->id_jenis_barang,
             'nama_brand' => $request->nama_brand,
         ]);
 

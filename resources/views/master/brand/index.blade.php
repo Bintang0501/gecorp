@@ -68,7 +68,6 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nama Brand</th>
-                                            <th>Jenis Barang</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -77,7 +76,6 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $br->nama_brand }}</td>
-                                            <td>{{ $br->jenis->nama_jenis_barang }}</td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.brand.delete', $br->id) }}" method="POST">
                                                     <a href="{{ route('master.brand.edit', $br->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>

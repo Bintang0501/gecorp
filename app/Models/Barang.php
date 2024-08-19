@@ -25,11 +25,11 @@ class Barang extends Model
 
     public function brand(): BelongsTo
     {
-        return $this->belongsTo(Brand::class, 'id_brand_barang');
+        return $this->belongsTo(Brand::class,'id_brand_barang', 'id');
     }
     public function jenis(): BelongsTo
     {
-        return $this->belongsTo(JenisBarang::class, 'id_jenis_barang');
+        return $this->belongsTo(JenisBarang::class, 'id_jenis_barang', 'id');
     }
 
 }

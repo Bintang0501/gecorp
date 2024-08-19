@@ -43,17 +43,6 @@
                             @csrf
                             @method('PUT')
                             <div class="form-group">
-                                <label for="id_jenis_barang" class=" form-control-label">Level</label>
-                                <select name="id_jenis_barang" class="standardSelect" tabindex="1">
-                                    <option value="">~Pilih~</option>
-                                    @foreach ($jenis as $jn)
-                                    <option value="{{ $jn->id }}" {{ old('id_jenis_barang', $brand->id_jenis_barang) == $jn->id ? 'selected' : '' }}>
-                                        {{ $jn->nama_jenis_barang }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="nama_brand" class=" form-control-label">Nama Brand<span style="color: red">*</span></label>
                                 <input type="text" id="nama_brand" name="nama_brand" value="{{ old('nama_brand', $brand->nama_brand) }}" placeholder="Contoh : Bearbrand" class="form-control">
                             </div>

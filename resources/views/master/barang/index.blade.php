@@ -58,8 +58,8 @@
                                             <td>{{$brg->jenis->nama_jenis_barang}}</td>
                                             <td>{{$brg->brand->nama_brand}}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
-                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <form onsubmit="#" method="POST">
+                                                    <a href="{{ route('master.barang.edit', $brg->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>

@@ -14,6 +14,7 @@ use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
+use App\Models\Barang;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -69,6 +70,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/barang', [BarangController::class, 'index'])->name('master.barang.index');
         Route::get('/barang/create', [BarangController::class, 'create'])->name('master.barang.create');
         Route::post('/barang/store', [BarangController::class, 'store'])->name('master.barang.store');
+        Route::get('/barang/edit/{id}', [BarangController::class, 'edit'])->name('master.barang.edit');
+        Route::put('/barang/update/{id}', [BarangController::class, 'update'])->name('master.barang.update');
         Route::get('/get-brands-by-jenis', [BrandController::class, 'getBrandsByJenis'])->name('getBrandsByJenis');
 
 

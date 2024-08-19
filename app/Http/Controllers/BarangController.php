@@ -82,12 +82,25 @@ class BarangController extends Controller
 
     public function edit(string $id)
     {
-        //
+        $barang = Barang::with('brand', 'jenis')->findOrFail($id);
+        $brand = Brand::all();
+        $jenis = JenisBarang::all();
+        return view('master.barang.edit', compact('barang', 'brand', 'jenis'));
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        $barang = Barang::findOrFail($id);
+        try {
+            $barang->update([
+                'id_jenis_barang' => $request->id_jenis_barang,
+                'id_brand_barang' => $request->id_brand_barang,
+                'nama_barang' => $request->nama_barang,
+            ]);
+            return redirect()->route('master.barang.index')->with('success', 'Sukses Mengubah Data User');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
+        }
     }
 
     public function destroy(string $id)
