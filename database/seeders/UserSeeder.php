@@ -29,6 +29,7 @@ class UserSeeder extends Seeder
         LevelUser::create([
             "id" => 1,
             "nama_level" => "Super Admin",
+            "informasi" => "Saitama",
         ]);
 
         Toko::create([

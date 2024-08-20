@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\DetailPembelianBarang;
 use App\Models\JenisBarang;
+use App\Models\LevelHarga;
 use App\Models\PembelianBarang;
 use App\Models\Supplier;
 use App\Models\Toko;
@@ -28,8 +29,9 @@ class PembelianBarangController extends Controller
         $tokos = Toko::all();
         $jenisBarangs = JenisBarang::all();
         $brands = Brand::all();
+        $LevelHarga = LevelHarga::all();
 
-        return view('transaksi.pembelianbarang.create', compact('suppliers', 'tokos', 'jenisBarangs', 'brands'));
+        return view('transaksi.pembelianbarang.create', compact('suppliers', 'tokos', 'jenisBarangs', 'brands', 'LevelHarga'));
     }
 
     public function store(Request $request)
