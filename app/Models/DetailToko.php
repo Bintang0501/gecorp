@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Toko extends Model
+class DetailToko extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'toko';
+    protected $table = 'detail_toko';
 
     protected $guarded = [''];
 
@@ -22,19 +22,13 @@ class Toko extends Model
 
     public $primaryKey = 'id';
 
-
-    public function detail_toko()
+    public function toko()
     {
-        return $this->hasMany(DetailToko::class, 'id_toko', 'id');
+        return $this->belongsTo(Toko::class, 'id_toko', 'id');
     }
 
-    public function user()
+    public function barang()
     {
-        return $this->hasMany(User::class, 'id_toko', 'id');
+        return $this->belongsTo(Barang::class, 'id_barang', 'id');
     }
-
-    // public function levelharga()
-    // {
-    //     return $this->belongsToMany(LevelHarga::class, 'id_level_harga');
-    // }
 }

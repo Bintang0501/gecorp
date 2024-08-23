@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Barang extends Model
@@ -30,6 +31,11 @@ class Barang extends Model
     public function jenis(): BelongsTo
     {
         return $this->belongsTo(JenisBarang::class, 'id_jenis_barang', 'id');
+    }
+
+    public function detail_toko(): HasMany
+    {
+        return $this->hasMany(DetailToko::class, 'id_barang', 'id');
     }
 
 }
