@@ -14,14 +14,12 @@ return new class extends Migration
         Schema::create('detail_pembelian_barang', function (Blueprint $table) {
             $table->id('id');
             $table->string('id_pembelian_barang')->nullable();
-            $table->string('id_jenis_barang')->nullable();
-            $table->string('id_brand')->nullable();
+            $table->string('id_barang')->nullable();
             $table->string('nama_barang')->nullable();
-            $table->string('jenis_barang')->nullable();
-            $table->string('brand_barang')->nullable();
-            $table->double('harga_barang')->nullable();
             $table->integer('qty')->nullable();
-            $table->enum('status', ['done', 'failed', 'progress', 'refund', 'resend'])->default('progress')->nullable();
+            $table->double('harga_barang')->nullable();
+            $table->double('total_harga')->nullable();
+            $table->enum('status', ['success', 'failed', 'progress'])->default('progress')->nullable();
             $table->softDeletes();
         });
     }

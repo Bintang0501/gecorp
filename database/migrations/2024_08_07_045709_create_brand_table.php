@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('brand', function (Blueprint $table) {
             $table->id('id');
-            $table->string('id_jenis_barang');
             $table->string('nama_brand');
             $table->softDeletes();
         });

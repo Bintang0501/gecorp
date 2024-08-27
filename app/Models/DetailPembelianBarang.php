@@ -11,19 +11,15 @@ class DetailPembelianBarang extends Model
 
     protected $table = 'detail_pembelian_barang';
 
-    // Disable default timestamps
     public $timestamps = false;
 
     protected $fillable = [
-        'id_pembelian_barang',
-        'id_jenis_barang',
-        'id_brand',
-        'nama_barang',
-        'jenis_barang',
-        'brand_barang',
-        'harga_barang',
-        'qty',
-        'status',
+        'id_pembelian_barang', 
+        'id_barang', 
+        'nama_barang', 
+        'qty', 
+        'harga_barang', 
+        'total_harga'
     ];
 
     public function pembelian()
@@ -33,6 +29,6 @@ class DetailPembelianBarang extends Model
 
     public function barang()
     {
-        return $this->hasMany(Barang::class, 'id');
+        return $this->belongsTo(Barang::class, 'id_barang');
     }
 }
