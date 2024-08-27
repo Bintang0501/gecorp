@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama_users')->nullable();
             $table->double('total_item')->nullable();
             $table->double('total_nilai')->nullable();
-            $table->enum('status', ['progress', 'success', 'failed'])->default('failed');
+            $table->enum('status', ['progress', 'success', 'failed'])->default('progress');
             $table->softDeletes();
         });
     }
