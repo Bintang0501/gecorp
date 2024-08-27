@@ -16,7 +16,24 @@ class PengirimanBarang extends Model
 
     public $incrementing = false;
 
+    public $timestamps = false;
+
     protected $keyType = 'string';
 
     public $primaryKey = 'id';
+
+    public function toko()
+    {
+        return $this->belongsTo(Toko::class, 'id_toko', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
+
+    public function levelusers()
+    {
+        return $this->belongsTo(LevelUser::class, 'id_level', 'id');
+    }
 }

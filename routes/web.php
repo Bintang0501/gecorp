@@ -126,9 +126,11 @@ Route::middleware(['auth'])->group(function () {
         // Pengiriman Barang
         Route::get('/pengirimanbarang', [PengirimanBarangController::class, 'index'])->name('master.pengirimanbarang.index');
         Route::get('/pengirimanbarang/create', [PengirimanBarangController::class, 'create'])->name('master.pengirimanbarang.create');
+        Route::get('/get-users-by-toko/{id_toko}', [PengirimanBarangController::class, 'getUsersByToko']);
         // Route::get('/pengirimanbarang', function () {return view('master.pengirimanbarang.index');})->name('master.pengirimanbarang.index');
         // Route::get('/pengirimanbarang/create', function () {return view('transaksi.pengirimanbarang.create');})->name('transaksi.pengirimanbarang.create');
 
     });
 
 });
+
