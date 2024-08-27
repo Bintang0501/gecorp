@@ -28,4 +28,9 @@ class LevelUser extends Model
         return $this->hasMany(User::class, 'id_level');
     }
 
+    public function levelusers()
+    {
+        return $this->hasMany(LevelUser::class, 'id_level');
+    }
+
 }

@@ -1,4 +1,4 @@
-<title>Level Karyawan - Gecorp</title>
+<title>Level User - Gecorp</title>
 @extends('layouts.main')
 @section('content')
 
@@ -8,7 +8,7 @@
             <div class="col-sm-4">
                 <div class="page-header">
                     <div class="page-title">
-                        <h1 class="card-title"><strong>Data Master - Level Karyawan</strong></h1>
+                        <h1 class="card-title"><strong>Data Master - Level User</strong></h1>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li><a href="{{ route('master.index')}}">Dashboard</a></li>
-                            <li class="active">Data Level Karyawan</li>
+                            <li class="active">Data Level User</li>
                         </ol>
                     </div>
                 </div>

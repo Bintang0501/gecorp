@@ -59,7 +59,7 @@ class LevelUserController extends Controller
      } catch (\Throwable $th) {
         return redirect()->back()->with('error', $th->getMessage())->withInput();
     }
-    return redirect()->route('master.leveluser.index')->with('success', 'Sukses Mengubah Data Level Karyawan');
+    return redirect()->route('master.leveluser.index')->with('success', 'Sukses Mengubah Data Level User');
     }
 
     public function delete(String $id)
@@ -70,10 +70,10 @@ class LevelUserController extends Controller
         $leveluser->delete();
         DB::commit();
 
-        return redirect()->route('master.leveluser.index')->with('success', 'Sukses menghapus Data Level Karyawan');
+        return redirect()->route('master.leveluser.index')->with('success', 'Sukses menghapus Data Level User');
         } catch (\Throwable $th) {
         DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal menghapus Data Level Karyawan ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus Data Level User ' . $th->getMessage());
         }
     }
 }
