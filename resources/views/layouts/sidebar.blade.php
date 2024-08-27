@@ -20,6 +20,7 @@
                         <li class="nav-item"><i class="fa fa-shield"></i><a href="{{ route('master.leveluser.index')}}"> Level User</a></li>
                         <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{route('master.jenisbarang.index')}}"> Jenis Barang</a></li>
                         <li class="nav-item"><i class="fa fa-sitemap"></i><a href="{{ route('master.levelharga.index')}}"> Level Harga</a></li>
+                        <li class="nav-item"><i class="fa fa-tasks"></i><a href="{{ route('master.stockbarang.index')}}"> Stock Barang</a></li>
                         <li class="nav-item"><i class="fa fa-edit"></i><a href="{{ route('master.stockopname.index')}}"> Stock Opname</a></li>
                         <li class="nav-item"><i class="fa fa-laptop"></i><a href="{{ route('master.planorder.index')}}"> Plan Order - All Toko</a></li>
                     </ul>
@@ -34,7 +35,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-shopping-cart"></i>Transaksi</a>
                     <ul class="sub-menu children dropdown-menu">
                         <li class="nav-item"><i class="fa fa-shopping-cart"></i><a href="{{ route('master.pembelianbarang.index')}}">Pembelian Barang</a></li>
-                        <li class="nav-item"><i class="fa fa-truck"></i><a href="{{ route('transaksi.pengirimanbarang.index')}}">Pengiriman Barang</a></li>
+                        <li class="nav-item"><i class="fa fa-truck"></i><a href="{{ route('master.pengirimanbarang.index')}}">Pengiriman Barang</a></li>
                     </ul>
                 </li>
 

@@ -1,4 +1,4 @@
-<title>Data Toko - Gecorp</title>
+<title>Data User - Gecorp</title>
 @extends('layouts.main')
 
 @section('content')
@@ -48,6 +48,7 @@
                                             <th>Toko</th>
                                             <th>Username</th>
                                             <th>Email</th>
+                                            <th>No. HP</th>
                                             <th>Alamat</th>
                                             <th>Action</th>
                                         </tr>
@@ -62,6 +63,7 @@
                                             <td>{{$usr->toko->nama_toko}}</td>
                                             <td>{{$usr->username}}</td>
                                             <td>{{$usr->email}}</td>
+                                            <td>{{$usr->no_hp}}</td>
                                             <td>{{$usr->alamat}}</td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.user.delete', $usr->id)}}" method="post">

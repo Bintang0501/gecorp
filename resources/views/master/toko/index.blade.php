@@ -47,6 +47,7 @@
                                             <th>Level Harga</th>
                                             <th>Wilayah</th>
                                             <th>Alamat</th>
+                                            <th>List Barang</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -84,12 +85,14 @@
 
                                             <td>{{$tk->wilayah}}</td>
                                             <td>{{$tk->alamat}}</td>
+                                            <td><a href="{{ route('master.toko.detail', $tk->id)}}" class="btn btn-primary btn-sm"><strong>Cek Barang</strong></a></td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="{{ route('master.toko.delete', $tk->id)}}" method="post">
                                                     <a href="{{ route('master.toko.edit', $tk->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
+
                                                 </form>
                                             </td>
                                         </tr>

@@ -8,8 +8,10 @@ use App\Http\Controllers\LevelHargaController;
 use App\Http\Controllers\LevelUserController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PembelianBarangController;
+use App\Http\Controllers\PengirimanBarangController;
 use App\Http\Controllers\PlanOrderController;
 use App\Http\Controllers\PromoController;
+use App\Http\Controllers\StockBarangController;
 use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TokoController;
@@ -57,6 +59,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/toko/edit/{id}', [TokoController::class, 'edit'])->name('master.toko.edit');
         Route::put('/toko/update/{id}', [TokoController::class, 'update'])->name('master.toko.update');
         Route::delete('/toko/delete/{id}', [TokoController::class, 'delete'])->name('master.toko.delete');
+        Route::get('/toko/detail/{id}', [TokoController::class, 'detail'])->name('master.toko.detail');
+        Route::get('/toko/detail/create/{id}', [TokoController::class, 'create_detail'])->name('master.toko.create_detail');
+        Route::post('/toko/store_detail', [TokoController::class, 'store_detail'])->name('master.toko.store_detail');
+        Route::get('/toko/{id_toko}/detail/{id_barang}/edit/{id}', [TokoController::class, 'edit_detail'])->name('master.toko.edit_detail');
+        Route::put('/toko/{id_toko}/detail/{id_barang}/update', [TokoController::class, 'update_detail'])->name('master.toko.update_detail');
+        Route::delete('/toko/{id_toko}/detail/{id_barang}/delete', [TokoController::class, 'delete_detail'])->name('master.toko.delete_detail');
 
         // User Controller
         Route::get('/user', [UserController::class, 'index'])->name('master.user.index');
@@ -108,12 +116,18 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/leveluser/update/{id}', [LevelUserController::class, 'update'])->name('master.leveluser.update');
         Route::delete('/leveluser/delete/{id}', [LevelUserController::class, 'delete'])->name('master.leveluser.delete');
 
+        // Stock Barang Controller
+        Route::get('/stockbarang', [StockBarangController::class, 'index'])->name('master.stockbarang.index');
+        Route::get('/stockbarang/create', [StockBarangController::class, 'create'])->name('master.stockbarang.create');
+
         Route::get('/stockopname', [StockOpnameController::class, 'index'])->name('master.stockopname.index');
         Route::get('/planorder', [PlanOrderController::class, 'index'])->name('master.planorder.index');
 
         // Pengiriman Barang
-        Route::get('/pengirimanbarang', function () {return view('transaksi.pengirimanbarang.index');})->name('transaksi.pengirimanbarang.index');
-        Route::get('/pengirimanbarang/create', function () {return view('transaksi.pengirimanbarang.create');})->name('transaksi.pengirimanbarang.create');
+        Route::get('/pengirimanbarang', [PengirimanBarangController::class, 'index'])->name('master.pengirimanbarang.index');
+        Route::get('/pengirimanbarang/create', [PengirimanBarangController::class, 'create'])->name('master.pengirimanbarang.create');
+        // Route::get('/pengirimanbarang', function () {return view('master.pengirimanbarang.index');})->name('master.pengirimanbarang.index');
+        // Route::get('/pengirimanbarang/create', function () {return view('transaksi.pengirimanbarang.create');})->name('transaksi.pengirimanbarang.create');
 
     });
 

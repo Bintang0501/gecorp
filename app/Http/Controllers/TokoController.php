@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
+use App\Models\DetailToko;
 use App\Models\LevelHarga;
 use App\Models\Toko;
 use Illuminate\Http\Request;
@@ -52,9 +54,51 @@ class TokoController extends Controller
     }
 
 
-    public function show(string $id)
+    public function detail(string $id)
     {
-        //
+        $toko = Toko::findOrFail($id);
+        $detail_toko = DetailToko::where('id_toko', $id)->get();
+        $barang = Barang::whereIn('id', $detail_toko->pluck('id_barang'))->get();
+        // $barang = Barang::all();
+        return view('master.toko.detail', compact('toko', 'detail_toko', 'barang'));
+    }
+
+    public function create_detail(string $id)
+    {
+        $toko = Toko::findOrFail($id);
+        $barang = Barang::all();
+        // $levelharga = LevelHarga::all();
+        return view('master.toko.create_detail', ['id_toko' => $toko->id], compact('barang', 'toko'));
+    }
+
+    public function store_detail(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_barang' => 'required|max:255',
+            'stock' => 'required|max:225', // Validasi sebagai array
+            'harga' => 'required|max:255',
+        ],[
+            'id_barang.required' => 'Nama Barang tidak boleh kosong.',
+            'stock.required' => 'Stock Barang tidak boleh kosong.',
+            'harga.required' => 'Harga tidak boleh kosong.',
+        ]);
+
+        try {
+            $harga = str_replace(',', '', $request->harga);
+            $id_toko = $request->input('id_toko');
+            $toko = Toko::findOrFail($id_toko);
+            // Simpan data Toko
+            DetailToko::create([
+                'id_toko' => $id_toko,
+                'id_barang' => $request->id_barang,
+                'stock' => $request->stock,
+                'harga' => $harga,
+            ]);
+
+            return redirect()->route('master.toko.detail', ['id' => $toko->id])->with('success', 'Berhasil menambahkan Barang Baru');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
+        }
     }
 
     public function edit(string $id)
@@ -62,6 +106,18 @@ class TokoController extends Controller
         $levelharga = LevelHarga::all();
         $toko = Toko::findOrFail($id);
         return view('master.toko.edit', compact('toko', 'levelharga'));
+    }
+
+    public function edit_detail(string $id_toko, $id_barang, $id)
+    {
+        $toko = Toko::findOrFail($id_toko);
+        $detail_toko = DetailToko::where('id', $id)
+                                ->where('id_toko', $id_toko)
+                                ->where('id_barang', $id_barang)
+                                ->firstOrFail(); // Ambil data toko berdasarkan ID
+        $barang = Barang::all(); // Cari barang berdasarkan ID dan ID toko
+        // dd($detail_toko);
+        return view('master.toko.edit_detail', compact('toko', 'barang', 'detail_toko'));
     }
 
     public function update(Request $request, string $id)
@@ -78,6 +134,53 @@ class TokoController extends Controller
             return redirect()->back()->with('error', $th->getMessage())->withInput();
         }
         return redirect()->route('master.toko.index')->with('success', 'Sukses Mengubah Data Toko');
+    }
+
+    public function update_detail(Request $request, string $id_toko, string $id_barang){
+        $validatedData = $request->validate([
+            'id_barang' => 'required|max:255',
+            'stock' => 'required|numeric', // Validasi sebagai array
+            'harga' => 'required|max:255',
+        ],[
+            'id_barang.required' => 'Nama Barang tidak boleh kosong.',
+            'stock.required' => 'Stock Barang tidak boleh kosong.',
+            'harga.required' => 'Harga tidak boleh kosong.',
+        ]);
+
+        try {
+            $toko = Toko::findOrFail($id_toko);
+            $harga = str_replace(',', '', $request->harga);
+            $detail_toko = DetailToko::where('id_toko', $id_toko)
+            ->where('id_barang', $id_barang)
+            ->firstOrFail();
+            // Update data Toko
+            $detail_toko->update([
+                'id_toko' => $id_toko,
+                'id_barang' => $request->id_barang,
+                'stock' => $request->stock,
+                'harga' => $harga,
+            ]);
+
+            return redirect()->route('master.toko.detail', ['id' => $toko->id])->with('success', 'Berhasil mengupdate Barang Baru');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
+        }
+    }
+
+    public function delete_detail(string $id_toko, string $id_barang)
+    {
+        try {
+            $toko = Toko::findOrFail($id_toko);
+            $detail_toko = DetailToko::where('id_toko', $id_toko)
+            ->where('id_barang', $id_barang)
+            ->firstOrFail();
+            // Hapus data Barang
+            $detail_toko->delete();
+
+            return redirect()->route('master.toko.detail', ['id' => $toko->id])->with('success', 'Berhasil Menghapus Data Barang di Toko');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage())->withInput();
+        }
     }
 
     public function delete(String $id)
