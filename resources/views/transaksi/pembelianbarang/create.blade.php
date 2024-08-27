@@ -40,18 +40,15 @@
                             <div class="custom-tab">
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="custom-nav-home-tab" data-toggle="tab" href="#custom-nav-home" role="tab" aria-controls="custom-nav-home" aria-selected="true">Tambah Pembelian</a>
-                                        <a class="nav-item nav-link" id="custom-nav-profile-tab" data-toggle="tab" href="#custom-nav-profile" role="tab" aria-controls="custom-nav-profile" aria-selected="false">Detail Pembelian</a>
-                                        {{-- <a class="nav-item nav-link" id="custom-nav-contact-tab" data-toggle="tab" href="#custom-nav-contact" role="tab" aria-controls="custom-nav-contact" aria-selected="false">Contact</a> --}}
+                                        <a class="nav-item nav-link {{ session('tab') == 'detail' ? '' : 'active' }}" id="tambah-tab" data-toggle="tab" href="#tambah" role="tab" aria-controls="tambah" aria-selected="true" {{ session('tab') == 'detail' ? 'style=pointer-events:none;opacity:0.6;' : '' }}>Tambah Pembelian</a>
+                                        <a class="nav-item nav-link {{ session('tab') == 'detail' ? 'active' : '' }}" id="detail-tab" data-toggle="tab" href="#detail" role="tab" aria-controls="detail" aria-selected="false" {{ session('tab') == '' ? 'style=pointer-events:none;opacity:0.6;' : '' }}>Detail Pembelian</a>
                                     </div>
                                 </nav>
                                 <div class="tab-content pl-3 pt-2" id="nav-tabContent">
-                                    <div class="tab-pane fade show active" id="custom-nav-home" role="tabpanel" aria-labelledby="custom-nav-home-tab">
+                                    <div class="tab-pane fade show {{ session('tab') == 'detail' ? '' : 'active' }}" id="tambah" role="tabpanel" aria-labelledby="tambah-tab">
                                         <br>
                                         <form action="{{ route('master.pembelianbarang.store') }}" method="POST">
                                             @csrf
-                                            <input type="hidden" id="tgl_beli" name="tgl_beli" value="{{ now()->format('Y-m-d H:i:s') }}">
-
                                             <div class="row">
                                                 <div class="col-6">
                                                     <!-- Nama Supplier -->
@@ -74,39 +71,33 @@
 
                                             <div class="form-group">
                                                 <label for="no_nota" class=" form-control-label">Nomor Nota<span style="color: red">*</span></label>
-                                                <input type="text" id="no_nota" name="no_nota" placeholder="Contoh : 001" class="form-control">
+                                                <input type="number" id="no_nota" name="no_nota" placeholder="Contoh : 001" class="form-control">
                                             </div>
+                                            <button type="submit" id="add-item" style="float: right" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
                                         </form>
-
-                                        <a href="#" type="button" id="add-item" style="float: right" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</a>
-
                                     </div>
-                                    <div class="tab-pane fade" id="custom-nav-profile" role="tabpanel" aria-labelledby="custom-nav-profile-tab">
-                                        <br>
+                                    <div class="tab-pane fade {{ session('tab') == 'detail' ? 'show active' : '' }}" id="detail" role="tabpanel" aria-labelledby="detail-tab">
+                                    <br>
+                                    @php
+                                        $pembelian = session('pembelian', $pembelian ?? null);
+                                    @endphp
+
+                                    @if ($pembelian)
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
-                                                <h5><i class="fa fa-home"></i> Nomor Nota <span class="badge badge-secondary pull-right">#</span></h5
+                                                <h5><i class="fa fa-home"></i> Nomor Nota <span class="badge badge-secondary pull-right">{{ $pembelian->no_nota }}</span></h5>
                                             </li>
                                             <li class="list-group-item">
-                                                <h5><i class="fa fa-globe"></i> Nama Supplier <span class="badge badge-secondary pull-right">#</span></h5
+                                                <h5><i class="fa fa-globe"></i> Nama Supplier <span class="badge badge-secondary pull-right">{{ $pembelian->supplier->nama_supplier }}</span></h5>
                                             </li>
                                             <li class="list-group-item">
-                                                <h5><i class="fa fa-map-marker"></i> &nbsp;Tanggal Nota <span class="badge badge-secondary pull-right">#</span></h3
+                                                <h5><i class="fa fa-map-marker"></i> &nbsp;Tanggal Nota <span class="badge badge-secondary pull-right">{{ $pembelian->tgl_nota }}</span></h5>
                                             </li>
                                         </ul>
-                                        {{-- <div class="col-6">
-                                            <!-- Nama Toko -->
-                                            <div class="form-group">
-                                                <label for="id_toko" class="form-control-label">Nama Toko</label>
-                                                <select name="id_toko" id="id_toko" class="form-control">
-                                                    <option value="" selected>Pilih Toko</option>
-                                                    @foreach($tokos as $toko)
-                                                        <option value="{{ $toko->id }}">{{ $toko->nama_toko }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div> --}}
                                     <br>
+                                    <form action="{{ route('master.pembelianbarang.update', $pembelian->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
                                     <!-- Item Container -->
                                     <div id="item-container">
                                         <div class="item-group">
@@ -117,7 +108,7 @@
                                                         <label for="id_barang" class="form-control-label">Nama Barang<span style="color: red">*</span></label>
                                                         <select name="id_barang[]" id="id_barang"  data-placeholder="Pilih Barang..." class="standardSelect">
                                                             <option value="" selected >Pilih Barang</option>
-                                                        @foreach($barang as $brg)
+                                                            @foreach($barang as $brg)
                                                                 <option value="{{ $brg->id }}">{{ $brg->nama_barang }}</option>
                                                             @endforeach
                                                         </select>
@@ -146,9 +137,9 @@
                                         </div>
                                     </div>
 
-                                    <button type="button" id="add-item" style="float: right" class="btn btn-secondary">Add</button>
-                                    <br><br>
-                                </form>
+                                <button type="button" id="add-item-detail" style="float: right" class="btn btn-secondary">Add</button>
+                                <br><br>
+                                    
                                 <div class="row">
                                     <div class="col-8">
                                         <!-- Jumlah Item -->
@@ -164,17 +155,15 @@
                                     <div class="col-4">
                                         <!-- Harga Barang -->
                                         <div>
-                                            <form action="#" method="post" class="">
-                                                @foreach ($LevelHarga as $level)
-                                                <div class="form-group">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
-                                                        <input type="text" class="form-control">
-                                                        <div class="input-group-addon">7.8%</div>
-                                                    </div>
+                                            @foreach ($LevelHarga as $level)
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
+                                                    <input type="text" class="form-control">
+                                                    <div class="input-group-addon">7.8%</div>
                                                 </div>
-                                                @endforeach
-                                            </form>
+                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -184,7 +173,7 @@
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th>action</th>
+                                                            <th>Action</th>
                                                             <th scope="col">No</th>
                                                             <th scope="col">Nama Barang</th>
                                                             <th scope="col">Qty</th>
@@ -193,20 +182,15 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td><a href=""><i class="fa fa-trash-o"></i></a></td>
-                                                            <td>1</td>
-                                                            <td>Lampu</td>
-                                                            <td>4</td>
-                                                            <td>Rp 10.000</td>
-                                                            <td>Rp 40.000</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td colspan="5" style='text-align:right'>SubTotal</td>
-                                                            <td>Rp 40.000</td>
-                                                        </tr>
+                                                        <!-- Rows akan ditambahkan di sini oleh JavaScript -->
                                                     </tbody>
-                                                </table>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th scope="col" colspan="5" style="text-align:right">SubTotal</th>
+                                                            <th scope="col">Rp </th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>                                                
                                                 <!-- Submit Button -->
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary">
@@ -215,7 +199,12 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </form>
+                                    @else
+                                    <div class="alert alert-warning">
+                                        <strong>Perhatian!</strong> Anda perlu menambahkan data pembelian di tab "Tambah Pembelian" terlebih dahulu.
                                     </div>
+                                    @endif
                                     <div class="tab-pane fade" id="custom-nav-contact" role="tabpanel" aria-labelledby="custom-nav-contact-tab">
                                         <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, irure terry richardson ex sd. Alip placeat salvia cillum iphone. Seitan alip s cardigan american apparel, butcher voluptate nisi .</p>
                                     </div>
@@ -232,63 +221,65 @@
     <div class="clearfix"></div>
 
     <script>
-        function calculateTotals() {
-            let totalItem = 0;
-            let totalHarga = 0;
-            let hppAwal = 0;
-            let hppBaru = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+        let subtotal = 0;
+        let addedItems = new Set();
 
-            document.querySelectorAll('.item-group').forEach(function(group) {
-                const qty = group.querySelector('.jumlah-item').value || 0;
-                const harga = group.querySelector('.harga-barang').value || 0;
-                const harga = group.querySelector('.hpp_awal').value || 0;
-                const harga = group.querySelector('.hpp_baru').value || 0;
+        document.getElementById('add-item-detail').addEventListener('click', function () {
+            let idBarang = document.getElementById('id_barang').value;
+            let namaBarang = document.getElementById('id_barang').selectedOptions[0].text;
+            let qty = parseInt(document.getElementById('jml_item').value);
+            let harga = parseInt(document.getElementById('harga_barang').value);
 
-                totalItem += parseInt(qty);
-                totalHarga += parseInt(harga) * parseInt(qty);
-                hppAwal += parseInt(harga);
-                hppBaru += parseInt(harga) / parseInt(qty);
+            if (addedItems.has(idBarang)) {
+                alert('Barang ini sudah ditambahkan sebelumnya.');
+                return;
+            }
 
+            addedItems.add(idBarang);
+
+            let totalHarga = qty * harga;
+            subtotal += totalHarga;
+
+            let row = `
+                <tr>
+                    <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+                    <td class="numbered">${document.querySelectorAll('tbody tr').length + 1}</td>
+                    <td><input type="hidden" name="id_barang[]" value="${idBarang}">${namaBarang}</td>
+                    <td><input type="hidden" name="qty[]" value="${qty}">${qty}</td>
+                    <td><input type="hidden" name="harga_barang[]" value="${harga}">Rp ${harga.toLocaleString('id-ID')}</td>
+                    <td>Rp ${totalHarga.toLocaleString('id-ID')}</td>
+                </tr>
+            `;
+
+            document.querySelector('tbody').insertAdjacentHTML('beforeend', row);
+
+            document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+
+            document.getElementById('jml_item').value = '';
+            document.getElementById('harga_barang').value = '';
+
+            updateNumbers();
+        });
+
+        document.querySelector('tbody').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-item')) {
+                let row = e.target.closest('tr');
+                let totalHarga = parseInt(row.querySelector('td:last-child').textContent.replace(/\D/g, ''));
+
+                subtotal -= totalHarga;
+                row.remove();
+
+                document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+                updateNumbers();
+            }
+        });
+
+        function updateNumbers() {
+            document.querySelectorAll('tbody tr .numbered').forEach((element, index) => {
+                element.textContent = index + 1;
             });
-
-            document.getElementById('total_item').value = totalItem;
-            document.getElementById('total_harga').value = totalHarga;
-            document.getElementById('hpp_awal').value = hppAwal;
-            document.getElementById('hpp_baru').value = hppBaru;
         }
-
-        document.getElementById('add-item').addEventListener('click', function () {
-            var itemContainer = document.getElementById('item-container');
-            var newItemGroup = document.createElement('div');
-            newItemGroup.className = 'item-group';
-
-            newItemGroup.innerHTML = ;
-
-            itemContainer.appendChild(newItemGroup);
-
-            // Attach event listener to remove button
-            newItemGroup.querySelector('.remove-item').addEventListener('click', function () {
-                newItemGroup.remove();
-                calculateTotals();
-            });
-
-            // Attach change listeners to newly added fields
-            newItemGroup.querySelector('.jumlah-item').addEventListener('input', calculateTotals);
-            newItemGroup.querySelector('.harga-barang').addEventListener('input', calculateTotals);
-
-            calculateTotals();
-        });
-
-        // Attach change listeners to default items
-        document.querySelectorAll('.jumlah-item').forEach(function(element) {
-            element.addEventListener('input', calculateTotals);
-        });
-
-        document.querySelectorAll('.harga-barang').forEach(function(element) {
-            element.addEventListener('input', calculateTotals);
-        });
-
-        calculateTotals();
-    </script>
-
+    });
+</script>
 @endsection

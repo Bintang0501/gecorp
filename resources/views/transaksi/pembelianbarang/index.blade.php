@@ -67,11 +67,9 @@
                                             <th>Status</th>
                                             <th>No. Nota</th>
                                             <th>Tgl Nota</th>
-                                            <th>Tgl Input</th>
                                             <th>Supplier</th>
                                             <th>Total Item</th>
                                             <th>Total Harga</th>
-                                            <th>Nama Toko</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -88,11 +86,9 @@
                                             @endif
                                             <td>{{ $beli->no_nota }}</td>
                                             <td>{{ $beli->tgl_nota }}</td>
-                                            <td>{{ $beli->tgl_beli }}</td>
                                             <td>{{ $beli->id_supplier }}</td>
                                             <td>{{ $beli->total_item }}</td>
-                                            <td>{{ $beli->total_harga }}</td>
-                                            <td>{{ $beli->id_toko }}</td>
+                                            <td>Rp. {{ number_format($beli->total_nilai, 0, '.', '.') }} </td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="{{ route('master.pembelianbarang.delete', $beli->id) }}" method="POST">
                                                     <a href="{{ route('master.pembelianbarang.edit', $beli->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>

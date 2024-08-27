@@ -12,22 +12,14 @@ class PembelianBarang extends Model
 
     protected $table = 'pembelian_barang';
 
-    // Disable default timestamps
     public $timestamps = false;
 
     protected $fillable = [
-        'id_users',
-        'id_supplier',
-        'id_toko',
-        'no_nota',
-        'tgl_nota',
-        'tgl_beli',
-        'nama_users',
-        'nama_toko',
-        'nama_supplier',
-        'total_item',
-        'total_harga',
-        'status'
+        'id_supplier', 
+        'no_nota', 
+        'tgl_nota', 
+        'total_item', 
+        'total_nilai'
     ];
 
     public function detail()
@@ -40,8 +32,4 @@ class PembelianBarang extends Model
         return $this->belongsTo(Supplier::class, 'id_supplier');
     }
 
-    public function brand()
-    {
-        return $this->belongsTo(Brand::class, 'id_brand');
-    }
 }
