@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barang;
 use App\Models\Brand;
 use App\Models\DetailPembelianBarang;
 use App\Models\JenisBarang;
@@ -25,13 +26,14 @@ class PembelianBarangController extends Controller
 
     public function create()
     {
-        $suppliers = Supplier::all(); 
+        $barang = Barang::all();
+        $suppliers = Supplier::all();
         $tokos = Toko::all();
         $jenisBarangs = JenisBarang::all();
         $brands = Brand::all();
         $LevelHarga = LevelHarga::all();
 
-        return view('transaksi.pembelianbarang.create', compact('suppliers', 'tokos', 'jenisBarangs', 'brands', 'LevelHarga'));
+        return view('transaksi.pembelianbarang.create', compact('suppliers', 'tokos', 'jenisBarangs', 'brands', 'LevelHarga', 'barang'));
     }
 
     public function store(Request $request)
@@ -164,7 +166,7 @@ class PembelianBarangController extends Controller
             foreach ($request->input('nama_barang') as $index => $namaBarang) {
                 // Ambil detail ID jika ada
                 $detailId = $existingDetailIds[$index] ?? null;
-                
+
                 // Siapkan data detail
                 $detailData = [
                     'nama_barang' => $namaBarang,
@@ -174,7 +176,7 @@ class PembelianBarangController extends Controller
                     'qty' => $request->input('qty')[$index],
                     'status' => $request->input('status_detail')[$index] ?? null, // Pastikan mengakses sesuai index
                 ];
-                
+
                 // Periksa apakah detail ID ada, update jika ada, atau buat baru jika tidak ada
                 if ($detailId) {
                     $detail = DetailPembelianBarang::findOrFail($detailId);
@@ -183,7 +185,7 @@ class PembelianBarangController extends Controller
                 } else {
                     $pembelian->detail()->create($detailData);
                 }
-            }            
+            }
 
             DB::commit();
 
