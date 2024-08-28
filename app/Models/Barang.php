@@ -37,5 +37,9 @@ class Barang extends Model
     {
         return $this->hasMany(DetailToko::class, 'id_barang', 'id');
     }
+    public function barang(): HasMany
+    {
+        return $this->hasMany(Barang::class, 'id_barang', 'id');
+    }
 
 }

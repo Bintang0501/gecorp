@@ -51,7 +51,7 @@
                                     <div class="form-group">
                                         <label class=" form-control-label">Toko Pengirim<span
                                                 style="color: red">*</span></label>
-                                        <select class="standardSelect" name="id_toko" id="id_toko" style="display: block;">
+                                        <select class="standardSelect" name="toko_pengirim" id="toko_pengirim" style="display: block;">
                                             <option class="" required>~Pilih Nama Toko~</option>
                                             @foreach ($toko as $tk)
                                                 <option value="{{ $tk->id }}">{{ $tk->nama_toko }}</option>
@@ -59,39 +59,22 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="id_user" class=" form-control-label">Nama Pengirim (Admin Toko)<span style="color: red">*</span></label>
-                                        <select name="id_user" class="form-control" id="id_user" data-placeholder="Choose a Country..." tabindex="1">
+                                        <label for="nama_pengirim" class=" form-control-label">Nama Pengirim (Admin Toko)<span style="color: red">*</span></label>
+                                        <select name="nama_pengirim" class="form-control" id="nama_pengirim" data-placeholder="Choose a Country..." tabindex="1">
                                             <option class="" required>~Pilih Toko Terlebih Dahulu~</option>
                                         </select>
                                     </div>
-                                    {{-- <div class="form-group">
-                                            <label for="id_toko" class=" form-control-label">Toko Penerima<span style="color: red">*</span></label>
-                                            <select name="id_toko" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                                <option value="" required>~Pilih Nama Toko~</option>
-                                                    @foreach ($toko as $tk)
-                                                    <option value="{{ $tk->id }}">{{ $tk->nama_toko }}</option>
-                                                    @endforeach
-                                                </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="id_user" class=" form-control-label">Nama Penerima<span style="color: red">*</span></label>
-                                            <select name="id_user" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                                <option value="" required>~Pilih Nama Penerima~</option>
-                                                    @foreach ($user as $usr)
-                                                    <option value="{{ $usr->id }}">{{ $usr->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                        </div> --}}
                                     <div class="form-group">
-                                        <label for="ekspedisi" class=" form-control-label">Ekspedisi<span
+                                        <label class=" form-control-label">Nama Barang<span
                                                 style="color: red">*</span></label>
-                                        <input type="text" id="ekspedisi" name="ekspedisi" placeholder="Contoh : J&E"
-                                            class="form-control">
+                                        <select class="form-control" name="nama_barang" id="nama_barang" style="display: block;">
+                                            <option class="" required>~Pilih Toko Terlebih Dahulu~</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="harga" class=" form-control-label">Harga<span
+                                        <label for="harga" class=" form-control-label">Harga perBarang<span
                                                 style="color: red">*</span></label>
-                                        <input type="number" id="harga" name="harga" placeholder="Contoh : 8000000"
+                                        <input type="text" id="harga" name="harga" readonly placeholder="0"
                                             class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -99,6 +82,22 @@
                                                 style="color: red">*</span></label>
                                         <input type="number" id="item" name="item" placeholder="Contoh : 20"
                                             class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ekspedisi" class=" form-control-label">Ekspedisi<span
+                                                style="color: red">*</span></label>
+                                        <input type="text" id="ekspedisi" name="ekspedisi" placeholder="Contoh : Sicepat"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class=" form-control-label">Toko Penerima<span
+                                                style="color: red">*</span></label>
+                                        <select class="standardSelect" name="toko_penerima" id="toko_penerima" style="display: block;">
+                                            <option class="" required>~Pilih Nama Toko~</option>
+                                            @foreach ($toko as $tk)
+                                                <option value="{{ $tk->id }}">{{ $tk->nama_toko }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="tgl_kirim" class=" form-control-label">Tanggal Kirim<span
@@ -141,7 +140,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#id_toko').change(function() {
+        $('#toko_pengirim').change(function() {
             var idToko = $(this).val();
             if (idToko) {
                 $.ajax({
@@ -150,26 +149,136 @@
                     dataType: "json",
                     success: function(data) {
                         console.log('Data received:', data); // Log data untuk debugging
-                        $('#id_user').empty();
-                        $('#id_user').append('<option value="">~Pilih Nama Pengirim~</option>');
+                        $('#nama_pengirim').empty();
+                        $('#nama_pengirim').append('<option value="">~Pilih Nama Pengirim~</option>');
                         $.each(data, function(key, value) {
-                            $('#id_user').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                            $('#nama_pengirim').append('<option value="' + value.id + '">' + value.nama + '</option>');
                         });
                     },
                     error: function(xhr, status, error) {
                         if (xhr.status === 404) {  // Jika tidak ditemukan user
-                    $('#id_user').empty();
-                    $('#id_user').append('<option value="">Toko Tidak ada Admin</option>');
+                    $('#nama_pengirim').empty();
+                    $('#nama_pengirim').append('<option value="">Toko Tidak ada Admin</option>');
                 } else {
                     console.error(xhr.responseText); // Log error lainnya
                 }
             }
         });
             } else {
-                $('#id_user').empty();
-                $('#id_user').append('<option value="">~Nama Pengirim Tidak Ditemukan~</option>');
+                $('#nama_pengirim').empty();
+                $('#nama_pengirim').append('<option value="">~Nama Pengirim Tidak Ditemukan~</option>');
             }
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('#toko_pengirim').change(function() {
+            var idToko = $(this).val();
+            if (idToko) {
+                $.ajax({
+                    url: '/admin/get-barangs-by-toko/' + idToko,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log('Data received:', data); // Log data untuk debugging
+                        $('#nama_barang').empty();
+                        $('#nama_barang').append('<option value="">~Pilih Nama Barang~</option>');
+                        $.each(data, function(key, value) {
+                            $('#nama_barang').append('<option value="' + value.id + '">' + value.nama_barang +  '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 404) {  // Jika tidak ditemukan barang
+                            $('#nama_barang').empty();
+                            $('#nama_barang').append('<option value="">Tak ada Barang di Toko Tersebut</option>');
+                        } else {
+                            console.error(xhr.responseText); // Log error lainnya
+                        }
+                    }
+                });
+            } else {
+                $('#nama_barang').empty();
+                $('#nama_barang').append('<option value="">~Nama Barang Tidak Ditemukan~</option>');
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#nama_barang').change(function() {
+            var idDetail = $(this).val();  // Mendapatkan id barang dari dropdown nama_barang
+            var idToko = $('#toko_pengirim').val();  // Mendapatkan id toko dari dropdown toko_pengirim
+
+            if (idDetail && idToko) {
+                $.ajax({
+                    url: '/admin/get-harga-barang/' + idDetail + '/' + idToko,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.harga) {
+                            var formattedHarga = new Intl.NumberFormat('id-ID').format(data.harga);
+                            $('#harga').val(data.harga);  // Set value asli (tanpa format)
+                            $('#harga').data('formatted', formattedHarga);  // Simpan format number di data attribute
+                            $('#harga').trigger('input');  // Trigger input event untuk memformat tampilan
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            } else {
+                $('#harga').val('');
+            }
+        });
+
+        $('#harga').on('input', function() {
+            var value = $(this).val();
+            var formattedValue = new Intl.NumberFormat('id-ID').format(value);
+            $(this).val(formattedValue);  // Tampilkan dengan format number
+            $(this).data('real-value', value);  // Simpan nilai asli
+        });
+
+        $('form').on('submit', function() {
+            var hargaInput = $('#harga');
+            var realValue = hargaInput.data('real-value');
+            hargaInput.val(realValue);  // Set value asli sebelum submit
+        });
+    });
+</script>
+
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#toko_penerima').change(function() {
+            var idToko = $(this).val();
+            if (idToko) {
+                $.ajax({
+                    url: '/admin/get-users-by-toko/' + idToko,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log('Data received:', data); // Log data untuk debugging
+                        $('#nama_penerima').empty();
+                        $('#nama_penerima').append('<option value="">~Pilih Nama Penerima~</option>');
+                        $.each(data, function(key, value) {
+                            $('#nama_penerima').append('<option value="' + value.id + '">' + value.nama + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        if (xhr.status === 404) {  // Jika tidak ditemukan user
+                    $('#nama_penerima').empty();
+                    $('#nama_penerima').append('<option value="">Toko Tidak ada Admin</option>');
+                } else {
+                    console.error(xhr.responseText); // Log error lainnya
+                }
+            }
+        });
+            } else {
+                $('#nama_penerima').empty();
+                $('#nama_penerima').append('<option value="">~Nama Pengirim Tidak Ditemukan~</option>');
+            }
+        });
+    });
+</script> --}}
 @endsection
