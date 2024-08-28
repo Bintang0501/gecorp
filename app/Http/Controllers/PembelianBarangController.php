@@ -28,8 +28,9 @@ class PembelianBarangController extends Controller
     {
         $barang = Barang::all();
         $suppliers = Supplier::all();
+        $LevelHarga = LevelHarga::all();
 
-        return view('transaksi.pembelianbarang.create', compact('suppliers', 'barang'));
+        return view('transaksi.pembelianbarang.create', compact('suppliers', 'barang', 'LevelHarga'));
     }
 
     public function store(Request $request)
@@ -76,10 +77,9 @@ class PembelianBarangController extends Controller
 
     public function update(Request $request, $id)
     {
-    
+
         try {
-            DB::beginTransaction();
-            
+
             DB::beginTransaction();
 
             $pembelian = PembelianBarang::findOrFail($id);

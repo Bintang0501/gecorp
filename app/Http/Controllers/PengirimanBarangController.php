@@ -11,14 +11,13 @@ class PengirimanBarangController extends Controller
 {
     public function index()
     {
-        $levelusers = LevelUser::all();
-        return view('transaksi.pengirimanbarang.index', compact('levelusers'));
+        return view('transaksi.pengirimanbarang.index');
     }
 
     public function getUsersByToko($id_toko)
 {
     $users = User::where('id_toko', $id_toko)
-                ->where('id_level', 3) // Tambahkan kondisi ini untuk filter admin
+                ->where('id_level', 2) // Tambahkan kondisi ini untuk filter admin
                 ->get();
     if ($users->isEmpty()) {
         return response()->json(['error' => 'No users found'], 404);
