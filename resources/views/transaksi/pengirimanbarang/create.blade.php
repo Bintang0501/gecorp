@@ -3,6 +3,7 @@
 @extends('layouts.main')
 
 @section('content')
+
     <div class="breadcrumbs">
         <div class="breadcrumbs-inner">
             <div class="row m-0">
@@ -30,6 +31,7 @@
 
     <!-- Content -->
     <div class="content">
+        <x-adminlte-alerts />
         <!-- Animated -->
         <div class="animated fadeIn">
             <div class="row">
@@ -41,7 +43,8 @@
                         <div class="card-body">
                             {{-- Content --}}
                             <div class="card-body card-block">
-                                <form action="#" method="post" class="">
+                                <form action="{{ route('master.pengirimanbarang.store')}}" method="POST" class="">
+                                    @csrf
                                     <div class="form-group">
                                         <label for="no_resi" class=" form-control-label">Nomor Resi<span
                                                 style="color: red">*</span></label>
@@ -78,9 +81,9 @@
                                             class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="item" class=" form-control-label">Item<span
+                                        <label for="qty" class=" form-control-label">Jumlah Item<span
                                                 style="color: red">*</span></label>
-                                        <input type="number" id="item" name="item" placeholder="Contoh : 20"
+                                        <input type="number" id="qty" name="qty" placeholder="Contoh : 20"
                                             class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -105,12 +108,12 @@
                                         <input type="date" id="tgl_kirim" name="tgl_kirim" placeholder="DD/MM/YYYY"
                                             class="form-control">
                                     </div>
-                                    <div class="form-group">
+                                    {{-- <div class="form-group" hidden>
                                         <label for="tgl_terima" class=" form-control-label">Tanggal Terima<span
                                                 style="color: red">*</span></label>
                                         <input type="date" id="tgl_terima" name="tgl_terima" placeholder="DD/MM/YYYY"
                                             class="form-control">
-                                    </div>
+                                    </div> --}}
                                     {{-- <div class="form-group">
                                             <label for="status" class=" form-control-label">Status</label>
                                                 <select name="status" id="select" class="form-control">
@@ -206,45 +209,40 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('#nama_barang').change(function() {
-            var idDetail = $(this).val();  // Mendapatkan id barang dari dropdown nama_barang
-            var idToko = $('#toko_pengirim').val();  // Mendapatkan id toko dari dropdown toko_pengirim
+    $('#nama_barang').change(function() {
+        var idDetail = $(this).val();  // Mendapatkan id detail_toko dari dropdown nama_barang
+        var idToko = $('#toko_pengirim').val();  // Mendapatkan id toko dari dropdown toko_pengirim
 
-            if (idDetail && idToko) {
-                $.ajax({
-                    url: '/admin/get-harga-barang/' + idDetail + '/' + idToko,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.harga) {
-                            var formattedHarga = new Intl.NumberFormat('id-ID').format(data.harga);
-                            $('#harga').val(data.harga);  // Set value asli (tanpa format)
-                            $('#harga').data('formatted', formattedHarga);  // Simpan format number di data attribute
-                            $('#harga').trigger('input');  // Trigger input event untuk memformat tampilan
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
+        if (idDetail && idToko) {
+            $.ajax({
+                url: '/admin/get-harga-barang/' + idDetail + '/' + idToko,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.harga) {
+                        var formattedHarga = new Intl.NumberFormat('id-ID').format(data.harga);
+                        $('#harga').val(formattedHarga);  // Menampilkan harga yang sudah diformat
+                        $('#harga').data('real-value', data.harga);  // Menyimpan harga asli di data attribute
+                    } else {
+                        $('#harga').val('');
                     }
-                });
-            } else {
-                $('#harga').val('');
-            }
-        });
-
-        $('#harga').on('input', function() {
-            var value = $(this).val();
-            var formattedValue = new Intl.NumberFormat('id-ID').format(value);
-            $(this).val(formattedValue);  // Tampilkan dengan format number
-            $(this).data('real-value', value);  // Simpan nilai asli
-        });
-
-        $('form').on('submit', function() {
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    $('#harga').val('');
+                }
+            });
+        } else {
+            $('#harga').val('');
+        }
+    });
+    $('form').on('submit', function() {
             var hargaInput = $('#harga');
             var realValue = hargaInput.data('real-value');
             hargaInput.val(realValue);  // Set value asli sebelum submit
         });
-    });
+});
+
 </script>
 
 

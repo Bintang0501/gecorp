@@ -11,16 +11,16 @@ return new class extends Migration
     {
         Schema::create('pengiriman_barang', function (Blueprint $table) {
             $table->id('id');
+            $table->string('no_resi');
             $table->string('toko_pengirim');
             $table->string('nama_pengirim');
-            $table->string('toko_penerima');
-            $table->string('nama_penerima');
+            $table->string('nama_barang');
             $table->string('ekspedisi');
-            $table->string('no_resi');
-            $table->double('harga');
-            $table->integer('item');
-            $table->dateTime('tgl_kirim');
-            $table->dateTime('tgl_terima');
+            $table->integer('qty');
+            $table->double('total_harga');
+            $table->string('toko_penerima');
+            $table->date('tgl_kirim');
+            $table->date('tgl_terima')->nullable();
             $table->enum('status', ['progress', 'done', 'failed'])->default('progress');
             $table->softDeletes();
         });

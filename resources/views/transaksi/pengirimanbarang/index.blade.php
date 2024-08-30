@@ -30,6 +30,7 @@
 
         <!-- Content -->
         <div class="content">
+            <x-adminlte-alerts />
             <!-- Animated -->
             <div class="animated fadeIn">
                 <div class="row">
@@ -42,33 +43,36 @@
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th>#</th>
                                             <th>Status</th>
                                             <th>Tgl Pengiriman</th>
-                                            <th>Nama Pengirim</th>
-                                            <th>Toko Pengirim</th>
-                                            <th>Toko Penerima</th>
-                                            <th>Nama Penerima</th>
-                                            <th>Ekspidisi</th>
+                                            <th>Tgl Terima</th>
                                             <th>No. Resi</th>
-                                            <th>Nilai</th>
-                                            <th>Item</th>
+                                            <th>Toko Pengirim</th>
+                                            <th>Nama Pengirim</th>
+                                            <th>Barang</th>
+                                            <th>Qty</th>
+                                            <th>Total Harga</th>
+                                            <th>Ekspidisi</th>
+                                            <th>Toko Penerima</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @forelse ($pengiriman_barang as $prbr)
                                         <tr>
-                                            <td>1</td>
-                                            <td><h4><span class="badge badge-success">Done</span></h4></td>
-                                            <td>12-95-2023</td>
-                                            <td>Nama Pengirim</td>
-                                            <td>Toko Pengirim</td>
-                                            <td>Toko Penerima</td>
-                                            <td>Nama Penerima</td>
-                                            <td>Shopee Express</td>
-                                            <td>13991395</td>
-                                            <td>Nilai (?)</td>
-                                            <td>Immortality</td>
+                                            <td>{{ $loop->iteration}}</td>
+                                            <td><h4><span class="badge badge-warning">{{$prbr->status}}</span></h4></td>
+                                            <td>{{ $prbr->tgl_kirim}}</td>
+                                            <td>{{ $prbr->tgl_terima}}</td>
+                                            <td>{{ $prbr->no_resi}}</td>
+                                            <td>{{ $prbr->toko->nama_toko}}</td>
+                                            <td>{{ $prbr->user->nama}}</td>
+                                            <td>{{ $prbr->barang->nama_barang}}</td>
+                                            <td>{{ $prbr->qty}}</td>
+                                            <td>Rp.{{ number_format($prbr->total_harga, 0, ',', '.')}}</td>
+                                            <td>{{ $prbr->ekspedisi}}</td>
+                                            <td>{{ $prbr->tokos->nama_toko}}</td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#">
                                                     <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
@@ -78,6 +82,9 @@
                                                 </form>
                                             </td>
                                         </tr>
+                                        @empty
+
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

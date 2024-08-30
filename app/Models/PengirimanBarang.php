@@ -12,7 +12,9 @@ class PengirimanBarang extends Model
 
     protected $table = 'pengiriman_barang';
 
-    protected $guarded = [''];
+    protected $fillable = [
+        'no_resi', 'toko_pengirim', 'nama_pengirim', 'nama_barang', 'ekspedisi', 'qty', 'total_harga', 'toko_penerima', 'tgl_kirim'
+    ];
 
     public $incrementing = false;
 
@@ -24,16 +26,21 @@ class PengirimanBarang extends Model
 
     public function toko()
     {
-        return $this->belongsTo(Toko::class, 'id_toko', 'id');
+        return $this->belongsTo(Toko::class, 'toko_pengirim', 'id');
+    }
+
+    public function tokos()
+    {
+        return $this->belongsTo(Toko::class, 'toko_penerima', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'nama_pengirim', 'id');
     }
 
-    public function levelusers()
+    public function barang()
     {
-        return $this->belongsTo(LevelUser::class, 'id_level', 'id');
+        return $this->belongsTo(Barang::class, 'nama_barang', 'id');
     }
 }
