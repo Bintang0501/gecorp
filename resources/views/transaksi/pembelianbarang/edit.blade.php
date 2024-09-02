@@ -2,7 +2,6 @@
 
 @section('content')
 <!-- Breadcrumb and Header -->
-...
 
 <!-- Form -->
 <div class="content">
@@ -15,121 +14,139 @@
                         <a href="{{ route('master.pembelianbarang.index')}}" class="btn btn-danger">Kembali</a>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('master.pembelianbarang.update', $pembelian->id) }}" method="POST">
-                            @csrf
-                            @method('PUT')
+                        <form action="{{ route('master.pembelianbarang.update_status', $pembelian->id) }}" method="POST">
+                        @csrf
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <h5><i class="fa fa-home"></i> Nomor Nota <span class="badge badge-secondary pull-right">{{ $pembelian->no_nota }}</span></h5>
+                            </li>
+                            <li class="list-group-item">
+                                <h5><i class="fa fa-globe"></i> Nama Supplier <span class="badge badge-secondary pull-right">{{ $pembelian->supplier->nama_supplier }}</span></h5>
+                            </li>
+                            <li class="list-group-item">
+                                <h5><i class="fa fa-map-marker"></i> &nbsp;Tanggal Nota <span class="badge badge-secondary pull-right">{{ $pembelian->tgl_nota }}</span></h5>
+                            </li>
+                        </ul>
+                        <br>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">No</th>
+                                            <th scope="col">Nama Barang</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Harga</th>
+                                            <th scope="col">Total Harga</th>
+                                            <th scope="col">Level Harga</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $statuses = ['progress', 'success', 'failed'];
+                                        @endphp
+                                        @foreach ($pembelian->detail as $detail)
+                                        <tr>
+                                            <td>
+                                                <select name="status_detail[]" id="status_detail_{{ $detail->id }}" class="form-control status-select">
+                                                    <option value="" disabled>Pilih Status</option>
+                                                    @foreach($statuses as $status)
+                                                        <option value="{{ $status }}" {{ $detail->status == $status ? 'selected' : '' }}>
+                                                            {{ $status }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $detail->barang->nama_barang }}</td>
+                                            <td>{{ $detail->qty }}</td>
+                                            <td>Rp {{ number_format($detail->harga_barang, 0, ',', '.') }}</td>
+                                            <td>Rp {{ number_format($detail->harga_barang * $detail->qty, 0, ',', '.') }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary mb-1 atur-harga-btn" data-toggle="modal" data-target="#mediumModal-{{ $detail->id }}" style="display: {{ $detail->status == 'success' ? 'inline-block' : 'none' }};">
+                                                    Atur Harga
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <!-- Modal for each item -->
+                                        <div class="modal fade" id="mediumModal-{{ $detail->id }}" tabindex="-1" role="dialog" aria-labelledby="mediumModalLabel-{{ $detail->id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="mediumModalLabel-{{ $detail->id }}">Atur Harga - {{ $detail->barang->nama_barang }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!-- Form atau konten modal untuk mengatur harga -->
+                                                        <div class="row">
+                                                            <div class="col-8">
+                                                                <!-- Jumlah Item -->
+                                                                <div class="card border border-primary">
+                                                                    <div class="card-body">
+                                                                        <p class="card-text">Detail Stock<strong>(GSS)</strong></p>
+                                                                        <p class="card-text">Stock :<strong class="stock">0</strong></p>
+                                                                        <p class="card-text">Hpp Awal : <strong class="hpp-awal">Rp 0</strong></p>
+                                                                        <p class="card-text">Hpp Baru : <strong class="hpp-baru">Rp 0</strong></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <!-- Harga Barang -->
+                                                                <div>
+                                                                    @foreach ($LevelHarga as $level)
+                                                                    <div class="form-group">
+                                                                        <div class="input-group">
+                                                                            <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
+                                                                            <input type="text" class="form-control">
+                                                                            <div class="input-group-addon">7.8%</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-primary">Confirm</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th scope="col" colspan="5" style="text-align:right">SubTotal</th>
+                                            <th scope="col">Rp {{ number_format($pembelian->detail->sum(function($detail) {
+                                                return $detail->harga_barang * $detail->qty;
+                                            }), 0, ',', '.') }}</th>
+                                        </tr>
+                                    </tfoot>                                    
+                                </table>
 
-                            <!-- Form fields for supplier and store -->
-                            <div class="form-group">
-                                <label for="id_supplier" class="form-control-label">Nama Supplier</label>
-                                <select name="id_supplier" class="form-control">
-                                    <option selected>Pilih</option>
-                                    @foreach($suppliers as $supplier)
-                                        <option value="{{ $supplier->id }}" {{ $pembelian->id_supplier == $supplier->id ? 'selected' : '' }}>{{ $supplier->nama_supplier }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="id_toko" class="form-control-label">Nama Toko</label>
-                                <select name="id_toko" class="form-control">
-                                    <option selected>Pilih</option>
-                                    @foreach($tokos as $toko)
-                                        <option value="{{ $toko->id }}" {{ $pembelian->id_toko == $toko->id ? 'selected' : '' }}>{{ $toko->nama_toko }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <!-- Item container -->
-                            <div id="item-container">
-                                @foreach($pembelian->detail as $detail)
-                                <input type="hidden" name="detail_ids[]" value="{{ $detail->id }}">
-                                <div class="item-group">
-                                    <!-- Nama Barang -->
-                                    <div class="form-group">
-                                        <label for="nama_barang" class="form-control-label">Nama Barang<span style="color: red">*</span></label>
-                                        <input type="text" name="nama_barang[]" value="{{ $detail->nama_barang }}" class="form-control col-4">
-                                    </div>
-
-                                    <!-- Jenis Barang -->
-                                    <div class="form-group">
-                                        <label for="id_jenis_barang" class="form-control-label">Jenis Barang</label>
-                                        <select name="id_jenis_barang[]" class="form-control col-4">
-                                            <option selected>Pilih</option>
-                                            @foreach($jenisBarang as $jenis)
-                                                <option value="{{ $jenis->id }}" {{ $detail->id_jenis_barang == $jenis->id ? 'selected' : '' }}>{{ $jenis->nama_jenis_barang }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <!-- Brand Barang -->
-                                    <div class="form-group">
-                                        <label for="id_brand" class="form-control-label">Brand Barang</label>
-                                        <select name="id_brand[]" class="form-control col-4">
-                                            <option selected>Pilih</option>
-                                            @foreach($brands as $brand)
-                                                <option value="{{ $brand->id }}" {{ $detail->id_brand == $brand->id ? 'selected' : '' }}>{{ $brand->nama_brand }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <!-- Harga Barang -->
-                                    <div class="form-group">
-                                        <label for="harga_barang" class="form-control-label">Harga Barang<span style="color: red">*</span></label>
-                                        <input type="number" name="harga_barang[]" min="1" value="{{ $detail->harga_barang }}" class="form-control col-4 harga-barang">
-                                    </div>
-
-                                    <!-- Jumlah Item -->
-                                    <div class="form-group">
-                                        <label for="qty" class="form-control-label">Jumlah Item<span style="color: red">*</span></label>
-                                        <input type="number" name="qty[]" min="1" value="{{ $detail->qty }}" class="form-control col-4 jumlah-item">
-                                    </div>
-
-                                    <!-- Status Barang -->
-                                    <div class="form-group">
-                                        <label for="status_detail" class="form-control-label">Status Barang</label>
-                                        <select name="status_detail[]" class="form-control">
-                                            <option value="progress" {{ $detail->status == 'progress' ? 'selected' : '' }}>Progress</option>
-                                            <option value="done" {{ $detail->status == 'done' ? 'selected' : '' }}>Done</option>
-                                            <option value="failed" {{ $detail->status == 'failed' ? 'selected' : '' }}>Failed</option>
-                                            <option value="refund" {{ $detail->status == 'refund' ? 'selected' : '' }}>Refund</option>
-                                            <option value="resend" {{ $detail->status == 'resend' ? 'selected' : '' }}>Resend</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Remove Button -->
-                                    <button type="button" class="btn btn-danger remove-item">Hapus</button>
+                                <div class="form-group">
+                                    <label for="status" class="form-control-label">Status Transaksi</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="" disabled>Pilih Status</option>
+                                        @foreach($statuses as $status)
+                                            <option value="{{ $status }}" {{ $pembelian->status == $status ? 'selected' : '' }}>
+                                                {{ $status }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                @endforeach
+                                <!-- Submit Button -->
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-dot-circle-o"></i> Simpan
+                                    </button>
+                                </div>
                             </div>
-                            <button type="button" id="reset-item" class="btn btn-secondary" style="display:none;">Reset</button>
-                            <br><br>
-
-                            <!-- Total Fields -->
-                            <div class="form-group">
-                                <label for="total_item" class="form-control-label">Total Item<span style="color: red">*</span></label>
-                                <input type="text" id="total_item" name="total_item" value="{{ $pembelian->total_item }}" class="form-control col-4" readonly>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="total_harga" class="form-control-label">Total Harga<span style="color: red">*</span></label>
-                                <input type="text" id="total_harga" name="total_harga" value="{{ $pembelian->total_harga }}" class="form-control col-4" readonly>
-                            </div>
-
-                            <!-- Status of the Main Transaction -->
-                            <div class="form-group">
-                                <label for="status" class="form-control-label">Status Transaksi</label>
-                                <select name="status" class="form-control">
-                                    <option value="progress" {{ $pembelian->status == 'progress' ? 'selected' : '' }}>Progress</option>
-                                    <option value="done" {{ $pembelian->status == 'done' ? 'selected' : '' }}>Done</option>
-                                    <option value="failed" {{ $pembelian->status == 'failed' ? 'selected' : '' }}>Failed</option>
-                                </select>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                            </div>
+                        </div>
                         </form>
                     </div>
                 </div>
@@ -139,76 +156,27 @@
 </div>
 
 <script>
-    let lastRemovedItem = null;
+    document.addEventListener('DOMContentLoaded', function() {
+    // Dapatkan semua elemen select dengan class status-select
+    const statusSelects = document.querySelectorAll('.status-select');
 
-    function attachEventListeners() {
-        document.querySelectorAll('.remove-item').forEach(function(button) {
-            button.addEventListener('click', function () {
-                lastRemovedItem = this.parentElement.cloneNode(true);
-                this.parentElement.remove();
-                calculateTotals();
-                updateRemoveButtons();
-                toggleResetButton();
-            });
-        });
+    statusSelects.forEach(select => {
+        // Event listener untuk setiap select option
+        select.addEventListener('change', function() {
+            const status = this.value; // Ambil nilai status yang dipilih
+            const row = this.closest('tr'); // Ambil row (baris) dari select yang sedang diubah
+            const aturHargaBtn = row.querySelector('.atur-harga-btn'); // Temukan tombol "Atur Harga" di dalam row
 
-        document.querySelectorAll('.jumlah-item, .harga-barang').forEach(function(input) {
-            input.addEventListener('input', calculateTotals);
-        });
-    }
-
-    function toggleResetButton() {
-        if (lastRemovedItem) {
-            document.getElementById('reset-item').style.display = 'inline-block';
-        } else {
-            document.getElementById('reset-item').style.display = 'none';
-        }
-    }
-
-    function updateRemoveButtons() {
-        const itemGroups = document.querySelectorAll('.item-group');
-        itemGroups.forEach(function(group) {
-            const removeButton = group.querySelector('.remove-item');
-            if (itemGroups.length > 1) {
-                removeButton.style.display = 'inline-block';
+            // Tampilkan atau sembunyikan tombol berdasarkan status yang dipilih
+            if (status === 'success') {
+                aturHargaBtn.style.display = 'inline-block'; // Tampilkan tombol
             } else {
-                removeButton.style.display = 'none';
+                aturHargaBtn.style.display = 'none'; // Sembunyikan tombol
             }
         });
-    }
-
-    function calculateTotals() {
-        let totalItem = 0;
-        let totalHarga = 0;
-
-        document.querySelectorAll('.item-group').forEach(function(group) {
-            const qty = group.querySelector('.jumlah-item').value;
-            const harga = group.querySelector('.harga-barang').value;
-            totalItem += parseInt(qty) || 0;
-            totalHarga += (parseInt(qty) || 0) * (parseInt(harga) || 0);
-        });
-
-        document.getElementById('total_item').value = totalItem;
-        document.getElementById('total_harga').value = totalHarga;
-    }
-
-    function resetDeletedItem() {
-        if (lastRemovedItem) {
-            document.getElementById('item-container').appendChild(lastRemovedItem);
-            lastRemovedItem = null;
-            toggleResetButton();
-            attachEventListeners();
-            updateRemoveButtons();
-            calculateTotals();
-        }
-    }
-
-    // Event Listeners
-    document.addEventListener('DOMContentLoaded', function() {
-        attachEventListeners();
-        updateRemoveButtons();
-        calculateTotals();
-        document.getElementById('reset-item').addEventListener('click', resetDeletedItem);
     });
+});
+
 </script>
+
 @endsection

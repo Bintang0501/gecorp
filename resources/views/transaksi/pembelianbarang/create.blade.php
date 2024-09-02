@@ -106,8 +106,8 @@
                                                     <!-- Jenis Barang -->
                                                     <div class="form-group">
                                                         <label for="id_barang" class="form-control-label">Nama Barang<span style="color: red">*</span></label>
-                                                        <select name="id_barang[]" id="id_barang"  data-placeholder="Pilih Barang..." class="standardSelect">
-                                                            <option value="" selected >Pilih Barang</option>
+                                                        <select name="id_barang[]" id="id_barang"  data-placeholder="Pilih Barang..." class="form-control">
+                                                            <option value="" disabled selected>Pilih Barang</option>
                                                             @foreach($barang as $brg)
                                                                 <option value="{{ $brg->id }}">{{ $brg->nama_barang }}</option>
                                                             @endforeach
@@ -145,13 +145,13 @@
                                         <!-- Jumlah Item -->
                                         <div class="card border border-primary">
                                             <div class="card-body">
-                                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                                <p class="card-text">Hpp Awal <strong>Tes</strong> Hpp Baru <strong>Tes</strong></p>
+                                                <p class="card-text">Detail Stock<strong>(GSS)</strong></p>
+                                                <p class="card-text">Stock :<strong class="stock">0</strong></p>
+                                                <p class="card-text">Hpp Awal : <strong class="hpp-awal">Rp 0</strong></p>
+                                                <p class="card-text">Hpp Baru : <strong class="hpp-baru">Rp 0</strong></p>
                                             </div>
                                         </div>
-
                                     </div>
-
                                     <div class="col-4">
                                         <!-- Harga Barang -->
                                         <div>
@@ -168,37 +168,37 @@
                                     </div>
                                 </div>
                                 <br>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Action</th>
-                                                            <th scope="col">No</th>
-                                                            <th scope="col">Nama Barang</th>
-                                                            <th scope="col">Qty</th>
-                                                            <th scope="col">Harga</th>
-                                                            <th scope="col">Total Harga</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Rows akan ditambahkan di sini oleh JavaScript -->
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th scope="col" colspan="5" style="text-align:right">SubTotal</th>
-                                                            <th scope="col">Rp </th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>                                                
-                                                <!-- Submit Button -->
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">
-                                                        <i class="fa fa-dot-circle-o"></i> Simpan
-                                                    </button>
-                                                </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Action</th>
+                                                        <th scope="col">No</th>
+                                                        <th scope="col">Nama Barang</th>
+                                                        <th scope="col">Qty</th>
+                                                        <th scope="col">Harga</th>
+                                                        <th scope="col">Total Harga</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Rows akan ditambahkan di sini oleh JavaScript -->
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th scope="col" colspan="5" style="text-align:right">SubTotal</th>
+                                                        <th scope="col">Rp </th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>                                                
+                                            <!-- Submit Button -->
+                                            <div class="form-group">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-dot-circle-o"></i> Simpan
+                                                </button>
                                             </div>
                                         </div>
+                                    </div>
                                     </form>
                                     @else
                                     <div class="alert alert-warning">
@@ -209,7 +209,6 @@
                                         <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, irure terry richardson ex sd. Alip placeat salvia cillum iphone. Seitan alip s cardigan american apparel, butcher voluptate nisi .</p>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -224,23 +223,39 @@
     document.addEventListener('DOMContentLoaded', function () {
         let subtotal = 0;
         let addedItems = new Set();
-
+    
+        function toggleInputFields(disabled) {
+            document.getElementById('jml_item').disabled = disabled;
+            document.getElementById('harga_barang').disabled = disabled;
+            if (disabled) {
+                document.getElementById('jml_item').value = '';
+                document.getElementById('harga_barang').value = '';
+            }
+        }
+    
+        // Initial check to set input fields based on existing items
+        function checkInputFields() {
+            let idBarang = document.getElementById('id_barang').value;
+            let isItemAdded = addedItems.has(idBarang);
+            toggleInputFields(isItemAdded);
+        }
+    
         document.getElementById('add-item-detail').addEventListener('click', function () {
             let idBarang = document.getElementById('id_barang').value;
             let namaBarang = document.getElementById('id_barang').selectedOptions[0].text;
             let qty = parseInt(document.getElementById('jml_item').value);
             let harga = parseInt(document.getElementById('harga_barang').value);
-
+    
             if (addedItems.has(idBarang)) {
                 alert('Barang ini sudah ditambahkan sebelumnya.');
                 return;
             }
-
+    
             addedItems.add(idBarang);
-
+    
             let totalHarga = qty * harga;
             subtotal += totalHarga;
-
+    
             let row = `
                 <tr>
                     <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
@@ -251,35 +266,71 @@
                     <td>Rp ${totalHarga.toLocaleString('id-ID')}</td>
                 </tr>
             `;
-
+    
             document.querySelector('tbody').insertAdjacentHTML('beforeend', row);
-
+    
             document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
-
-            document.getElementById('jml_item').value = '';
-            document.getElementById('harga_barang').value = '';
-
+    
+            // Disable input fields after adding
+            toggleInputFields(true);
+    
             updateNumbers();
         });
-
+    
         document.querySelector('tbody').addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-item')) {
                 let row = e.target.closest('tr');
+                let idBarang = row.querySelector('input[name="id_barang[]"]').value;
                 let totalHarga = parseInt(row.querySelector('td:last-child').textContent.replace(/\D/g, ''));
-
+    
                 subtotal -= totalHarga;
                 row.remove();
-
+    
+                addedItems.delete(idBarang);
+    
                 document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
                 updateNumbers();
+    
+                // Enable input fields if no items are added
+                if (!addedItems.size) {
+                    toggleInputFields(false);
+                } else {
+                    // Recheck if the currently selected item is in the added items
+                    checkInputFields();
+                }
             }
         });
+    
+        document.getElementById('id_barang').addEventListener('change', function () {
+            let idBarang = this.value;
 
+            if (idBarang) {
+                fetch(`/admin/get-stock-details/${idBarang}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('.card-text strong.stock').textContent = data.stock || '0';
+                        document.querySelector('.card-text strong.hpp-awal').textContent = `Rp ${data.hpp_awal.toLocaleString('id-ID')}`;
+                        document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${data.hpp_baru.toLocaleString('id-ID')}`;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                document.querySelector('.card-text strong.stock').textContent = '0';
+                document.querySelector('.card-text strong.hpp-awal').textContent = 'Rp 0';
+                document.querySelector('.card-text strong.hpp-baru').textContent = 'Rp 0';
+            }
+
+            checkInputFields();
+        });
+
+    
         function updateNumbers() {
             document.querySelectorAll('tbody tr .numbered').forEach((element, index) => {
                 element.textContent = index + 1;
             });
         }
-    });
-</script>
+    });    
+    
+    </script>
 @endsection
