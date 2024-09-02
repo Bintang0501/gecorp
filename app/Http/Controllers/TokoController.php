@@ -63,6 +63,20 @@ class TokoController extends Controller
         return view('master.toko.detail', compact('toko', 'detail_toko', 'barang'));
     }
 
+    // public function getHargaBarang($id_barang, $id_detail, $id_toko)
+    // {
+    //     $detailToko = DetailToko::where('id', $id_detail)
+    //                             ->where('id_barang', $id_barang)
+    //                             ->where('id_toko', $id_toko)
+    //                             ->first(['harga']);
+    //     // dd($detailToko);
+    //     if (!$detailToko) {
+    //         return response()->json(['error' => 'No price found'], 404);
+    //     }
+
+    //     return response()->json(['harga' => $detailToko->harga]);
+    // }
+
     public function create_detail(string $id)
     {
         $toko = Toko::findOrFail($id);

@@ -131,6 +131,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pengirimanbarang', [PengirimanBarangController::class, 'index'])->name('master.pengirimanbarang.index');
         Route::get('/pengirimanbarang/create', [PengirimanBarangController::class, 'create'])->name('master.pengirimanbarang.create');
         Route::get('/get-users-by-toko/{id_toko}', [PengirimanBarangController::class, 'getUsersByToko']);
+        Route::get('/get-barangs-by-toko/{id_toko}', [PengirimanBarangController::class, 'getBarangsByToko']);
+        Route::get('/get-harga-barang/{id_detail}/{id_toko}', [PengirimanBarangController::class, 'getHargaBarang']);
+        Route::post('/pengirimanbarang/store', [PengirimanBarangController::class, 'store'])->name('master.pengirimanbarang.store');
+
+        // Route::get('/get-harga-barang/{id_detail}/{id_toko}/{id_barang}', [TokoController::class, 'getHargaBarang']);
+        // Pada file routes/web.php
+
+
+        // Pada file routes/web.php
+
         // Route::get('/pengirimanbarang', function () {return view('master.pengirimanbarang.index');})->name('master.pengirimanbarang.index');
         // Route::get('/pengirimanbarang/create', function () {return view('transaksi.pengirimanbarang.create');})->name('transaksi.pengirimanbarang.create');
 
