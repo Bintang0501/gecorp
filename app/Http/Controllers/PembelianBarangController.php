@@ -4,17 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
-use App\Models\Brand;
 use App\Models\DetailPembelianBarang;
-use App\Models\JenisBarang;
 use App\Models\LevelHarga;
 use App\Models\PembelianBarang;
 use App\Models\Supplier;
-use App\Models\Toko;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PembelianBarangController extends Controller
 {
@@ -28,8 +23,9 @@ class PembelianBarangController extends Controller
     {
         $barang = Barang::all();
         $suppliers = Supplier::all();
+        $LevelHarga = LevelHarga::all();
 
-        return view('transaksi.pembelianbarang.create', compact('suppliers', 'barang'));
+        return view('transaksi.pembelianbarang.create', compact('suppliers', 'barang', 'LevelHarga'));
     }
 
     public function store(Request $request)
@@ -53,33 +49,44 @@ class PembelianBarangController extends Controller
             DB::commit();
 
             return redirect()->route('master.pembelianbarang.create')
-                            //  ->with(['tab' => 'detail', 'pembelian' => $pembelian]);
                              ->with('tab', 'detail')
                              ->with('pembelian', $pembelian);
+
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
     public function edit($id)
     {
         $pembelian = PembelianBarang::with('detail')->findOrFail($id);
-        $suppliers = Supplier::all();
-        $tokos = Toko::all();
-        $jenisBarang = JenisBarang::all();
-        $brands = Brand::all();
+        $LevelHarga = LevelHarga::all();
 
-        return view('transaksi.pembelianbarang.edit', compact('pembelian', 'suppliers', 'tokos', 'jenisBarang', 'brands'));
+        return view('transaksi.pembelianbarang.edit', compact('pembelian', 'LevelHarga'));
     }
 
     public function update(Request $request, $id)
     {
-    
+        $idBarangs = $request->input('id_barang', []);
+        $qtys = $request->input('qty', []);
+        $hargaBarangs = $request->input('harga_barang', []);
+
+        foreach ($idBarangs as $index => $id_barang) {
+            $qty = $qtys[$index] ?? null;
+            $harga_barang = $hargaBarangs[$index] ?? null;
+
+            if (is_null($qty) || is_null($harga_barang)) {
+                continue;
+            }
+
+            if ($qty <= 0 || $harga_barang <= 0) {
+                return redirect()->back()->with('error', 'Failed: Data harap diisi dengan benar.');
+            }
+        }
+
         try {
-            DB::beginTransaction();
-            
             DB::beginTransaction();
 
             $pembelian = PembelianBarang::findOrFail($id);
@@ -87,21 +94,34 @@ class PembelianBarangController extends Controller
             $totalItem = 0;
             $totalNilai = 0;
 
-            foreach ($request->id_barang as $index => $id_barang) {
-                // Temukan barang berdasarkan ID
-                $barang = Barang::findOrFail($id_barang);
+            $count = count($idBarangs);
+            for ($i = 0; $i < $count; $i++) {
+                $id_barang = $idBarangs[$i];
+                $qty = $qtys[$i] ?? null;
+                $harga_barang = $hargaBarangs[$i] ?? null;
 
-                // Perbarui atau buat detail pembelian
-                $detail = DetailPembelianBarang::create([
-                        'id_pembelian_barang' => $pembelian->id,
-                        'id_barang' => $id_barang,
-                        'qty' => $request->qty[$index],
-                        'harga_barang' => $request->harga_barang[$index],
-                        'total_harga' => $request->qty[$index] * $request->harga_barang[$index],
-                    ]);
+                if (is_null($qty) || is_null($harga_barang)) {
+                    continue;
+                }
 
-                $totalItem += $detail->qty;
-                $totalNilai += $detail->total_harga;
+                if ($id_barang && $qty > 0 && $harga_barang > 0) {
+                    $barang = Barang::findOrFail($id_barang);
+
+                    $detail = DetailPembelianBarang::updateOrCreate(
+                        [
+                            'id_pembelian_barang' => $pembelian->id,
+                            'id_barang' => $id_barang,
+                        ],
+                        [
+                            'qty' => $qty,
+                            'harga_barang' => $harga_barang,
+                            'total_harga' => $qty * $harga_barang,
+                        ]
+                    );
+
+                    $totalItem += $detail->qty;
+                    $totalNilai += $detail->total_harga;
+                }
             }
 
             $pembelian->total_item = $totalItem;
@@ -123,19 +143,16 @@ class PembelianBarangController extends Controller
         DB::beginTransaction();
 
         try {
-            // Find the PembelianBarang record
             $pembelian = PembelianBarang::findOrFail($id);
 
-            // Delete all related detail records
             $pembelian->detail()->delete();
 
-            // Delete the PembelianBarang record
             $pembelian->delete();
 
             DB::commit();
 
             return redirect()->route('master.pembelianbarang.index')
-                ->with('success', 'Pembelian barang deleted successfully.');
+                             ->with('success', 'Pembelian barang deleted successfully.');
         } catch (\Exception $e) {
             DB::rollback();
 

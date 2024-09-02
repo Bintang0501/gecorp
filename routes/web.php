@@ -48,8 +48,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/pembelianbarang', [PembelianBarangController::class, 'index'])->name('master.pembelianbarang.index');
         Route::get('/pembelianbarang/create', [PembelianBarangController::class, 'create'])->name('master.pembelianbarang.create');
         Route::post('/pembelianbarang/store', [PembelianBarangController::class, 'store'])->name('master.pembelianbarang.store');
+        Route::post('/pembelianbarang/additem', [PembelianBarangController::class, 'addItem'])->name('master.pembelianbarang.additem');
+        Route::delete('/pembelianbarang/remove-item/{id}', [PembelianBarangController::class, 'removeItem']);
         Route::get('/pembelianbarang/{id}/edit', [PembelianBarangController::class, 'edit'])->name('master.pembelianbarang.edit');
         Route::put('/pembelianbarang/{id}/update', [PembelianBarangController::class, 'update'])->name('master.pembelianbarang.update');
+        Route::put('/pembelianbarang/{id}/update_status', [PembelianBarangController::class, 'update_status'])->name('master.pembelianbarang.update_status');
         Route::delete('/pembelianbarang/{id}/delete', [PembelianBarangController::class, 'delete'])->name('master.pembelianbarang.delete');
 
         // Toko Controller
@@ -119,6 +122,7 @@ Route::middleware(['auth'])->group(function () {
         // Stock Barang Controller
         Route::get('/stockbarang', [StockBarangController::class, 'index'])->name('master.stockbarang.index');
         Route::get('/stockbarang/create', [StockBarangController::class, 'create'])->name('master.stockbarang.create');
+        Route::get('/get-stock-details/{id_barang}', [StockBarangController::class, 'getStockDetails'])->name('get-stock-details');
 
         Route::get('/stockopname', [StockOpnameController::class, 'index'])->name('master.stockopname.index');
         Route::get('/planorder', [PlanOrderController::class, 'index'])->name('master.planorder.index');
