@@ -51,9 +51,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/pembelianbarang/additem', [PembelianBarangController::class, 'addItem'])->name('master.pembelianbarang.additem');
         Route::delete('/pembelianbarang/remove-item/{id}', [PembelianBarangController::class, 'removeItem']);
         Route::get('/pembelianbarang/{id}/edit', [PembelianBarangController::class, 'edit'])->name('master.pembelianbarang.edit');
-        Route::put('/pembelianbarang/{id}/update', [PembelianBarangController::class, 'update'])->name('master.pembelianbarang.update');
-        Route::put('/pembelianbarang/{id}/update_status', [PembelianBarangController::class, 'update_status'])->name('master.pembelianbarang.update_status');
+        Route::put('/pembelianbarang/{id}/update', [PembelianBarangController::class, 'update'])->name('master.pembelianbarang.update');        
         Route::delete('/pembelianbarang/{id}/delete', [PembelianBarangController::class, 'delete'])->name('master.pembelianbarang.delete');
+        Route::get('/get-stock/{id_barang}', [PembelianBarangController::class, 'getStock'])->name('master.pembelian.getstock');
+        Route::post('/pembelianbarang/update_status/{id}', [PembelianBarangController::class, 'updateStatus'])->name('master.pembelianbarang.update_status');
 
         // Toko Controller
         Route::get('/toko', [TokoController::class, 'index'])->name('master.toko.index');

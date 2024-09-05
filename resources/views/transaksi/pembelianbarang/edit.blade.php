@@ -47,9 +47,14 @@
                                             $statuses = ['progress', 'success', 'failed'];
                                         @endphp
                                         @foreach ($pembelian->detail as $detail)
+                                        <input type="hidden" name="detail_ids[{{ $detail->id }}]" value="{{ $detail->id }}">
                                         <tr>
                                             <td>
-                                                <select name="status_detail[]" id="status_detail_{{ $detail->id }}" class="form-control status-select">
+                                                @if ($detail->status == 'success')
+                                                <!-- Jika status sudah 'success', tampilkan badge -->
+                                                <span class="badge badge-success">Success</span>
+                                                @else
+                                                <select name="status_detail[{{ $detail->id }}]" id="status_detail_{{ $detail->id }}" class="form-control status-select">
                                                     <option value="" disabled>Pilih Status</option>
                                                     @foreach($statuses as $status)
                                                         <option value="{{ $status }}" {{ $detail->status == $status ? 'selected' : '' }}>
@@ -57,6 +62,7 @@
                                                         </option>
                                                     @endforeach
                                                 </select>
+                                                @endif
                                             </td>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $detail->barang->nama_barang }}</td>
@@ -64,7 +70,14 @@
                                             <td>Rp {{ number_format($detail->harga_barang, 0, ',', '.') }}</td>
                                             <td>Rp {{ number_format($detail->harga_barang * $detail->qty, 0, ',', '.') }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary mb-1 atur-harga-btn" data-toggle="modal" data-target="#mediumModal-{{ $detail->id }}" style="display: {{ $detail->status == 'success' ? 'inline-block' : 'none' }};">
+                                                <button 
+                                                    type="button" 
+                                                    class="btn btn-primary mb-1 atur-harga-btn" 
+                                                    data-toggle="modal" 
+                                                    data-target="#mediumModal-{{ $detail->id }}" 
+                                                    data-id_barang="{{ $detail->id_barang }}"
+                                                    data-id="{{ $detail->id }}"
+                                                    {{ $detail->status == 'success' ? 'disabled' : '' }}>
                                                     Atur Harga
                                                 </button>
                                             </td>
@@ -86,7 +99,7 @@
                                                                 <!-- Jumlah Item -->
                                                                 <div class="card border border-primary">
                                                                     <div class="card-body">
-                                                                        <p class="card-text">Detail Stock<strong>(GSS)</strong></p>
+                                                                        <p class="card-text">Detail Stock<strong> (GSS)</strong></p>
                                                                         <p class="card-text">Stock :<strong class="stock">0</strong></p>
                                                                         <p class="card-text">Hpp Awal : <strong class="hpp-awal">Rp 0</strong></p>
                                                                         <p class="card-text">Hpp Baru : <strong class="hpp-baru">Rp 0</strong></p>
@@ -96,12 +109,13 @@
                                                             <div class="col-4">
                                                                 <!-- Harga Barang -->
                                                                 <div>
-                                                                    @foreach ($LevelHarga as $level)
+                                                                    @foreach ($LevelHarga as $index => $level)
                                                                     <div class="form-group">
                                                                         <div class="input-group">
                                                                             <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
-                                                                            <input type="text" class="form-control">
-                                                                            <div class="input-group-addon">7.8%</div>
+                                                                            <input type="hidden" name="level_nama[]" value="{{ $level->nama_level_harga }}">
+                                                                            <input type="text" class="form-control" name="level_harga[{{ $detail->id }}][]" value="">
+                                                                            <div class="input-group-addon">10%</div>
                                                                         </div>
                                                                     </div>
                                                                     @endforeach
@@ -111,7 +125,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <button type="button" class="btn btn-primary">Confirm</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -155,27 +169,69 @@
     </div>
 </div>
 
+<style>
+    .atur-harga-btn {
+        display: none; /* Sembunyikan tombol secara default */
+    }
+</style>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Dapatkan semua elemen select dengan class status-select
+
+document.addEventListener('DOMContentLoaded', function() {
     const statusSelects = document.querySelectorAll('.status-select');
 
     statusSelects.forEach(select => {
-        // Event listener untuk setiap select option
-        select.addEventListener('change', function() {
-            const status = this.value; // Ambil nilai status yang dipilih
-            const row = this.closest('tr'); // Ambil row (baris) dari select yang sedang diubah
-            const aturHargaBtn = row.querySelector('.atur-harga-btn'); // Temukan tombol "Atur Harga" di dalam row
+        const row = select.closest('tr');
+        const aturHargaBtn = row.querySelector('.atur-harga-btn');
+        
+        // Set tombol "Atur Harga" tidak muncul secara default
+        aturHargaBtn.style.display = 'none';
 
-            // Tampilkan atau sembunyikan tombol berdasarkan status yang dipilih
+        // Event listener untuk mengubah visibilitas tombol berdasarkan status
+        select.addEventListener('change', function() {
+            const status = this.value;
+
             if (status === 'success') {
-                aturHargaBtn.style.display = 'inline-block'; // Tampilkan tombol
+                aturHargaBtn.style.display = 'inline-block'; // Tampilkan tombol jika status "success"
             } else {
-                aturHargaBtn.style.display = 'none'; // Sembunyikan tombol
+                aturHargaBtn.style.display = 'none'; // Sembunyikan tombol jika status bukan "success"
             }
         });
     });
+
+    const aturHargaButtons = document.querySelectorAll('.atur-harga-btn');
+
+    aturHargaButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            const id_barang = button.getAttribute('data-id_barang');
+            const id_modal = button.getAttribute('data-id'); // Ambil data-id yang benar dari tombol
+            const modalId = `#mediumModal-${id_modal}`; // Gunakan id_modal untuk membuat ID modal
+
+            fetch(`/admin/get-stock/${id_barang}`)
+                .then(response => response.json())
+                .then(data => {
+                    const modal = document.querySelector(modalId);
+                    if (modal) {
+                        modal.querySelector('.stock').textContent = data.stock;
+                        modal.querySelector('.hpp-awal').textContent = `Rp ${new Intl.NumberFormat('id-ID').format(data.hpp_awal)}`;
+                        modal.querySelector('.hpp-baru').textContent = `Rp ${new Intl.NumberFormat('id-ID').format(data.hpp_baru)}`;
+                        Object.keys(data.level_harga).forEach(function(level_name, index) {
+                            const inputField = modal.querySelectorAll('input[name="level_harga[' + id_modal + '][]"]')[index];
+                            if (inputField) {
+                                inputField.value = data.level_harga[level_name];
+                            }
+                        });
+                    } else {
+                        console.error(`Modal dengan ID ${modalId} tidak ditemukan.`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        });
+    });
 });
+
 
 </script>
 

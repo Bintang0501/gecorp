@@ -111,9 +111,10 @@
                                                             @foreach($barang as $brg)
                                                                 <option value="{{ $brg->id }}">{{ $brg->nama_barang }}</option>
                                                             @endforeach
+                                                            @foreach($pengiriman as $kirim)
+                                                                <option value="{{ $brg->id }}">{{ $kirim->toko->detail_toko->barang->nama_barang }}</option>
+                                                            @endforeach
                                                         </select>
-                                                        <label class=" form-control-label">Barang Baru ?</label>
-                                                        &nbsp;&nbsp;<input type="checkbox" id="checkbox1" name="checkbox1" value="option1"> Ya
                                                     </div>
                                                 </div>
                                             </div>
@@ -141,29 +142,15 @@
                                 <br><br>
                                     
                                 <div class="row">
-                                    <div class="col-8">
+                                    <div class="col-12">
                                         <!-- Jumlah Item -->
                                         <div class="card border border-primary">
                                             <div class="card-body">
-                                                <p class="card-text">Detail Stock<strong>(GSS)</strong></p>
+                                                <p class="card-text">Detail Stock <strong>(GSS)</strong></p>
                                                 <p class="card-text">Stock :<strong class="stock">0</strong></p>
                                                 <p class="card-text">Hpp Awal : <strong class="hpp-awal">Rp 0</strong></p>
                                                 <p class="card-text">Hpp Baru : <strong class="hpp-baru">Rp 0</strong></p>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <!-- Harga Barang -->
-                                        <div>
-                                            @foreach ($LevelHarga as $level)
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
-                                                    <input type="text" class="form-control">
-                                                    <div class="input-group-addon">7.8%</div>
-                                                </div>
-                                            </div>
-                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -308,9 +295,13 @@
                 fetch(`/admin/get-stock-details/${idBarang}`)
                     .then(response => response.json())
                     .then(data => {
+                        // let hppBaru = data.hpp_baru || 0;
+
                         document.querySelector('.card-text strong.stock').textContent = data.stock || '0';
                         document.querySelector('.card-text strong.hpp-awal').textContent = `Rp ${data.hpp_awal.toLocaleString('id-ID')}`;
                         document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${data.hpp_baru.toLocaleString('id-ID')}`;
+
+                        // calculateHPP(hppBaru);
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -324,7 +315,25 @@
             checkInputFields();
         });
 
-    
+        document.querySelectorAll('.jumlah-item, .harga-barang').forEach(function (input) {
+            input.addEventListener('input', function () {
+                let hppBaru = parseFloat(document.querySelector('.card-text strong.hpp-baru').textContent.replace('Rp ', '').replace(/\./g, '')) || 0;
+                calculateHPP(hppBaru);
+            });
+        });
+
+        function calculateHPP(hppBaru) {
+            let jumlah = parseFloat(document.querySelector('.jumlah-item').value) || 0;
+            let harga = parseFloat(document.querySelector('.harga-barang').value) || 0;
+
+            if (jumlah > 0 && harga > 0) {
+                let totalHpp = harga;
+                let finalHpp = (totalHpp + hppBaru) / 2;
+
+                document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${Math.round(finalHpp).toLocaleString('id-ID')}`;
+            }
+        }
+
         function updateNumbers() {
             document.querySelectorAll('tbody tr .numbered').forEach((element, index) => {
                 element.textContent = index + 1;
