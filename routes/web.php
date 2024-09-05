@@ -135,6 +135,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/get-harga-barang/{id_detail}/{id_toko}', [PengirimanBarangController::class, 'getHargaBarang']);
         Route::post('/pengirimanbarang/store', [PengirimanBarangController::class, 'store'])->name('master.pengirimanbarang.store');
         Route::get('/pengirimanbarang/edit/{id}', [PengirimanBarangController::class, 'edit'])->name('master.pengirimanbarang.edit');
+        Route::put('/pengirimanbarang/update/{id}', [PengirimanBarangController::class, 'update'])->name('master.pengirimanbarang.update');
 
         // Route::get('/get-harga-barang/{id_detail}/{id_toko}/{id_barang}', [TokoController::class, 'getHargaBarang']);
         // Pada file routes/web.php
