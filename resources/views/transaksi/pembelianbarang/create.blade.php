@@ -217,7 +217,6 @@
             }
         }
 
-        // Initial check to set input fields based on existing items
         function checkInputFields() {
             let idBarang = document.getElementById('id_barang').value;
             let isItemAdded = addedItems.has(idBarang);
@@ -286,19 +285,22 @@
         });
 
         document.getElementById('id_barang').addEventListener('change', function () {
-            let idBarang = this.value;
+            checkInputFields(); // Periksa apakah barang sudah ada atau belum
 
+            let idBarang = this.value;
             if (idBarang) {
                 fetch(`/admin/get-stock-details/${idBarang}`)
                     .then(response => response.json())
                     .then(data => {
-                        // let hppBaru = data.hpp_baru || 0;
+                        let hppBaru = data.hpp_baru || 0;
+                        let totalHargaSuccess = data.total_harga_success || 0;
+                        let totalQtySuccess = data.total_qty_success || 0;
 
                         document.querySelector('.card-text strong.stock').textContent = data.stock || '0';
                         document.querySelector('.card-text strong.hpp-awal').textContent = `Rp ${data.hpp_awal.toLocaleString('id-ID')}`;
-                        document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${data.hpp_baru.toLocaleString('id-ID')}`;
+                        document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${hppBaru.toLocaleString('id-ID')}`;
 
-                        // calculateHPP(hppBaru);
+                        setupInputListeners(totalHargaSuccess, totalQtySuccess);
                     })
                     .catch(error => {
                         console.error('Error:', error);
@@ -308,26 +310,37 @@
                 document.querySelector('.card-text strong.hpp-awal').textContent = 'Rp 0';
                 document.querySelector('.card-text strong.hpp-baru').textContent = 'Rp 0';
             }
-
-            checkInputFields();
         });
 
-        document.querySelectorAll('.jumlah-item, .harga-barang').forEach(function (input) {
-            input.addEventListener('input', function () {
-                let hppBaru = parseFloat(document.querySelector('.card-text strong.hpp-baru').textContent.replace('Rp ', '').replace(/\./g, '')) || 0;
-                calculateHPP(hppBaru);
+        // Fungsi untuk mendengarkan perubahan input jumlah dan harga
+        function setupInputListeners(totalHarga, totalQty) {
+            document.querySelectorAll('.jumlah-item, .harga-barang').forEach(function (input) {
+                input.addEventListener('input', function () {
+                    calculateHPP(totalHarga, totalQty);
+                });
             });
-        });
+        }
 
-        function calculateHPP(hppBaru) {
+        // Fungsi untuk menghitung HPP Baru
+        function calculateHPP(totalHarga, totalQty) {
             let jumlah = parseFloat(document.querySelector('.jumlah-item').value) || 0;
             let harga = parseFloat(document.querySelector('.harga-barang').value) || 0;
 
             if (jumlah > 0 && harga > 0) {
-                let totalHpp = harga;
-                let finalHpp = (totalHpp + hppBaru) / 2;
+                let totalHargaBaru = jumlah * harga;
 
+                // Hitung total keseluruhan harga dan total qty
+                let totalKeseluruhanHarga = totalHargaBaru + totalHarga;
+                let totalKeseluruhanQty = jumlah + totalQty;
+
+                // Hitung HPP baru
+                let finalHpp = totalKeseluruhanHarga / totalKeseluruhanQty;
+
+                // Tampilkan hasil HPP baru
                 document.querySelector('.card-text strong.hpp-baru').textContent = `Rp ${Math.round(finalHpp).toLocaleString('id-ID')}`;
+            } else {
+                // Jika input kosong, HPP Baru tidak dihitung
+                document.querySelector('.card-text strong.hpp-baru').textContent = 'Rp 0';
             }
         }
 
