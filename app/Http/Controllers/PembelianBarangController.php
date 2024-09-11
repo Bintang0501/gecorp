@@ -72,6 +72,18 @@ class PembelianBarangController extends Controller
     {
         $stock = StockBarang::where('id_barang', $id_barang)->first();
 
+        $detail = DetailPembelianBarang::where('id_barang', $id_barang)->get();
+
+        $totalHargaSuccess = $detail->sum('total_harga');
+        $totalQtySuccess = $detail->sum('qty');
+
+        // Hitung HPP baru
+        if ($totalQtySuccess > 0) {
+            $hppBaru = $totalHargaSuccess / $totalQtySuccess;
+        } else {
+            $hppBaru = 0;
+        }
+
         $level_harga = [];
         if ($stock && $stock->level_harga) {
             $decoded_level_harga = json_decode($stock->level_harga, true);
@@ -82,9 +94,9 @@ class PembelianBarangController extends Controller
         }
 
         return response()->json([
-            'stock' => $stock->stock,
-            'hpp_awal' => $stock->hpp_awal,
-            'hpp_baru' => $stock->hpp_baru,
+            'stock' => $stock->stock ?? 0,
+            'hpp_awal' => $stock->hpp_awal ?? 0,
+            'hpp_baru' => $hppBaru,
             'level_harga' => $level_harga,
         ]);
     }
@@ -175,6 +187,12 @@ class PembelianBarangController extends Controller
         foreach ($detail_ids as $key => $detail_id) {
             $detail = DetailPembelianBarang::findOrFail($detail_id);
 
+            if (isset($statuses[$key]) && $statuses[$key] == 'failed') {
+                // Update the status in detail pembelian to failed
+                $detail->status = 'failed';
+                $detail->save();
+            }    
+
             if (isset($statuses[$key]) && $statuses[$key] == 'success') {
 
                 // Update the status in detail pembelian
@@ -203,15 +221,11 @@ class PembelianBarangController extends Controller
                                                                 ->get();
 
                     // Hitung total harga dan qty dari pembelian yang sudah 'success'
-                    $totalHargaSebelumnya = $successfulDetails->sum('total_harga');
-                    $totalQtySebelumnya = $successfulDetails->sum('qty');
-
-                    // Tambahkan total harga dan qty dari pembelian saat ini
-                    $totalHargaBaru = $totalHargaSebelumnya + $detail->total_harga;
-                    $totalQtyBaru = $totalQtySebelumnya + $detail->qty;
+                    $totalHargaSemua = $successfulDetails->sum('total_harga');
+                    $totalQtySemua = $successfulDetails->sum('qty');
 
                     // Hitung HPP baru
-                    $hppBaru = $totalHargaBaru / $totalQtyBaru;
+                    $hppBaru = $totalHargaSemua / $totalQtySemua;
 
                     $existingStock->stock += $detail->qty;
                     $existingStock->harga_satuan = $detail->harga_barang;
@@ -234,14 +248,16 @@ class PembelianBarangController extends Controller
             }
         }
 
-        // Cek apakah semua barang dalam detail pembelian memiliki status 'success'
+        $hasFailed = $pembelian->detail()->where('status', 'failed')->count() > 0;
         $allSuccess = $pembelian->detail()->where('status', '!=', 'success')->count() === 0;
 
         if ($allSuccess) {
-            // Jika semua barang sudah success, ubah status pembelian jadi success
             $pembelian->status = 'success';
-            $pembelian->save();
+        } elseif ($hasFailed) {
+            $pembelian->status = 'mixed';
         }
+
+        $pembelian->save();
 
         return redirect()->route('master.pembelianbarang.index')->with('success', 'Data berhasil disimpan');
     }

@@ -95,7 +95,7 @@
                                                     <div class="modal-body">
                                                         <!-- Form atau konten modal untuk mengatur harga -->
                                                         <div class="row">
-                                                            <div class="col-8">
+                                                            <div class="col-7">
                                                                 <!-- Jumlah Item -->
                                                                 <div class="card border border-primary">
                                                                     <div class="card-body">
@@ -106,7 +106,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-4">
+                                                            <div class="col-5">
                                                                 <!-- Harga Barang -->
                                                                 <div>
                                                                     @foreach ($LevelHarga as $index => $level)
@@ -114,8 +114,8 @@
                                                                         <div class="input-group">
                                                                             <div class="input-group-addon">{{ $level->nama_level_harga }}</div>
                                                                             <input type="hidden" name="level_nama[]" value="{{ $level->nama_level_harga }}">
-                                                                            <input type="text" class="form-control" name="level_harga[{{ $detail->id }}][]" value="">
-                                                                            <div class="input-group-addon">10%</div>
+                                                                            <input type="text" class="form-control level-harga" name="level_harga[{{ $detail->id }}][]" id="level_harga_{{ $detail->id }}_{{ $index }}" data-index="{{ $index }}" data-hpp-baru="0"> <!-- Tambahkan data-hpp-baru untuk menyimpan nilai hpp_baru -->
+                                                                            <div class="input-group-addon persen" id="persen_{{ $detail->id }}_{{ $index }}">0%</div> <!-- Tambahkan id persen untuk menampung persentase -->
                                                                         </div>
                                                                     </div>
                                                                     @endforeach
@@ -142,7 +142,7 @@
                                     </tfoot>                                    
                                 </table>
 
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="status" class="form-control-label">Status Transaksi</label>
                                     <select name="status" id="status" class="form-control">
                                         <option value="" disabled>Pilih Status</option>
@@ -152,7 +152,8 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
+
                                 <!-- Submit Button -->
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">
@@ -204,21 +205,43 @@ document.addEventListener('DOMContentLoaded', function() {
     aturHargaButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const id_barang = button.getAttribute('data-id_barang');
-            const id_modal = button.getAttribute('data-id'); // Ambil data-id yang benar dari tombol
-            const modalId = `#mediumModal-${id_modal}`; // Gunakan id_modal untuk membuat ID modal
+            const id_modal = button.getAttribute('data-id');
+            const modalId = `#mediumModal-${id_modal}`; // Gunakan id_modal untuk modal yang tepat
 
             fetch(`/admin/get-stock/${id_barang}`)
                 .then(response => response.json())
                 .then(data => {
                     const modal = document.querySelector(modalId);
                     if (modal) {
+                        let hppBaru = parseFloat(data.hpp_baru) || 0;
+
+                        // Set nilai HPP baru di setiap input level harga
+                        modal.querySelectorAll('.level-harga').forEach(function(input, index) {
+                            input.setAttribute('data-hpp-baru', hppBaru);
+                        });
+
                         modal.querySelector('.stock').textContent = data.stock;
                         modal.querySelector('.hpp-awal').textContent = `Rp ${new Intl.NumberFormat('id-ID').format(data.hpp_awal)}`;
-                        modal.querySelector('.hpp-baru').textContent = `Rp ${new Intl.NumberFormat('id-ID').format(data.hpp_baru)}`;
+                        modal.querySelector('.hpp-baru').textContent = `Rp ${hppBaru.toLocaleString('id-ID')}`;
+
+                        // Mengisi nilai level harga dari server ke dalam input
                         Object.keys(data.level_harga).forEach(function(level_name, index) {
                             const inputField = modal.querySelectorAll('input[name="level_harga[' + id_modal + '][]"]')[index];
                             if (inputField) {
                                 inputField.value = data.level_harga[level_name];
+                                
+                                // Hitung persentase langsung setelah mengisi nilai dari server
+                                let levelHarga = parseFloat(inputField.value) || 0;
+                                let persen = 0;
+                                if (hppBaru > 0) {
+                                    persen = ((levelHarga - hppBaru) / hppBaru) * 100;
+                                }
+
+                                // Tampilkan persentase
+                                const persenElement = modal.querySelector(`#persen_${id_modal}_${index}`);
+                                if (persenElement) {
+                                    persenElement.textContent = `${persen.toFixed(2)}%`;
+                                }
                             }
                         });
                     } else {
@@ -230,9 +253,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         });
     });
+
+    // Event listener untuk menghitung ulang persentase saat input level harga berubah
+    document.querySelectorAll('.level-harga').forEach(function(input) {
+        input.addEventListener('input', function() {
+            let hppBaru = parseFloat(input.getAttribute('data-hpp-baru')) || 0;
+            let levelHarga = parseFloat(this.value) || 0;
+
+            // Hitung persentase jika HPP baru lebih dari 0
+            let persen = 0;
+            if (hppBaru > 0) {
+                persen = ((levelHarga - hppBaru) / hppBaru) * 100;
+            }
+
+            const index = this.getAttribute('data-index');
+            const persenElement = document.getElementById(`persen_${this.getAttribute('name').match(/\d+/g)[0]}_${index}`);
+            if (persenElement) {
+                persenElement.textContent = `${persen.toFixed(2)}%`;
+            }
+        });
+    });
+
 });
-
-
 </script>
 
 @endsection
