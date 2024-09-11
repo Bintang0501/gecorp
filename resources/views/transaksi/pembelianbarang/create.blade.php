@@ -111,9 +111,6 @@
                                                             @foreach($barang as $brg)
                                                                 <option value="{{ $brg->id }}">{{ $brg->nama_barang }}</option>
                                                             @endforeach
-                                                            @foreach($pengiriman as $kirim)
-                                                                <option value="{{ $brg->id }}">{{ $kirim->toko->detail_toko->barang->nama_barang }}</option>
-                                                            @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
@@ -140,7 +137,7 @@
 
                                 <button type="button" id="add-item-detail" style="float: right" class="btn btn-secondary">Add</button>
                                 <br><br>
-                                    
+
                                 <div class="row">
                                     <div class="col-12">
                                         <!-- Jumlah Item -->
@@ -177,7 +174,7 @@
                                                         <th scope="col">Rp </th>
                                                     </tr>
                                                 </tfoot>
-                                            </table>                                                
+                                            </table>
                                             <!-- Submit Button -->
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-primary">
@@ -210,7 +207,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         let subtotal = 0;
         let addedItems = new Set();
-    
+
         function toggleInputFields(disabled) {
             document.getElementById('jml_item').disabled = disabled;
             document.getElementById('harga_barang').disabled = disabled;
@@ -219,30 +216,30 @@
                 document.getElementById('harga_barang').value = '';
             }
         }
-    
+
         // Initial check to set input fields based on existing items
         function checkInputFields() {
             let idBarang = document.getElementById('id_barang').value;
             let isItemAdded = addedItems.has(idBarang);
             toggleInputFields(isItemAdded);
         }
-    
+
         document.getElementById('add-item-detail').addEventListener('click', function () {
             let idBarang = document.getElementById('id_barang').value;
             let namaBarang = document.getElementById('id_barang').selectedOptions[0].text;
             let qty = parseInt(document.getElementById('jml_item').value);
             let harga = parseInt(document.getElementById('harga_barang').value);
-    
+
             if (addedItems.has(idBarang)) {
                 alert('Barang ini sudah ditambahkan sebelumnya.');
                 return;
             }
-    
+
             addedItems.add(idBarang);
-    
+
             let totalHarga = qty * harga;
             subtotal += totalHarga;
-    
+
             let row = `
                 <tr>
                     <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
@@ -253,31 +250,31 @@
                     <td>Rp ${totalHarga.toLocaleString('id-ID')}</td>
                 </tr>
             `;
-    
+
             document.querySelector('tbody').insertAdjacentHTML('beforeend', row);
-    
+
             document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
-    
+
             // Disable input fields after adding
             toggleInputFields(true);
-    
+
             updateNumbers();
         });
-    
+
         document.querySelector('tbody').addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-item')) {
                 let row = e.target.closest('tr');
                 let idBarang = row.querySelector('input[name="id_barang[]"]').value;
                 let totalHarga = parseInt(row.querySelector('td:last-child').textContent.replace(/\D/g, ''));
-    
+
                 subtotal -= totalHarga;
                 row.remove();
-    
+
                 addedItems.delete(idBarang);
-    
+
                 document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
                 updateNumbers();
-    
+
                 // Enable input fields if no items are added
                 if (!addedItems.size) {
                     toggleInputFields(false);
@@ -287,7 +284,7 @@
                 }
             }
         });
-    
+
         document.getElementById('id_barang').addEventListener('change', function () {
             let idBarang = this.value;
 
@@ -339,7 +336,7 @@
                 element.textContent = index + 1;
             });
         }
-    });    
-    
+    });
+
     </script>
 @endsection

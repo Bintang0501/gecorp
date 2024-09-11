@@ -47,43 +47,27 @@
                                             <th>#</th>
                                             <th>Nama Barang</th>
                                             <th>Stock</th>
-                                            <th>Harga Satuan</th>
-                                            <th>Modal</th>
-                                            <th>Level 1</th>
-                                            <th>Level 2</th>
-                                            <th>Level 3</th>
-                                            <th>Level 4</th>
-                                            <th>Level 5</th>
-                                            <th>User 1</th>
-                                            <th>User 2</th>
+                                            <th>Harga Satuan (Hpp Baru)</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        {{-- <tr>
                                             <td>#</td>
                                             <td>POCO F5 RAM 8/256</td>
                                             <td>10</td>
                                             <td>Rp. 5.000.000</td>
-                                            <td>RP. 50.000.000</td>
-                                            <td>Rp. 100.150</td>
-                                            <td></td>
-                                            <td>Rp. 102.500</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        {{-- <?php $no = 1; ?>
-                                        @forelse ($supplier as $spl)
+                                        </tr> --}}
+                                        <?php $no = 1; ?>
+                                        @forelse ($stock as $stk)
                                         <tr>
                                             <td>{{$no++}}</td>
-                                            <td>{{$spl->nama_supplier}}</td>
-                                            <td>{{$spl->email}}</td>
-                                            <td>{{$spl->alamat}}</td>
-                                            <td>{{$spl->contact}}</td>
+                                            <td>{{$stk->nama_barang}}</td>
+                                            <td>{{$stk->stock}}</td>
+                                            <td>Rp. {{ number_format($stk->hpp_baru, 0, '.', '.') }}</td>
                                             <td>
-                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="{{ route('master.supplier.delete', $spl->id) }}" method="POST">
-                                                    <a href="{{ route('master.supplier.edit', $spl->id)}}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                                <form onsubmit="return confirm('Ingin menghapus Data ini ? ?');" action="#" method="POST">
+                                                    <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
@@ -92,9 +76,9 @@
                                         </tr>
                                         @empty
                                         <div class="alert alert-danger">
-                                            Data Supplier belum Tersedia.
+                                            Data Stock belum Tersedia.
                                         </div>
-                                        @endforelse --}}
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>

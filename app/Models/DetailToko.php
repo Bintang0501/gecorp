@@ -31,4 +31,10 @@ class DetailToko extends Model
     {
         return $this->belongsTo(Barang::class, 'id_barang', 'id');
     }
+
+    public function stokBarang()
+{
+    return $this->hasMany(StockBarang::class, 'id_barang', 'id_barang');
+}
+
 }

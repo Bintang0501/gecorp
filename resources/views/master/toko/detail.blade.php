@@ -62,35 +62,60 @@
                                                     <th>#</th>
                                                     <th>Nama Barang</th>
                                                     <th>Stock</th>
-                                                    <th>Harga Satuan</th>
+                                                    <th>Harga Satuan (Hpp Baru)</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php $no = 1; ?>
-                                                @forelse ($detail_toko as $dt)
-                                                <tr>
-                                                    <td>{{$no++}}</td>
-                                                    <td>{{$dt->barang->nama_barang}}</td>
-                                                    <td>{{$dt->stock}}</td>
-                                                    <td>Rp. {{ number_format($dt->harga, 0, ',', '.') }}</td>
-                                                    <td>
-                                                        <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="{{ route('master.toko.delete_detail', ['id_toko' => $dt->id_toko, 'id_barang' => $dt->id_barang, 'id' => $dt->id]) }}" method="post">
-                                                            <a href="{{ route('master.toko.edit_detail', ['id_toko' => $dt->id_toko, 'id_barang' => $dt->id_barang, 'id' => $dt->id]) }}" class="btn btn-warning btn-sm">
-                                                                <i class="ti-pencil menu-icon"></i>
-                                                            </a>
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                                @empty
+
+                                                @if($toko->id == 1)
+                                                    @forelse ($stock as $stk)
+                                                    <tr>
+                                                        <td>{{$no++}}</td>
+                                                        <td>{{$stk->nama_barang}}</td>
+                                                        <td>{{$stk->stock}}</td>
+                                                        <td>Rp. {{ number_format($stk->hpp_baru, 0, '.', '.') }}</td>
+                                                        <td>
+                                                            <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="#" method="post">
+                                                                <a href="#" class="btn btn-warning btn-sm">
+                                                                    <i class="ti-pencil menu-icon"></i>
+                                                                </a>
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    @empty
                                                     <tr>
                                                         <td colspan="6">Tidak ada data.</td>
                                                     </tr>
-                                                @endforelse
+                                                    @endforelse
+                                                @else
+                                                    @forelse ($detail_toko as $dt)
+                                                    <tr>
+                                                        <td>{{$no++}}</td>
+                                                        <td>{{$dt->barang->nama_barang}}</td>
+                                                        <td>{{$dt->stock}}</td>
+                                                        <td>Rp. {{ number_format($dt->harga, 0, ',', '.') }}</td>
+                                                        <td>
+                                                            <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="{{ route('master.toko.delete_detail', ['id_toko' => $dt->id_toko, 'id_barang' => $dt->id_barang, 'id' => $dt->id]) }}" method="post">
+                                                                <a href="{{ route('master.toko.edit_detail', ['id_toko' => $dt->id_toko, 'id_barang' => $dt->id_barang, 'id' => $dt->id]) }}" class="btn btn-warning btn-sm">
+                                                                    <i class="ti-pencil menu-icon"></i>
+                                                                </a>
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                    @empty
+
+                                                    @endforelse
+                                                @endif
                                             </tbody>
+
                                         </table>
                                     </div>
 

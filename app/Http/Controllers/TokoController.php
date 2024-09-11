@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\DetailToko;
 use App\Models\LevelHarga;
+use App\Models\StockBarang;
 use App\Models\Toko;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,13 +56,27 @@ class TokoController extends Controller
 
 
     public function detail(string $id)
-    {
-        $toko = Toko::findOrFail($id);
-        $detail_toko = DetailToko::where('id_toko', $id)->get();
-        $barang = Barang::whereIn('id', $detail_toko->pluck('id_barang'))->get();
-        // $barang = Barang::all();
-        return view('master.toko.detail', compact('toko', 'detail_toko', 'barang'));
-    }
+{
+    // Ambil data toko berdasarkan id
+    $toko = Toko::findOrFail($id);
+
+    // Ambil detail toko yang berhubungan dengan toko ini
+    $detail_toko = DetailToko::where('id_toko', $id)
+               ->with('barang') // Relasi barang
+               ->get();
+
+    // Inisialisasi variabel $stock
+    $stock = StockBarang::all();
+
+    // Jika toko dengan id = 1, ambil data stok barang
+    // if ($id == 1) {
+    //     $stock = StockBarang::whereIn('id_barang', $detail_toko->pluck('id_barang'))->get();
+    // }
+
+    return view('master.toko.detail', compact('toko', 'detail_toko', 'stock'));
+}
+
+
 
     // public function getHargaBarang($id_barang, $id_detail, $id_toko)
     // {

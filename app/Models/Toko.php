@@ -35,11 +35,11 @@ class Toko extends Model
 
     public function pengiriman_barang()
     {
-        return $this->hasMany(PengirimanBarang::class, 'id_toko', 'id');
+        return $this->hasMany(PengirimanBarang::class, 'toko_pengirim', 'id');
     }
 
-    // public function levelharga()
-    // {
-    //     return $this->belongsToMany(LevelHarga::class, 'id_level_harga');
-    // }
+    public function stok()
+    {
+        return $this->hasMany(StockBarang::class, 'toko_pengirim', 'id');
+    }
 }

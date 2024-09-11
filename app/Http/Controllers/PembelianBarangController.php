@@ -89,7 +89,6 @@ class PembelianBarangController extends Controller
         ]);
     }
 
-
     public function update(Request $request, $id)
     {
         $idBarangs = $request->input('id_barang', []);
@@ -201,17 +200,25 @@ class PembelianBarangController extends Controller
                     $successfulDetails = DetailPembelianBarang::where('id_barang', $detail->id_barang)
                                                                 ->where('status', 'success')
                                                                 ->get();
-
+                    // dd($successfulDetails);
                     // Hitung total harga dan qty dari pembelian yang sudah 'success'
                     $totalHargaSebelumnya = $successfulDetails->sum('total_harga');
                     $totalQtySebelumnya = $successfulDetails->sum('qty');
+                    // dd($totalQtySebelumnya);
 
                     // Tambahkan total harga dan qty dari pembelian saat ini
-                    $totalHargaBaru = $totalHargaSebelumnya + $detail->total_harga;
-                    $totalQtyBaru = $totalQtySebelumnya + $detail->qty;
+                    // $totalHargaBaru = $totalHargaSebelumnya + $detail->total_harga;
+                    // $totalQtyBaru = $totalQtySebelumnya + $detail->qty;
 
+                    // if ($totalQtyBaru > 0) {
+                    //     $hppBaru = $totalHargaBaru / $totalQtyBaru;
+                    // }
+                    // else{
+                    //     $hppBaru = 0;
+                    // }
                     // Hitung HPP baru
-                    $hppBaru = $totalHargaBaru / $totalQtyBaru;
+                    // $hppBaru = ($existingStock->hpp_baru + $detail->harga_barang) / 2;
+                    $hppBaru = $totalHargaSebelumnya / $totalQtySebelumnya;
 
                     $existingStock->stock += $detail->qty;
                     $existingStock->harga_satuan = $detail->harga_barang;
@@ -230,7 +237,7 @@ class PembelianBarangController extends Controller
                     $newStock->nilai_total = $detail->qty;
                     $newStock->level_harga = $levelHargaJson;
                     $newStock->save();
-                }     
+                }
             }
         }
 

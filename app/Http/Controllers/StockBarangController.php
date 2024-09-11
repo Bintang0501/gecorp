@@ -9,7 +9,9 @@ class StockBarangController extends Controller
 {
     public function index()
     {
-    return view('master.stockbarang.index');
+        $stock = StockBarang::all();
+
+    return view('master.stockbarang.index', compact('stock'));
     }
 
     public function create()

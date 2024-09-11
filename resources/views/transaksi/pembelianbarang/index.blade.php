@@ -77,22 +77,27 @@
                                     @foreach ($pembelian as $beli)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            @if ($beli->status == 'progress')
-                                                <td><h4><span class="badge badge-warning">Progress</span></h4></td>  
-                                            @elseif ($beli->status == 'done')
-                                                <td><h4><span class="badge badge-success">Done</span></h4></td>
-                                            @else
+                                            @if ($beli->status == 'failed')
                                                 <td><h4><span class="badge badge-danger">Failed</span></h4></td>
+                                            @elseif ($beli->status == 'progress')
+                                            <td><h4><span class="badge badge-warning">Progress</span></h4></td>
+                                            @else
+                                            <td><h4><span class="badge badge-success">Success</span></h4></td>
                                             @endif
                                             <td>{{ $beli->no_nota }}</td>
                                             <td>{{ $beli->tgl_nota }}</td>
-                                            <td>{{ $beli->id_supplier }}</td>
+                                            <td>{{ $beli->supplier->nama_supplier }}</td>
                                             <td>{{ $beli->total_item }}</td>
                                             <td>Rp. {{ number_format($beli->total_nilai, 0, '.', '.') }} </td>
                                             <td>
                                                 <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="{{ route('master.pembelianbarang.delete', $beli->id) }}" method="POST">
-                                                    <a href="{{ route('master.pembelianbarang.edit', $beli->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
-                                                    @csrf
+                                            @if ($beli->status == 'success')
+                                                <a href="{{ route('master.pembelianbarang.edit', $beli->id) }}" disabled class="btn btn-primary btn-sm"><i class="ti-book menu-icon"></i></a>
+                                            @else
+                                                <a href="{{ route('master.pembelianbarang.edit', $beli->id) }}" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
+                                            @endif
+
+                                                @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="ti-trash menu-icon"></i></button>
                                                 </form>

@@ -14,14 +14,13 @@ return new class extends Migration
             $table->string('no_resi');
             $table->string('toko_pengirim');
             $table->string('nama_pengirim');
-            $table->string('nama_barang');
             $table->string('ekspedisi');
-            $table->integer('qty');
-            $table->double('total_harga');
             $table->string('toko_penerima');
             $table->date('tgl_kirim');
+            $table->double('total_item')->nullable();
+            $table->double('total_nilai')->nullable();
             $table->date('tgl_terima')->nullable();
-            $table->enum('status', ['progress', 'done', 'failed'])->default('progress');
+            $table->enum('status', ['progress', 'success', 'failed'])->default('progress');
             $table->softDeletes();
         });
     }

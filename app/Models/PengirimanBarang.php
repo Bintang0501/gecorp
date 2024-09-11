@@ -13,16 +13,10 @@ class PengirimanBarang extends Model
     protected $table = 'pengiriman_barang';
 
     protected $fillable = [
-        'no_resi', 'toko_pengirim', 'nama_pengirim', 'nama_barang', 'ekspedisi', 'qty', 'total_harga', 'toko_penerima', 'tgl_kirim'
+        'no_resi', 'toko_pengirim', 'nama_pengirim', 'ekspedisi', 'toko_penerima', 'tgl_kirim', 'tgl_terima'
     ];
 
-    public $incrementing = false;
-
     public $timestamps = false;
-
-    protected $keyType = 'string';
-
-    public $primaryKey = 'id';
 
     public function toko()
     {
@@ -42,5 +36,10 @@ class PengirimanBarang extends Model
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'nama_barang', 'id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(DetailPengirimanBarang::class, 'id_pengiriman_barang');
     }
 }
