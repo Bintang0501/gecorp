@@ -12,13 +12,14 @@ class StockBarang extends Model
 
     protected $table = 'stock_barang';
 
-    protected $guarded = [''];
+    protected $fillable = ['id_barang', 'nama_barang', 'stock', 'harga_satuan', 'hpp_awal', 'hpp_baru', 'nilai_total', 'level_harga'];
 
-    public $incrementing = false;
-
-    protected $keyType = 'string';
+    protected $guarded = [];
 
     public $timestamps = false;
 
-    public $primaryKey = 'id';
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'id_barang', 'id');
+    }
 }

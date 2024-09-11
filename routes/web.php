@@ -135,6 +135,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/get-users-by-toko/{id_toko}', [PengirimanBarangController::class, 'getUsersByToko']);
         Route::get('/get-barang-stock/{id_toko}', [PengirimanBarangController::class, 'getBarangStock']);
         Route::get('/get-harga-barang/{id_barang}', [PengirimanBarangController::class, 'getHargaBarang']);
+        Route::get('/get-harga-barangs/{id_barang}', [PengirimanBarangController::class, 'getHargaBarangs']);
         Route::post('/pengirimanbarang/additem', [PengirimanBarangController::class, 'addItem'])->name('master.pengirimanbarang.additem');
         Route::delete('/pengirimanbarang/remove-item/{id}', [PengirimanBarangController::class, 'removeItem']);
         // Route::get('/get-barangs-by-toko/{id_toko}', [PengirimanBarangController::class, 'getBarangsByToko']);

@@ -37,21 +37,32 @@ class PengirimanBarangController extends Controller
         return view('transaksi.pengirimanbarang.detail', compact('detail_pengiriman', 'pengiriman_barang'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $toko = Toko::all();
         $user = User::all();
         $detail_toko = DetailToko::all();
         $barang = Barang::all();
         $stock = StockBarang::all();
+        $barangs = collect();
+
+        if ($request->has('toko_pengirim')) {
+            $barangs = $request->toko_pengirim == 1
+                ? StockBarang::all()
+                : DetailToko::query()
+                    ->with(['barang'])
+                    ->where('id_toko', $request->toko_pengirim)
+                    ->get()
+                    ->pluck('barang');
+        }
+
         // $pengiriman = PengirimanBarang::where('id', $id)->first();
 
-        return view('transaksi.pengirimanbarang.create', compact('toko', 'user', 'detail_toko', 'barang', 'stock'));
+        return view('transaksi.pengirimanbarang.create', compact('toko', 'user', 'detail_toko', 'barang', 'stock', 'barangs'));
     }
 
     public function store(Request $request)
     {
-
         try {
             DB::beginTransaction();
             // dd($request);
@@ -70,9 +81,11 @@ class PengirimanBarangController extends Controller
             DB::commit();
 
             // Redirect ke tab "detail pengiriman" dengan data pengiriman yang baru disimpan
-            return redirect()->route('master.pengirimanbarang.create')
-                                 ->with('tab', 'detail')
-                                 ->with('pengiriman_barang', $pengiriman_barang);
+            return redirect()->route('master.pengirimanbarang.create', [
+                    'toko_pengirim' => $request->toko_pengirim
+                ])
+                ->with('tab', 'detail')
+                ->with('pengiriman_barang', $pengiriman_barang);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -91,16 +104,19 @@ class PengirimanBarangController extends Controller
         return response()->json($users);
     }
 
-    public function getBarangStock($id_toko)
+    public function getBarangStock(int $id_toko)
     {
         // Mengambil barang yang tersedia berdasarkan id_toko dari tabel StockBarang
-        if ($id_toko == 1){
+        if ($id_toko == 1) {
             $barangs = StockBarang::all();
+        } else {
+            $barangs = DetailToko::where('id_toko', $id_toko)->get();
         }
 
         // Mengembalikan data dalam format JSON
         return response()->json($barangs);
     }
+
 
     public function getHargaBarang($id_barang)
     {
@@ -109,6 +125,18 @@ class PengirimanBarangController extends Controller
 
         if ($stock) {
             return response()->json(['harga' => $stock->hpp_baru]);
+        } else {
+            return response()->json(['error' => 'Barang tidak ditemukan'], 404);
+        }
+    }
+
+    public function getHargaBarangs($id_barang)
+    {
+        // Ambil harga dari tabel detail_toko berdasarkan id_barang
+        $detail = DetailToko::where('id', $id_barang)->first();
+
+        if ($detail) {
+            return response()->json(['harga' => $detail->harga]);
         } else {
             return response()->json(['error' => 'Barang tidak ditemukan'], 404);
         }
@@ -152,7 +180,7 @@ class PengirimanBarangController extends Controller
                 }
 
                 if ($id_barang && $qty > 0 && $harga > 0) {
-                    $barang = Barang::findOrFail($id_barang);
+                    $barang = StockBarang::findOrFail($id_barang);
 
                     $detail = DetailPengirimanBarang::updateOrCreate(
                         [
