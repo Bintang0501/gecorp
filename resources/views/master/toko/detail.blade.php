@@ -74,7 +74,7 @@
                                                     <tr>
                                                         <td>{{$no++}}</td>
                                                         <td>{{$stk->nama_barang}}</td>
-                                                        <td>{{$stk->stock}}</td>
+                                                        <td>{{$stk->qty}}</td>
                                                         <td>Rp. {{ number_format($stk->hpp_baru, 0, '.', '.') }}</td>
                                                         <td>
                                                             <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="#" method="post">
@@ -97,7 +97,7 @@
                                                     <tr>
                                                         <td>{{$no++}}</td>
                                                         <td>{{$dt->barang->nama_barang}}</td>
-                                                        <td>{{$dt->stock}}</td>
+                                                        <td>{{$dt->qty}}</td>
                                                         <td>Rp. {{ number_format($dt->harga, 0, ',', '.') }}</td>
                                                         <td>
                                                             <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="{{ route('master.toko.delete_detail', ['id_toko' => $dt->id_toko, 'id_barang' => $dt->id_barang, 'id' => $dt->id]) }}" method="post">

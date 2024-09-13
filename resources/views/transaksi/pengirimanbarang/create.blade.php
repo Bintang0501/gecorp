@@ -140,25 +140,38 @@
                                                         <p>ID Pengiriman Barang: {{ $pengiriman_barang->id }}</p>
 
                                                         <!-- Hidden input untuk mengirim id_toko -->
-                                                        <input type="hidden" name="toko_pengirim" id="toko_pengirim" value="{{ $pengiriman_barang->toko_pengirim }}">
+                                                        <input type="hidden" name="tk_pengirim" id="tk_pengirim" value="{{ $pengiriman_barang->toko_pengirim }}">
 
                                                         <div class="form-group">
                                                             <label for="id_barang" class="form-control-label">Nama Barang<span style="color: red">*</span></label>
                                                             <select name="id_barang" id="id_barang" class="form-control" required>
-                                                            @if (count($barangs) > 0)
                                                                 <option value="" disabled selected>Pilih Barang</option>
-                                                                @foreach ($barangs as $brg)
-                                                                <option value="{{ $brg->id_barang }}">{{ $brg->nama_barang }}</option>
-                                                                @endforeach
-                                                                @elseif(count($detail_toko) > 0)
-                                                                <option value="" disabled selected>Pilih Barang</option>
-                                                                @foreach ($detail_toko as $dt)
-                                                                <option value="{{ $dt->id_barang }}">{{ $dt->nama_barang }}</option>
-                                                                @endforeach
-                                                            @else
-                                                                <option value="">Tidak Ada Barang Di Toko Ini</option>
-                                                            @endif
+
+                                                                @if ($pengiriman_barang->toko_pengirim == 1)
+                                                                    {{-- Jika toko_pengirim adalah 1, ambil data dari StockBarang --}}
+                                                                    @if ($stock->isEmpty())
+                                                                        <option value="">Tidak ada Barang</option>
+                                                                    @else
+                                                                        @foreach ($stock as $tk)
+                                                                            <option value="{{ $tk->id_barang }}">{{ $tk->nama_barang }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                @else
+                                                                    {{-- Jika toko_pengirim bukan 1, ambil data dari DetailToko yang sesuai dengan toko_pengirim --}}
+                                                                    @php
+                                                                        $detailBarang = $detail_toko->where('id_toko', $pengiriman_barang->toko_pengirim);
+                                                                    @endphp
+
+                                                                    @if ($detailBarang->isEmpty())
+                                                                        <option value="">Tidak ada Barang Di Toko INi</option>
+                                                                    @else
+                                                                        @foreach ($detailBarang as $dt)
+                                                                            <option value="{{ $dt->id_barang }}">{{ $dt->barang->nama_barang }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                @endif
                                                             </select>
+
                                                         </div>
 
                                                 </div>
@@ -273,53 +286,149 @@
         });
     </script>
 
-{{-- Tampilkan Barang --}}
 <script>
-    $(document).ready(function() {
-    // Ambil nilai id_toko dari hidden input
-    var id_toko = $('#toko_pengirim').val();
+    $('#id_barang').change(function() {
+    var idBarang = $(this).val();
+    var idToko = $('#tk_pengirim').val(); // Ambil id_toko dari hidden input
 
-    // Pastikan id_toko sudah ada nilainya sebelum menjalankan AJAX
-    if (id_toko) {
+    console.log("Selected idBarang: ", idBarang);
+    console.log("Selected idToko: ", idToko);
+
+    if (idBarang) {
         $.ajax({
-            url: '/admin/get-barang-stock/' + id_toko, // Gunakan id_toko dari hidden input
-            method: 'GET',
+            url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
+            type: 'GET',
             success: function(response) {
-                var select = $('#id_barang');
-                select.empty(); // Kosongkan opsi sebelumnya
-                select.append('<option value="" disabled selected>Pilih Barang</option>');
-
-                // Isi dropdown barang dengan response dari server
-                response.forEach(function(barang) {
-                    select.append('<option value="' + barang.id + '">' + barang.nama_barang + '</option>');
-                });
+                console.log("Response from server: ", response);
+                if (response.harga) {
+                    // Format number untuk tampilan
+                    $('#harga_formatted').val(formatNumber(response.harga));
+                    // Simpan harga asli ke input hidden untuk dikirim ke server
+                    $('#harga').val(response.harga);
+                } else {
+                    alert('Harga barang tidak ditemukan.');
+                }
             },
-            error: function() {
-                alert('Gagal mengambil data barang');
+            error: function(xhr, status, error) {
+                console.error("Error fetching price:", error);
+                alert('Gagal mendapatkan harga barang.');
+            }
+        });
+    } else {
+        $('#harga_formatted').val('');
+        $('#harga').val('');
+    }
+});
+
+// Fungsi untuk memformat angka dengan pemisah ribuan
+function formatNumber(num) {
+    return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
+}
+
+</script>
+
+{{-- Tampilkan Barang --}}
+{{-- <script>
+    $(document).ready(function() {
+    // Tampilkan Barang berdasarkan toko
+    var id_toko = $('#tk_pengirim').val();
+    console.log("test toko :", id_toko);
+    if (id_toko) {
+        // Ketika dropdown barang berubah
+        $('#id_barang').change(function() {
+            var idBarang = $(this).val(); // Mengambil id_barang yang dipilih
+            console.log("id Barang woi", idBarang);
+
+            if (idBarang) {
+                $.ajax({
+                    url: '/admin/get-barang-stock/' + idBarang + '/' + id_toko,
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        var select = $('#id_barang');
+                        select.empty(); // Kosongkan opsi sebelumnya
+                        select.append('<option value="" disabled selected>Pilih Barang</option>');
+
+                        // Isi dropdown barang dengan response dari server
+                        response.forEach(function(barang) {
+                            select.append('<option value="' + barang.id + '">' + barang.nama_barang + '</option>');
+                        });
+                    },
+                    error: function() {
+                        alert('Gagal mengambil data barang');
+                    }
+                });
+            } else {
+                console.log('idBarang tidak ditemukan');
             }
         });
     } else {
         console.log('id_toko tidak ditemukan');
     }
+
+    // Tampilkan Harga berdasarkan barang yang dipilih
+    $('#id_barang').change(function() {
+        var idBarang = $(this).val();
+        var idToko = $('#tk_pengirim').val(); // Ambil id_toko dari hidden input
+
+        console.log("idBarangs: ", idBarang);
+        console.log("idTokos: ", idToko);
+
+        if (idBarang) {
+            $.ajax({
+                url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    if (response.harga) {
+                        // Format number untuk tampilan
+                        $('#harga_formatted').val(formatNumber(response.harga));
+                        // Simpan harga asli ke input hidden untuk dikirim ke server
+                        $('#harga').val(response.harga);
+                    } else {
+                        alert('Barang tidak ditemukan');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Gagal mendapatkan harga barang');
+                }
+            });
+        } else {
+            $('#harga_formatted').val('');
+            $('#harga').val('');
+        }
+    });
+
+    // Fungsi untuk memformat angka dengan pemisah ribuan
+    function formatNumber(num) {
+        return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
+    }
 });
-</script>
+
+</script> --}}
+
 
 {{-- Tampilkan Harga Stock  --}}
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('#id_barang').change(function() {
             var idBarang = $(this).val();
+            var idToko = $('#tk_pengirim').val(); // Ambil id_toko dari hidden input
+
+            console.log("idBarangs: ", idBarang);
+            console.log("idTokos: ", idToko);
 
             if (idBarang) {
                 $.ajax({
-                    url: '/admin/get-harga-barang/' + idBarang,
+                    url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
                     type: 'GET',
-                    success: function(data) {
-                        if (data.harga) {
+                    success: function(response) {
+                        console.log(response);
+                        if (response.harga) {
                             // Format number untuk tampilan
-                            $('#harga_formatted').val(formatNumber(data.harga));
-                            // Simpan harga asli ke input hidden untuk dikirim ke database
-                            $('#harga').val(data.harga);
+                            $('#harga_formatted').val(formatNumber(response.harga));
+                            // Simpan harga asli ke input hidden untuk dikirim ke responsebase
+                            $('#harga').val(response.harga);
                         } else {
                             alert('Barang tidak ditemukan');
                         }
@@ -339,10 +448,10 @@
             return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
         }
     });
-</script>
+</script> --}}
 
 {{-- Tampilkan Harga Detail --}}
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('#id_barang').change(function() {
             var idBarang = $(this).val();
@@ -376,7 +485,7 @@
             return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
         }
     });
-</script>
+</script> --}}
 
 {{-- Tampilkan Add --}}
 <script>

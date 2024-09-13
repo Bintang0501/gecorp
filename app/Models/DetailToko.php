@@ -12,9 +12,7 @@ class DetailToko extends Model
 
     protected $table = 'detail_toko';
 
-    protected $fillable = ['id_barang', 'nama_barang', 'id_toko', 'stock', 'harga'];
-
-    protected $guarded = [''];
+    protected $fillable = ['id_barang', 'nama_barang', 'id_toko', 'qty', 'harga'];
 
     public $incrementing = false;
 
@@ -33,10 +31,5 @@ class DetailToko extends Model
     {
         return $this->belongsTo(Barang::class, 'id_barang', 'id');
     }
-
-    public function stokBarang()
-{
-    return $this->hasMany(StockBarang::class, 'id_barang', 'id_barang');
-}
 
 }
