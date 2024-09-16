@@ -367,6 +367,16 @@ function formatNumber(num) {
         return;
     }
 
+    if (stok === 0){
+        alert('Stock barang sudah Habis !');
+        return;
+    }
+
+    if (qty === 0){
+        alert('Jumlah item tidak boleh 0 !');
+        return;
+    }
+
     if (addedItems.has(idBarang)) {
         alert('Barang ini sudah ditambahkan sebelumnya.');
         return;
