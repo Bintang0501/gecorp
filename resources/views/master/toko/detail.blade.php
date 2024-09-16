@@ -74,7 +74,7 @@
                                                     <tr>
                                                         <td>{{$no++}}</td>
                                                         <td>{{$stk->nama_barang}}</td>
-                                                        <td>{{$stk->qty}}</td>
+                                                        <td>{{$stk->stock}}</td>
                                                         <td>Rp. {{ number_format($stk->hpp_baru, 0, '.', '.') }}</td>
                                                         <td>
                                                             <form onsubmit="return confirm('Ingin menghapus Data ini ?');" action="#" method="post">

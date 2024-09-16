@@ -153,7 +153,7 @@
                                                                         <option value="">Tidak ada Barang</option>
                                                                     @else
                                                                         @foreach ($stock as $tk)
-                                                                            <option value="{{ $tk->id_barang }}">{{ $tk->nama_barang }}</option>
+                                                                            <option value="{{ $tk->id_barang }}" data-stock="{{$tk->stock}}">{{ $tk->nama_barang }} ( Stock Tersedia : <strong>{{$tk->stock}}</strong> )</option>
                                                                         @endforeach
                                                                     @endif
                                                                 @else
@@ -163,17 +163,15 @@
                                                                     @endphp
 
                                                                     @if ($detailBarang->isEmpty())
-                                                                        <option value="">Tidak ada Barang Di Toko INi</option>
+                                                                        <option value="">Tidak ada Barang Di Toko Ini</option>
                                                                     @else
                                                                         @foreach ($detailBarang as $dt)
-                                                                            <option value="{{ $dt->id_barang }}">{{ $dt->barang->nama_barang }}</option>
+                                                                            <option value="{{ $dt->id_barang }}" data-stock="{{$dt->qty}}">{{ $dt->barang->nama_barang }} ( Stock Tersedia : <strong>{{$dt->qty}}</strong> )</option>
                                                                         @endforeach
                                                                     @endif
                                                                 @endif
                                                             </select>
-
                                                         </div>
-
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -327,166 +325,6 @@ function formatNumber(num) {
 
 </script>
 
-{{-- Tampilkan Barang --}}
-{{-- <script>
-    $(document).ready(function() {
-    // Tampilkan Barang berdasarkan toko
-    var id_toko = $('#tk_pengirim').val();
-    console.log("test toko :", id_toko);
-    if (id_toko) {
-        // Ketika dropdown barang berubah
-        $('#id_barang').change(function() {
-            var idBarang = $(this).val(); // Mengambil id_barang yang dipilih
-            console.log("id Barang woi", idBarang);
-
-            if (idBarang) {
-                $.ajax({
-                    url: '/admin/get-barang-stock/' + idBarang + '/' + id_toko,
-                    method: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        var select = $('#id_barang');
-                        select.empty(); // Kosongkan opsi sebelumnya
-                        select.append('<option value="" disabled selected>Pilih Barang</option>');
-
-                        // Isi dropdown barang dengan response dari server
-                        response.forEach(function(barang) {
-                            select.append('<option value="' + barang.id + '">' + barang.nama_barang + '</option>');
-                        });
-                    },
-                    error: function() {
-                        alert('Gagal mengambil data barang');
-                    }
-                });
-            } else {
-                console.log('idBarang tidak ditemukan');
-            }
-        });
-    } else {
-        console.log('id_toko tidak ditemukan');
-    }
-
-    // Tampilkan Harga berdasarkan barang yang dipilih
-    $('#id_barang').change(function() {
-        var idBarang = $(this).val();
-        var idToko = $('#tk_pengirim').val(); // Ambil id_toko dari hidden input
-
-        console.log("idBarangs: ", idBarang);
-        console.log("idTokos: ", idToko);
-
-        if (idBarang) {
-            $.ajax({
-                url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
-                type: 'GET',
-                success: function(response) {
-                    console.log(response);
-                    if (response.harga) {
-                        // Format number untuk tampilan
-                        $('#harga_formatted').val(formatNumber(response.harga));
-                        // Simpan harga asli ke input hidden untuk dikirim ke server
-                        $('#harga').val(response.harga);
-                    } else {
-                        alert('Barang tidak ditemukan');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('Gagal mendapatkan harga barang');
-                }
-            });
-        } else {
-            $('#harga_formatted').val('');
-            $('#harga').val('');
-        }
-    });
-
-    // Fungsi untuk memformat angka dengan pemisah ribuan
-    function formatNumber(num) {
-        return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
-    }
-});
-
-</script> --}}
-
-
-{{-- Tampilkan Harga Stock  --}}
-{{-- <script>
-    $(document).ready(function() {
-        $('#id_barang').change(function() {
-            var idBarang = $(this).val();
-            var idToko = $('#tk_pengirim').val(); // Ambil id_toko dari hidden input
-
-            console.log("idBarangs: ", idBarang);
-            console.log("idTokos: ", idToko);
-
-            if (idBarang) {
-                $.ajax({
-                    url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
-                    type: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        if (response.harga) {
-                            // Format number untuk tampilan
-                            $('#harga_formatted').val(formatNumber(response.harga));
-                            // Simpan harga asli ke input hidden untuk dikirim ke responsebase
-                            $('#harga').val(response.harga);
-                        } else {
-                            alert('Barang tidak ditemukan');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Gagal mendapatkan harga barang');
-                    }
-                });
-            } else {
-                $('#harga_formatted').val('');
-                $('#harga').val('');
-            }
-        });
-
-        // Fungsi untuk memformat angka dengan pemisah ribuan
-        function formatNumber(num) {
-            return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
-        }
-    });
-</script> --}}
-
-{{-- Tampilkan Harga Detail --}}
-{{-- <script>
-    $(document).ready(function() {
-        $('#id_barang').change(function() {
-            var idBarang = $(this).val();
-
-            if (idBarang) {
-                $.ajax({
-                    url: '/admin/get-harga-barangs/' + idBarang,
-                    type: 'GET',
-                    success: function(data) {
-                        if (data.harga) {
-                            // Format number untuk tampilan
-                            $('#harga_formatted').val(formatNumber(data.harga));
-                            // Simpan harga asli ke input hidden untuk dikirim ke database
-                            $('#harga').val(data.harga);
-                        } else {
-                            alert('Barang tidak ditemukan');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Gagal mendapatkan harga barang');
-                    }
-                });
-            } else {
-                $('#harga_formatted').val('');
-                $('#harga').val('');
-            }
-        });
-
-        // Fungsi untuk memformat angka dengan pemisah ribuan
-        function formatNumber(num) {
-            return new Intl.NumberFormat('id-ID', { minimumFractionDigits: 0 }).format(num);
-        }
-    });
-</script> --}}
-
 {{-- Tampilkan Add --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -509,66 +347,126 @@ function formatNumber(num) {
             toggleInputFields(isItemAdded);
         }
 
+    let lastDeletedItem = null;
         document.getElementById('add-item-detail').addEventListener('click', function () {
-            let idBarang = document.getElementById('id_barang').value;
-            let namaBarang = document.getElementById('id_barang').selectedOptions[0].text;
-            let qty = parseInt(document.getElementById('jml_item').value);
-            let harga = parseInt(document.getElementById('harga').value);
+    let idBarang = document.getElementById('id_barang').value;
+    let namaBarang = document.getElementById('id_barang').selectedOptions[0].text;
+    let qty = parseInt(document.getElementById('jml_item').value) || 0; // Default to 0 if NaN
+    let harga = parseInt(document.getElementById('harga').value) || 0; // Default to 0 if NaN
 
-            if (addedItems.has(idBarang)) {
-                alert('Barang ini sudah ditambahkan sebelumnya.');
-                return;
-            }
+    if (!idBarang) {
+        alert('Harap pilih barang terlebih dahulu !');
+        return;
+    }
+    // Ambil stok barang dari atribut stok yang disimpan di dalam option
+    let stok = parseInt(document.getElementById('id_barang').selectedOptions[0].getAttribute('data-stock')) || 0; // Default to 0 if NaN
 
-            addedItems.add(idBarang);
+    // Validasi apakah qty melebihi stok yang tersedia
+    if (qty > stok) {
+        alert('Stock barang tidak cukup !');
+        return;
+    }
 
-            let totalHarga = qty * harga;
-            subtotal += totalHarga;
+    if (addedItems.has(idBarang)) {
+        alert('Barang ini sudah ditambahkan sebelumnya.');
+        return;
+    }
 
-            let row = `
-                <tr>
-                    <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
-                    <td class="numbered">${document.querySelectorAll('tbody tr').length + 1}</td>
-                    <td><input type="hidden" name="id_barang[]" value="${idBarang}">${namaBarang}</td>
-                    <td><input type="hidden" name="qty[]" value="${qty}">${qty}</td>
-                    <td><input type="hidden" name="harga[]" value="${harga}">Rp ${harga.toLocaleString('id-ID')}</td>
-                    <td>Rp ${totalHarga.toLocaleString('id-ID')}</td>
-                </tr>
-            `;
+    addedItems.add(idBarang);
 
-            document.querySelector('tbody').insertAdjacentHTML('beforeend', row);
+    let totalHarga = qty * harga;
+    subtotal += totalHarga;
 
-            document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+    let row = `
+        <tr>
+            <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+            <td class="numbered">${document.querySelectorAll('tbody tr').length + 1}</td>
+            <td><input type="hidden" name="id_barang[]" value="${idBarang}">${namaBarang}</td>
+            <td><input type="hidden" name="qty[]" value="${qty}">${qty}</td>
+            <td><input type="hidden" name="harga[]" value="${harga}">Rp ${harga.toLocaleString('id-ID')}</td>
+            <td>Rp ${totalHarga.toLocaleString('id-ID')}</td>
+        </tr>
+    `;
 
-            // Disable input fields after adding
-            toggleInputFields(true);
+    document.querySelector('tbody').insertAdjacentHTML('beforeend', row);
 
-            updateNumbers();
-        });
+    // Update subtotal in the footer
+    document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
 
-        document.querySelector('tbody').addEventListener('click', function (e) {
-            if (e.target.classList.contains('remove-item')) {
-                let row = e.target.closest('tr');
-                let idBarang = row.querySelector('input[name="id_barang[]"]').value;
-                let totalHarga = parseInt(row.querySelector('td:last-child').textContent.replace(/\D/g, ''));
+    // Disable input fields after adding
+    toggleInputFields(true);
 
-                subtotal -= totalHarga;
-                row.remove();
+    updateNumbers();
 
-                addedItems.delete(idBarang);
+    // Reset input fields jika barang yang dihapus berbeda
+    if (!lastDeletedItem || lastDeletedItem.id !== idBarang) {
+        document.getElementById('id_barang').value = '';
+        document.getElementById('jml_item').value = '';
+        document.getElementById('harga').value = '';
+    }
+});
 
-                document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
-                updateNumbers();
+document.querySelector('tbody').addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-item')) {
+        let row = e.target.closest('tr');
+        let idBarang = row.querySelector('input[name="id_barang[]"]').value;
 
-                // Enable input fields if no items are added
-                if (!addedItems.size) {
-                    toggleInputFields(false);
-                } else {
-                    // Recheck if the currently selected item is in the added items
-                    checkInputFields();
-                }
-            }
-        });
+        // Get total price of the removed item (use a fallback of 0 to avoid NaN)
+        let totalHarga = parseInt(row.querySelector('td:last-child').textContent.replace(/[^\d]/g, '')) || 0;
+
+        subtotal -= totalHarga;
+
+        row.remove();
+
+        addedItems.delete(idBarang);
+
+        // Simpan barang yang terakhir dihapus
+        lastDeletedItem = {
+            id: idBarang,
+            nama: row.querySelector('td:nth-child(3)').textContent,
+            qty: row.querySelector('td:nth-child(4)').textContent,
+            harga: row.querySelector('td:nth-child(5)').textContent.replace(/\D/g, '')
+        };
+
+        // Update subtotal in the footer
+        document.querySelector('tfoot tr th:last-child').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+        updateNumbers();
+
+        // Enable input fields if no items are added
+        if (!addedItems.size) {
+            toggleInputFields(false);
+        } else {
+             // Isi ulang form dengan barang yang terakhir dihapus
+            document.getElementById('id_barang').value = lastDeletedItem.id;
+            document.getElementById('jml_item').value = lastDeletedItem.qty;
+            document.getElementById('harga').value = lastDeletedItem.harga;
+            // Recheck if the currently selected item is in the added items
+            checkInputFields();
+        }
+    }
+});
+
+// Fungsi untuk update nomor urut di tabel
+function updateNumbers() {
+    let rows = document.querySelectorAll('tbody tr');
+    rows.forEach((row, index) => {
+        row.querySelector('.numbered').textContent = index + 1;
+    });
+}
+
+// Fungsi untuk mengatur input field
+function toggleInputFields(disable) {
+    document.getElementById('harga').disabled = disable;
+}
+
+// Fungsi untuk memeriksa ulang input fields jika barang sudah ditambahkan
+function checkInputFields() {
+    let idBarang = document.getElementById('id_barang').value;
+    if (addedItems.has(idBarang)) {
+        toggleInputFields(true); // Disable if item already added
+    }
+}
+
 
         document.getElementById('id_barang').addEventListener('change', function () {
             let idBarang = this.value;
@@ -624,141 +522,5 @@ function formatNumber(num) {
     });
 
     </script>
-
-{{-- <script>
-$('#id_barang').on('change', function () {
-    var barangId = $(this).val();
-    var tokoId = $('#toko_pengirim').val();
-    if (barangId && tokoId) {
-        $.ajax({
-            url: '/admin/get-harga-barang/' + barangId + '/' + tokoId,
-            type: "GET",
-            dataType: "json",
-            success: function (data) {
-                $('#harga').val(data.harga); // Isi input harga otomatis
-            }
-        });
-    }
-});
-
-</script> --}}
-
-
-    {{-- @if(isset($pengiriman))
-    <script>
-        $(document).ready(function(){
-            var id_toko = "{{ $pengiriman->toko_pengirim }}";
-            // Fungsi untuk mendapatkan barang berdasarkan toko
-            function fetchBarang(id_toko) {
-                $.ajax({
-                    url: '/admin/get-barangs-by-toko/' + id_toko,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#id_barang').empty(); // Kosongkan dropdown barang
-                        $('#id_barang').append('<option value="" disabled selected>Pilih Barang</option>');
-
-                        $.each(data, function(key, value){
-                            $('#id_barang').append('<option value="'+ value.id +'">'+ value.nama_barang +'</option>');
-                        });
-                    }
-                });
-            }
-
-            // Panggil fungsi untuk mendapatkan barang saat halaman dimuat
-            fetchBarang(id_toko);
-        });
-    </script>
-@else
-    <script>
-        // Jika $pengiriman tidak tersedia, tidak melakukan apa-apa atau tampilkan pesan
-        console.log('Toko pengirim tidak tersedia.');
-    </script>
-@endif --}}
-
-
-    {{-- <script>
-        $(document).ready(function() {
-            $('#id_barang').change(function() {
-                var idBarang = $(this).val();  // Mendapatkan id_barang yang dipilih
-                var idToko = $('#toko_pengirim').val();  // Mendapatkan id toko dari dropdown toko_pengirim (pastikan elemen ini ada di view)
-
-                if (idBarang && idToko) {
-                    $.ajax({
-                        url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            if (data.harga) {
-                                var formattedHarga = new Intl.NumberFormat('id-ID').format(data.harga);
-                                $('#harga').val(formattedHarga);  // Menampilkan harga yang sudah diformat
-                                $('#harga').data('real-value', data.harga);  // Menyimpan harga asli di data attribute
-                            } else {
-                                $('#harga').val('');
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error(xhr.responseText);
-                            $('#harga').val('');
-                        }
-                    });
-                } else {
-                    $('#harga').val('');
-                }
-            });
-
-            // Mengatur nilai harga sebelum submit form
-            $('form').on('submit', function() {
-                var hargaInput = $('#harga');
-                var realValue = hargaInput.data('real-value');
-                hargaInput.val(realValue);  // Set value asli sebelum submit
-            });
-        });
-    </script>
-
-
-    {{-- <script>
-    $(document).ready(function() {
-        $('#id_barang').change(function() {
-            var idBarang = $(this).val();  // Mendapatkan id_barang yang dipilih
-            var idToko = $('#toko_pengirim').val();  // Mendapatkan id toko dari dropdown toko_pengirim
-
-            if (!idToko || idToko === "~Pilih Nama Toko~") {
-        alert('Silakan pilih toko terlebih dahulu');
-        return;
-    }
-
-            if (idBarang && idToko) {
-                $.ajax({
-                    url: '/admin/get-harga-barang/' + idBarang + '/' + idToko,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        if (data.harga) {
-                            var formattedHarga = new Intl.NumberFormat('id-ID').format(data.harga);
-                            $('#harga').val(formattedHarga);  // Menampilkan harga yang sudah diformat
-                            $('#harga').data('real-value', data.harga);  // Menyimpan harga asli di data attribute
-                        } else {
-                            $('#harga').val('');
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        $('#harga').val('');
-                    }
-                });
-            } else {
-                $('#harga').val('');
-            }
-        });
-
-        // Mengatur nilai harga sebelum submit form
-        $('form').on('submit', function() {
-            var hargaInput = $('#harga');
-            var realValue = hargaInput.data('real-value');
-            hargaInput.val(realValue);  // Set value asli sebelum submit
-        });
-    });
-</script> --}}
 
 @endsection
