@@ -71,7 +71,7 @@
 
                                             <div class="form-group">
                                                 <label for="no_nota" class=" form-control-label">Nomor Nota<span style="color: red">*</span></label>
-                                                <input type="number" id="no_nota" name="no_nota" placeholder="Contoh : 001" class="form-control">
+                                                <input type="text" id="no_nota" name="no_nota" placeholder="Contoh : 001" class="form-control">
                                             </div>
                                             <button type="submit" id="add-item" style="float: right" class="btn btn-primary"><i class="fa fa-save"></i> Simpan</button>
                                         </form>
@@ -128,7 +128,7 @@
                                                     <!-- Harga Barang -->
                                                     <div class="form-group">
                                                         <label for="harga_barang" class="form-control-label">Harga Barang<span style="color: red">*</span></label>
-                                                        <input type="number" id="harga_barang" min="1" name="harga_barang[]" placeholder="Contoh: 16000" class="form-control harga-barang">
+                                                        <input type="text" id="harga_barang" min="1" name="harga_barang[]" placeholder="Contoh: 16000" class="form-control harga-barang">
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,6 +204,20 @@
     <div class="clearfix"></div>
 
     <script>
+    document.getElementById('harga_barang').addEventListener('input', function (e) {
+                let value = e.target.value;
+
+                // Hapus semua karakter non-digit kecuali tanda desimal
+                value = value.replace(/[^\d,]/g, '');
+
+                // Pisahkan angka menjadi bagian integer dan desimal jika ada
+                let parts = value.split(',');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Ganti koma dengan titik sebagai pemisah ribuan
+
+                // Gabungkan kembali bagian integer dan desimal (jika ada)
+                e.target.value = parts.join(',');
+            });
+
     document.addEventListener('DOMContentLoaded', function () {
         let subtotal = 0;
         let addedItems = new Set();
