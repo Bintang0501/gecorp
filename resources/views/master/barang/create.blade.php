@@ -101,7 +101,7 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
 
         <!-- JavaScript untuk AJAX -->

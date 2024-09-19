@@ -12,16 +12,12 @@ return new class extends Migration
         Schema::create('member', function (Blueprint $table) {
             $table->id('id')->primary();
             $table->string('id_toko');
-            $table->string('id_level_harga');
-            $table->string('id_level_user');
+            $table->string('level_harga');
             $table->string('nama_member');
-            $table->integer('report_transaksi')->nullable();
-            $table->integer('idle')->nullable();
-            $table->dateTime('last_transaksi')->nullable();
-            $table->integer('bon')->nullable();
-            $table->dateTime('tgl_registrasi')->nullable();
+            $table->string('no_hp');
+            $table->string('alamat');
+            $table->date('tgl_registrasi')->nullable();
             $table->softDeletes();
         });
     }
-
 };

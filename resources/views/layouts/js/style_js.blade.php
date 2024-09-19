@@ -34,7 +34,6 @@
 <script src="{{ asset('ElaAdmin-master/assets/js/lib/data-table/buttons.colVis.min.js') }}"></script>
 <script src="{{ asset('ElaAdmin-master/assets/js/init/datatables-init.js') }}"></script>
 <script src="{{ asset('ElaAdmin-master/assets/js/lib/chosen/chosen.jquery.min.js') }}"></script>
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
 <script>
     jQuery(document).ready(function() {

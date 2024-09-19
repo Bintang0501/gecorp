@@ -132,7 +132,7 @@
                     </div><!-- /# column -->
                 </div>
                 <!--  /Traffic -->
-                <div class="clearfix"></div>
+
                 <!-- Orders -->
                 <div class="orders">
                     <div class="row">
@@ -200,6 +200,6 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
         @endsection

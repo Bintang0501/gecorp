@@ -74,7 +74,7 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
 @endsection
 </body>

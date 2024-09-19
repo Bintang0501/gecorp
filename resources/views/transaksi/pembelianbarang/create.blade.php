@@ -201,7 +201,7 @@
         </div>
     </div>
 
-    <div class="clearfix"></div>
+
 
     <script>
     document.getElementById('harga_barang').addEventListener('input', function (e) {

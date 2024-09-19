@@ -94,7 +94,7 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
         <script>
             document.getElementById('harga').addEventListener('input', function (e) {

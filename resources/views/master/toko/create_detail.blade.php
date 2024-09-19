@@ -93,21 +93,21 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
         <script>
             document.getElementById('harga').addEventListener('input', function (e) {
                 let value = e.target.value;
 
                 // Hapus semua karakter non-digit kecuali tanda desimal
-                value = value.replace(/[^\d.]/g, '');
+                value = value.replace(/[^\d,]/g, '');
 
                 // Pisahkan angka menjadi bagian integer dan desimal jika ada
-                let parts = value.split('.');
-                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Tambahkan koma sebagai pemisah ribuan
+                let parts = value.split(',');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Ganti koma dengan titik sebagai pemisah ribuan
 
                 // Gabungkan kembali bagian integer dan desimal (jika ada)
-                e.target.value = parts.join('.');
+                e.target.value = parts.join(',');
             });
         </script>
 @endsection

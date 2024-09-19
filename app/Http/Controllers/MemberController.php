@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JenisBarang;
 use App\Models\LevelHarga;
 use App\Models\LevelUser;
 use App\Models\Member;
@@ -27,33 +28,9 @@ class MemberController extends Controller
         $toko = Toko::all();
         $leveluser = LevelUser::all();
         $levelharga = LevelHarga::all();
-        return view('master.member.create', compact('toko', 'leveluser', 'levelharga'), [
-            'levelharga' => LevelHarga::all()->pluck('nama_level_harga','id'),
-            'leveluser' => LevelUser::all()->pluck('nama_level','id'),
-            'toko' => Toko::query()->where('id', request()->get('toko'))
-            ->first(),
-        ]);
+        $jenis_barang = JenisBarang::all();
+        return view('master.member.create', compact('toko', 'leveluser', 'levelharga', 'jenis_barang'));
     }
-
-    public function getWilayah(Request $request)
-    {
-        // Menggunakan id_toko sebagai parameter
-        $toko = Toko::where('id', $request->id_toko)->first();
-
-        if ($toko) {
-            dd($toko);
-            return response()->json([
-                'success' => true,
-                'wilayah' => $toko->wilayah, // Mengirimkan wilayah sebagai respons
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Wilayah tidak ditemukan',
-        ]);
-    }
-
 
     public function store(Request $request)
     {

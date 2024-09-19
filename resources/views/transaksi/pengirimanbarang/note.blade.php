@@ -139,7 +139,7 @@
         <!-- .animated -->
     </div>
     <!-- /.content -->
-    <div class="clearfix"></div>
+
 
 <script>
     $(document).ready(function() {

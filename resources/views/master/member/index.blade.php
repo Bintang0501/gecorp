@@ -42,11 +42,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nama Member</th>
                                             <th>Toko</th>
-                                            <th>Wilayah</th>
+                                            <th>Nama Member</th>
+                                            <th>No Hp</th>
                                             <th>Alamat</th>
-                                            <th>Level User</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -55,11 +54,10 @@
                                         @forelse ($leveluser as $lu) --}}
                                         <tr>
                                             <td>#</td>
-                                            <td>Asep Saipudin</td>
-                                            <td>Toko Bahagia</td>
-                                            <td>Cirebon</td>
+                                            <td>Toko Sejahtera</td>
+                                            <td>MAMAT CELL</td>
+                                            <td>0989139283</td>
                                             <td>Jl. Jalan Santai</td>
-                                            <td>Member</td>
                                             <td>
                                             <form onsubmit="return confirm('Ingin menghapus Kostum ini ? ?');" action="#" method="post">
                                                     <a href="#" class="btn btn-warning btn-sm"><i class="ti-pencil menu-icon"></i></a>
@@ -82,7 +80,7 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
 @endsection
 </body>

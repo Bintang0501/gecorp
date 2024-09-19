@@ -27,7 +27,6 @@
         </div>
     </div>
 </div>
-
         <!-- Content -->
         <div class="content">
             <x-adminlte-alerts />
@@ -53,18 +52,21 @@
                                                     @endforeach
                                                 </select>
                                         </div>
-                                        {{-- <div class="form-group">
-                                            <label for="wilayah" class=" form-control-label">Wilayah<span style="color: red">*</span></label>
-                                            <input type="text" id="wilayah" name="wilayah" readonly class="form-control">
-                                        </div> --}}
                                         <div class="form-group">
-                                            <label for="id_level" class=" form-control-label">Level</label>
-                                            <select name="id_level" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                            <option value="" required>~Pilih~</option>
-                                                    @foreach ($leveluser as $lu)
-                                                    <option value="{{ $lu->id }}">{{ $lu->nama_level }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <label for="jenis_barang" class=" form-control-label">Jenis Barang</label>
+                                            <ul class="list-group list-group-flush">
+                                                @foreach ($jenis_barang as $jb)
+                                                <li class="list-group-item">
+                                                    <h4><i class="fa fa-dot-circle-o"></i> {{ $jb->nama_jenis_barang}}
+                                                        <select style="width: 30%; margin-left:100" name="" id="">
+                                                            @foreach ($levelharga as $lh )
+                                                            <option value="id">{{$lh->nama_level_harga}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </h4>
+                                                </li>
+                                                @endforeach
+                                            </ul>
                                         </div>
                                         <div class="form-group">
                                             <label for="nama" class=" form-control-label">Nama Member<span style="color: red">*</span></label>
@@ -74,15 +76,7 @@
                                             <label for="alamat" class=" form-control-label">Alamat<span style="color: red">*</span></label>
                                             <textarea name="alamat" id="alamat" rows="4" placeholder="Contoh : Jl. Nyimas Gandasari No.18 Plered - Cirebon" class="form-control"></textarea>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="id_level_harga" class=" form-control-label">Level Harga</label>
-                                            <select name="id_level_harga" data-placeholder="Choose a Country..." class="standardSelect" tabindex="1">
-                                            <option value="" required>~Pilih~</option>
-                                                    @foreach ($levelharga as $lh)
-                                                    <option value="{{ $lh->id }}">{{ $lh->nama_level_harga }}</option>
-                                                    @endforeach
-                                                </select>
-                                        </div>
+
                                         <br>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary">
@@ -100,7 +94,7 @@
             <!-- .animated -->
         </div>
         <!-- /.content -->
-        <div class="clearfix"></div>
+
         <!-- Footer -->
         <script>
             $(document).ready(function() {
